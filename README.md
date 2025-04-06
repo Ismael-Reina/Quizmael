@@ -1,2 +1,3 @@
 # Quizmael
-Quizmael es una aplicación de escritorio desarrollada en Java que permite a los usuarios jugar y crear tests de preguntas y respuestas. El objetivo del proyecto es poner en práctica los conocimientos adquiridos en el ciclo formativo DAM, implementando múltiples tecnologías y buenas prácticas de desarrollo de software.
+Quizmael is a Java-based desktop application designed to allow users to create and take quizzes.
+This project aims to apply the knowledge gained throughout the Multiplatform Application Development program (DAM), integrating multiple technologies and adhering to best practices in software development.
