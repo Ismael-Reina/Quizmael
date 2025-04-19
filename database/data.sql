@@ -1,7 +1,13 @@
+-- ----------------------------
 -- Insert Users
-INSERT INTO Users (name, email, password, role) VALUES
-('Admin1', 'admin1@email.com', 'pass123', 'ADMINISTRATOR'),
-('Mod1', 'mod1@email.com', 'pass456', 'MODERATOR'),
-('User1', 'user1@email.com', 'pass789', 'REGISTERED'),
-('User2', 'user2@email.com', 'pass321', 'REGISTERED'),
-('Anonymous', NULL, NULL, 'ANONYMOUS');
+-- ----------------------------
+
+-- Usuario anónimo creado al instalar el sistema
+INSERT INTO Users (user_id, name, email, password, password_hint, secret_question, secret_answer, role)
+VALUES (1, 'Anonymous', 'anonymous@quizmael.com', 'dummy', 'N/A', 'N/A', 'dummy', 'ANONYMOUS');
+
+
+-- Usuario del sistema para los tests preinstalados
+INSERT INTO Users (user_id, name, email, password, password_hint, secret_question, secret_answer, role)
+VALUES (2, 'Quizmael', 'quizmael@system.com', 'systempass', 'N/A', 'N/A', 'system', 'ADMINISTRATOR');
+
