@@ -13,7 +13,7 @@ USE quizmael_db;
 
 CREATE TABLE Users (
     user_id         INT AUTO_INCREMENT PRIMARY KEY,
-    name            VARCHAR(20) NOT NULL,
+    name            VARCHAR(20) NOT NULL UNIQUE,
     email           VARCHAR(40) NULL UNIQUE,
     password        VARCHAR(20) NULL, -- Encrypted
     password_hint   VARCHAR(100) NULL,
@@ -29,9 +29,9 @@ CREATE TABLE Tests (
     title       VARCHAR(100) NOT NULL,
     creator_id  INT NOT NULL,
     state       ENUM('PENDING', 'APPROVED', 'REFUSED') NOT NULL,
-    FOREIGN KEY (creator_id) REFERENCES Users(user_id) ON DELETE SET NULL
+    FOREIGN KEY (creator_id) REFERENCES Users(user_id) ON DELETE RESTRICT
 );
--- If a user is deleted, their created tests remain (creator_id set to NULL).
+-- Users with created tests cannot be deleted unless their tests are reassigned (e.g. to the 'Deleted User').
 
 CREATE TABLE Questions (
     question_id     INT AUTO_INCREMENT PRIMARY KEY,

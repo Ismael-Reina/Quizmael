@@ -2,12 +2,12 @@
 -- Insert Users
 -- ----------------------------
 
--- Usuario anónimo creado al instalar el sistema
-INSERT INTO Users (user_id, name, email, password, password_hint, secret_question, secret_answer, role)
-VALUES (1, 'Anonymous', 'anonymous@quizmael.com', 'dummy', 'N/A', 'N/A', 'dummy', 'ANONYMOUS');
+-- Special users
+INSERT INTO Users (user_id, name, password, role) VALUES 
+(1, 'Anonymous', NULL, 'ANONYMOUS'),	-- Anonymous user created during system installation
+(2, 'Quizmael', NULL, 'REGISTERED'),    -- System user for preinstalled tests
+(3, 'Deleted User', NULL, 'ANONYMOUS'), -- Placeholder user for data from deleted accounts
+(4, 'admin', 'admin', 'ADMINISTRATOR'); -- Default administrator user. Password is stored in plain text (not encrypted yet)
 
-
--- Usuario del sistema para los tests preinstalados
-INSERT INTO Users (user_id, name, email, password, password_hint, secret_question, secret_answer, role)
-VALUES (2, 'Quizmael', 'quizmael@system.com', 'systempass', 'N/A', 'N/A', 'system', 'ADMINISTRATOR');
-
+-- Adjust the AUTO_INCREMENT counter by reserving the first IDs
+ALTER TABLE Users AUTO_INCREMENT = 10;
