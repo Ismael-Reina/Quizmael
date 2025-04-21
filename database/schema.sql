@@ -28,6 +28,7 @@ CREATE TABLE Tests (
     test_id     INT AUTO_INCREMENT PRIMARY KEY,
     title       VARCHAR(100) NOT NULL,
     creator_id  INT NOT NULL,
+    language    ENUM('ES', 'EN') NOT NULL,
     state       ENUM('PENDING', 'APPROVED', 'REFUSED') NOT NULL,
     FOREIGN KEY (creator_id) REFERENCES Users(user_id) ON DELETE RESTRICT
 );
