@@ -29,7 +29,7 @@
             <version>9.2.0</version>
         </dependency>
 
-        <!-- JPA API --> <!-- https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api -->
+        <!-- JAKARTA PERSISTENCE API (JPA) --> <!-- https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api -->
         <dependency>
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
