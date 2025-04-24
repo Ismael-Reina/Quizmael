@@ -53,11 +53,11 @@ CREATE TABLE Answers (
 
 CREATE TABLE Games (
     game_id     INT AUTO_INCREMENT PRIMARY KEY,
-    user_id     INT NULL,
+    user_id     INT NOT NULL,
     played_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE SET NULL
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE RESTRICT
 );
--- If a user is deleted, their played games are preserved.
+-- Users with played games cannot be deleted unless their games are reassigned (e.g. to the 'Deleted User').
 
 CREATE TABLE Game_Questions (
     game_id      INT NOT NULL,
@@ -75,6 +75,7 @@ CREATE TABLE Moderations (
     moderator_id      INT NOT NULL,
     assigned_state    ENUM('PENDING', 'APPROVED', 'REFUSED') NOT NULL,
     moderated_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    rejection_reason TEXT NULL,
     FOREIGN KEY (test_id) REFERENCES Tests(test_id) ON DELETE CASCADE,
     FOREIGN KEY (moderator_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );

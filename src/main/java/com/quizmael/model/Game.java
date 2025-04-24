@@ -18,8 +18,8 @@ public class Game {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "user_id")
+    @OnDelete(action = OnDeleteAction.RESTRICT)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ColumnDefault("current_timestamp()")
