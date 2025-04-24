@@ -1,5 +1,6 @@
 package com.quizmael.model;
 
+import com.quizmael.model.enums.State;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
@@ -27,9 +28,9 @@ public class Moderation {
     @JoinColumn(name = "moderator_id", nullable = false)
     private User moderator;
 
-    @Lob // TODO: cambiar a @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(name = "assigned_state", nullable = false)
-    private String assignedState; // TODO: Cambiar tipo a enum
+    private State assignedState;
 
     @ColumnDefault("current_timestamp()")
     @Column(name = "moderated_at", nullable = false)
@@ -62,11 +63,11 @@ public class Moderation {
         this.moderator = moderator;
     }
 
-    public String getAssignedState() {
+    public State getAssignedState() {
         return assignedState;
     }
 
-    public void setAssignedState(String assignedState) {
+    public void setAssignedState(State assignedState) {
         this.assignedState = assignedState;
     }
 
