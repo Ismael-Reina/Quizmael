@@ -36,6 +36,9 @@ public class Moderation {
     @Column(name = "moderated_at", nullable = false)
     private Instant moderatedAt;
 
+    @Column(name = "rejection_reason", columnDefinition = "TEXT")
+    private String rejectionReason;
+
     // ------------------------------------------------------------
     //                   Getters & Setters
     // ------------------------------------------------------------
@@ -77,6 +80,14 @@ public class Moderation {
 
     public void setModeratedAt(Instant moderatedAt) {
         this.moderatedAt = moderatedAt;
+    }
+
+    public String getRejectionReason() {
+        return rejectionReason;
+    }
+
+    public void setRejectionReason(String rejectionReason) {
+        this.rejectionReason = rejectionReason;
     }
 
 }
