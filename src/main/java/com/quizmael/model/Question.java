@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+/**
+ * <strong>Question</strong> entity belonging to a test.
+ * <p>Can contain multiple possible answers, one or more of which may be correct.</p>
+ */
 @Entity
 @Table(name = "questions")
 public class Question {
@@ -14,14 +18,17 @@ public class Question {
     @Column(name = "question_id", nullable = false)
     private Integer id;
 
+    // The test to which this question belongs
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "test_id", nullable = false)
     private Test test;
 
+    // The textual content of the question
     @Column(name = "text", nullable = false)
     private String text;
 
+    // Optional feedback shown after answering the question
     @Column(name = "feedback", length = 500)
     private String feedback;
 

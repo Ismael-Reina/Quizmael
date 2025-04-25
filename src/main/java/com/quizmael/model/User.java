@@ -3,6 +3,9 @@ package com.quizmael.model;
 import com.quizmael.model.enums.Role;
 import jakarta.persistence.*;
 
+/**
+ * Represents a user of the application, which may have different roles and permissions.
+ */
 @Entity
 @Table(name = "users")
 public class User {
@@ -13,24 +16,31 @@ public class User {
     @Column(name = "user_id", nullable = false)
     private Integer id;
 
+    // Username of the user
     @Column(name = "name", nullable = false, length = 20)
     private String name;
 
+    // The email address of the user
     @Column(name = "email", length = 40)
     private String email;
 
+    // Encrypted password of the user
     @Column(name = "password", length = 20)
     private String password;
 
+    // Hint to help recover the password
     @Column(name = "password_hint", length = 100)
     private String passwordHint;
 
+    // Secret question for password recovery.
     @Column(name = "secret_question", length = 100)
     private String secretQuestion;
 
+    // Encrypted answer to the secret question
     @Column(name = "secret_answer", length = 20)
     private String secretAnswer;
 
+    // The role of the user (ANONYMOUS, REGISTERED, MODERATOR, ADMIN)
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role;

@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+/**
+ * <strong>Answer</strong> entity representing a possible answer to a question.
+ * <p>Each answer is linked to a single question and can be correct or incorrect.</p>
+ */
 @Entity
 @Table(name = "answers")
 public class Answer {
@@ -14,12 +18,15 @@ public class Answer {
     @Column(name = "answer_id", nullable = false)
     private Integer id;
 
+    // The textual content of the answer
     @Column(name = "text", nullable = false)
     private String text;
 
+    // Indicates whether the answer is correct
     @Column(name = "is_correct", nullable = false)
     private Boolean isCorrect = false;
 
+    // The question to which this answer belongs
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "question_id", nullable = false)

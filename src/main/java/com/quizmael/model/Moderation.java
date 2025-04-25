@@ -8,6 +8,10 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 
+/**
+ * <strong>Moderation</strong> entity representing the review of a test.
+ * <p>Includes the moderator's decision, date of review, and optional rejection reason.</p>
+ */
 @Entity
 @Table(name = "moderations")
 public class Moderation {
@@ -18,24 +22,29 @@ public class Moderation {
     @Column(name = "moderation_id", nullable = false)
     private Integer id;
 
+    // The test being moderated
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "test_id", nullable = false)
     private Test test;
 
+    // The moderator who reviewed the test
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "moderator_id", nullable = false)
     private User moderator;
 
+    // The state assigned to the test after moderation (PUBLISHED, REJECTED)
     @Enumerated(EnumType.STRING)
     @Column(name = "assigned_state", nullable = false)
     private State assignedState;
 
+    // The timestamp when the moderation was performed
     @ColumnDefault("current_timestamp()")
     @Column(name = "moderated_at", nullable = false)
     private Instant moderatedAt;
 
+    // The reason for rejection, if applicable
     @Column(name = "rejection_reason", columnDefinition = "TEXT")
     private String rejectionReason;
 

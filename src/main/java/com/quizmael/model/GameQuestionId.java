@@ -7,6 +7,10 @@ import org.hibernate.Hibernate;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * <strong>Composite key</strong> for the <code>GameQuestion</code> entity.
+ * <p>Combines <code>game_id</code> and <code>question_id</code> to uniquely identify an entry.</p>
+ */
 @Embeddable
 public class GameQuestionId implements Serializable {
     private static final long serialVersionUID = -4994674196001757508L;

@@ -73,7 +73,7 @@ CREATE TABLE Moderations (
     moderation_id     INT AUTO_INCREMENT PRIMARY KEY,
     test_id           INT NOT NULL,
     moderator_id      INT NOT NULL,
-    assigned_state    ENUM('PENDING', 'APPROVED', 'REFUSED') NOT NULL,
+    assigned_state    ENUM('DRAFT', 'PENDING', 'APPROVED', 'REFUSED') NOT NULL,
     moderated_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     rejection_reason TEXT NULL,
     FOREIGN KEY (test_id) REFERENCES Tests(test_id) ON DELETE CASCADE,

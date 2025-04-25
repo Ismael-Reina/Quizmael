@@ -7,6 +7,10 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 
+/**
+ * <strong>Game</strong> entity representing a play session by a user.
+ * <p>Stores the <code>user</code> who played and the <code>playedAt</code> timestamp.</p>
+ */
 @Entity
 @Table(name = "games")
 public class Game {
@@ -17,11 +21,13 @@ public class Game {
     @Column(name = "game_id", nullable = false)
     private Integer id;
 
+    // The user who played this game
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.RESTRICT)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    // The timestamp when the game was played
     @ColumnDefault("current_timestamp()")
     @Column(name = "played_at", nullable = false)
     private Instant playedAt;

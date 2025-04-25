@@ -4,6 +4,10 @@ import com.quizmael.model.enums.Language;
 import com.quizmael.model.enums.State;
 import jakarta.persistence.*;
 
+/**
+ * <strong>Test</strong> entity containing a set of questions.
+ * <p>Associated with a creator, has a language, topic, difficulty, and moderation <code>state</code>.</p>
+ */
 @Entity
 @Table(name = "tests")
 public class Test {
@@ -14,17 +18,21 @@ public class Test {
     @Column(name = "test_id", nullable = false)
     private Integer id;
 
+    // The title of the test
     @Column(name = "title", nullable = false, length = 100)
     private String title;
 
+    // The user who created this test
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
 
+    // The state of the test (DRAFT, PUBLISHED, REJECTED, PENDING)
     @Enumerated(EnumType.STRING)
     @Column(name = "state", nullable = false)
     private State state;
 
+    // The language in which the test is written
     @Enumerated(EnumType.STRING)
     @Column(name = "language", nullable = false)
     private Language language;
