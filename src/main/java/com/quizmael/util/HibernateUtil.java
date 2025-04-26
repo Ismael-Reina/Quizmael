@@ -1,5 +1,6 @@
 package com.quizmael.util;
 
+import com.quizmael.util.LoggerUtil;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -16,7 +17,7 @@ public class HibernateUtil {
         try {
             sessionFactory = new Configuration().configure().buildSessionFactory();
         } catch (Exception ex) {
-            // TODO: agregar log de error logger.error("Initial SessionFactory creation failed.", ex);
+            LoggerUtil.error(HibernateUtil.class, "Initial SessionFactory creation failed.", ex);
             throw new ExceptionInInitializerError(ex);
         }
     }

@@ -47,6 +47,17 @@ public class LoggerUtil {
     }
 
     /**
+     * Logs a warning message with an exception.
+     *
+     * @param clazz the class originating the log
+     * @param message the message to log
+     * @param throwable the exception to log
+     */
+    public static void warn(Class<?> clazz, String message, Throwable throwable) {
+        getLogger(clazz).warn(message, throwable);
+    }
+
+    /**
      * Logs an error message.
      *
      * @param clazz the class originating the log
@@ -54,6 +65,17 @@ public class LoggerUtil {
      */
     public static void error(Class<?> clazz, String message) {
         getLogger(clazz).error(message);
+    }
+
+    /**
+     * Logs an error message with an exception.
+     *
+     * @param clazz the class originating the log
+     * @param message the message to log
+     * @param throwable the exception to log
+     */
+    public static void error(Class<?> clazz, String message, Throwable throwable) {
+        getLogger(clazz).error(message, throwable);
     }
 
     /**
@@ -66,4 +88,14 @@ public class LoggerUtil {
         getLogger(clazz).debug(message);
     }
 
+    /**
+     * Logs a debug message.
+     *
+     * @param clazz the class originating the log
+     * @param message the message to log
+     * @param throwable the exception to log
+     */
+    public static void debug(Class<?> clazz, String message, Throwable throwable) {
+        getLogger(clazz).debug(message, throwable);
+    }
 }
