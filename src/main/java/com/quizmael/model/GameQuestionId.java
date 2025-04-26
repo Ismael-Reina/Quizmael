@@ -13,7 +13,9 @@ import java.util.Objects;
  */
 @Embeddable
 public class GameQuestionId implements Serializable {
+
     private static final long serialVersionUID = -4994674196001757508L;
+
     // ------------------------------------------------------------
     //                   Attributes / Fields
     // ------------------------------------------------------------

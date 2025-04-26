@@ -3,21 +3,25 @@ package com.quizmael.model;
 import com.quizmael.model.enums.Role;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 /**
  * Represents a user of the application, which may have different roles and permissions.
  */
 @Entity
 @Table(name = "users")
 public class User {
+
     // ------------------------------------------------------------
     //                   Attributes / Fields
     // ------------------------------------------------------------
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
     private Integer id;
 
     // Username of the user
-    @Column(name = "name", nullable = false, length = 20)
+    @Column(name = "name", nullable = false, unique = true, length = 20)
     private String name;
 
     // The email address of the user
@@ -28,7 +32,7 @@ public class User {
     @Column(name = "password", length = 20)
     private String password;
 
-    // Hint to help recover the password
+    // Hint to aid the user in recalling their password
     @Column(name = "password_hint", length = 100)
     private String passwordHint;
 
@@ -40,7 +44,16 @@ public class User {
     @Column(name = "secret_answer", length = 20)
     private String secretAnswer;
 
-    // The role of the user (ANONYMOUS, REGISTERED, MODERATOR, ADMIN)
+    // Fecha de nacimiento del usuario
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
+
+    // Imagen de perfil del usuario
+    @Lob
+    @Column(name = "profile_picture")
+    private byte[] profilePicture;
+
+    // The role of the user (ANONYMOUS, REGISTERED, MODERATOR, ADMINISTRATOR)
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role;
@@ -102,6 +115,22 @@ public class User {
 
     public void setSecretAnswer(String secretAnswer) {
         this.secretAnswer = secretAnswer;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public byte[] getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(byte[] profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     public Role getRole() {

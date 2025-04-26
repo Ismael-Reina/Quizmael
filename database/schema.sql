@@ -19,6 +19,8 @@ CREATE TABLE Users (
     password_hint   VARCHAR(100) NULL,
     secret_question VARCHAR(100) NULL,
     secret_answer   VARCHAR(20) NULL, -- Encrypted
+    birth_date DATE,
+    profile_picture LONGBLOB,
     role ENUM('ANONYMOUS', 'REGISTERED', 'MODERATOR', 'ADMINISTRATOR') NOT NULL
 );
 -- Email must be unique.
@@ -29,10 +31,49 @@ CREATE TABLE Tests (
     title       VARCHAR(100) NOT NULL,
     creator_id  INT NOT NULL,
     language    ENUM('ES', 'EN') NOT NULL,
-    state       ENUM('PENDING', 'APPROVED', 'REFUSED') NOT NULL,
+    state       ENUM('DRAFT', 'PENDING', 'APPROVED', 'REFUSED') NOT NULL,
+    options_count INT NOT NULL CHECK (options_count BETWEEN 2 AND 6),
+    time_limit  INT NOT NULL CHECK (time_limit BETWEEN 0 AND 3600), -- in seconds
+    created_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    description TEXT NULL,
+    image       LONGBLOB NULL,
+    times_played INT NOT NULL DEFAULT 0,
+    average_score DECIMAL(4,2) NOT NULL DEFAULT 0.00,
+    average_rating DECIMAL(2,1) NOT NULL DEFAULT 0.0,
     FOREIGN KEY (creator_id) REFERENCES Users(user_id) ON DELETE RESTRICT
 );
 -- Users with created tests cannot be deleted unless their tests are reassigned (e.g. to the 'Deleted User').
+
+CREATE TABLE User_Favorite_Tests (
+    user_id INT NOT NULL,
+    test_id INT NOT NULL,
+    PRIMARY KEY (user_id, test_id),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (test_id) REFERENCES Tests(test_id) ON DELETE CASCADE
+);
+
+CREATE TABLE User_Recent_Tests (
+    user_id INT NOT NULL,
+    test_id INT NOT NULL,
+    played_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, test_id),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (test_id) REFERENCES Tests(test_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Topics (
+    topic_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE Test_Topics (
+     test_id INT NOT NULL,
+     topic_id INT NOT NULL,
+     PRIMARY KEY (test_id, topic_id),
+     FOREIGN KEY (test_id) REFERENCES Tests(test_id) ON DELETE CASCADE,
+     FOREIGN KEY (topic_id) REFERENCES Topics(topic_id) ON DELETE CASCADE
+);
 
 CREATE TABLE Questions (
     question_id     INT AUTO_INCREMENT PRIMARY KEY,
@@ -73,7 +114,7 @@ CREATE TABLE Moderations (
     moderation_id     INT AUTO_INCREMENT PRIMARY KEY,
     test_id           INT NOT NULL,
     moderator_id      INT NOT NULL,
-    assigned_state    ENUM('DRAFT', 'PENDING', 'APPROVED', 'REFUSED') NOT NULL,
+    assigned_state    ENUM('PENDING', 'APPROVED', 'REFUSED') NOT NULL,
     moderated_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     rejection_reason TEXT NULL,
     FOREIGN KEY (test_id) REFERENCES Tests(test_id) ON DELETE CASCADE,

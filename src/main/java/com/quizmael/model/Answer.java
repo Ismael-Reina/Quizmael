@@ -11,10 +11,12 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Table(name = "answers")
 public class Answer {
+
     // ------------------------------------------------------------
     //                   Attributes / Fields
     // ------------------------------------------------------------
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "answer_id", nullable = false)
     private Integer id;
 

@@ -15,10 +15,12 @@ import java.time.Instant;
 @Entity
 @Table(name = "moderations")
 public class Moderation {
+
     // ------------------------------------------------------------
     //                   Attributes / Fields
     // ------------------------------------------------------------
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "moderation_id", nullable = false)
     private Integer id;
 

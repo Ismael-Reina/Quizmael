@@ -11,6 +11,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Table(name = "game_questions")
 public class GameQuestion {
+
     // ------------------------------------------------------------
     //                   Attributes / Fields
     // ------------------------------------------------------------
