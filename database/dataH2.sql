@@ -10,4 +10,4 @@ INSERT INTO Users (user_id, name, password, role) VALUES
 (4, 'admin', 'admin', 'ADMINISTRATOR'); -- Default administrator user. Password is stored in plain text (not encrypted yet)
 
 -- Adjust the AUTO_INCREMENT counter by reserving the first IDs
-ALTER TABLE Users AUTO_INCREMENT = 10;
+ALTER TABLE Users ALTER COLUMN user_id RESTART WITH 10;
