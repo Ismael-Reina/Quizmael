@@ -1,5 +1,7 @@
 package com.quizmael.util;
 
+import com.quizmael.exceptions.EncryptionException;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -25,7 +27,7 @@ public class EncryptionUtil {
             byte[] hashBytes = digest.digest(input.getBytes());
             return bytesToHex(hashBytes);
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("SHA-256 algorithm not found", e);
+            throw new EncryptionException("SHA-256 algorithm not found", e);
         }
     }
 
