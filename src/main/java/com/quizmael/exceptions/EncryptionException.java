@@ -8,6 +8,7 @@ package com.quizmael.exceptions;
  * </p>
  *
  * @author Ismael Reina Muñoz
+ * @version 1.0
  */
 public class EncryptionException extends RuntimeException {
 

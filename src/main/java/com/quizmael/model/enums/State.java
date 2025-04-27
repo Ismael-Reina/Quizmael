@@ -10,6 +10,9 @@ package com.quizmael.model.enums;
  *     <li><code>PUBLISHED</code> — Approved and visible to all users.</li>
  *     <li><code>REJECTED</code> — Rejected by a moderator.</li>
  * </ul>
+ *
+ * @author Ismael Reina Muñoz
+ * @version 1.0
  */
 public enum State {
     DRAFT,

@@ -8,6 +8,9 @@ import org.hibernate.annotations.OnDeleteAction;
  * <strong>Entity</strong> representing the association between a test and a topic.
  *
  * <p>Defines a many-to-one relationship with {@link Topic}, using a composite primary key.</p>
+ *
+ * @author Ismael Reina Muñoz
+ * @version 1.0
  */
 @Entity
 @Table(name = "test_topics")

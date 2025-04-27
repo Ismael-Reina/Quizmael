@@ -11,6 +11,9 @@ import java.util.Objects;
  * <strong>Composite primary key</strong> for the {@link UserFavoriteTest} entity.
  *
  * <p>Consists of the user ID and the test ID.</p>
+ *
+ * @author Ismael Reina Muñoz
+ * @version 1.0
  */
 @Embeddable
 public class UserFavoriteTestId implements Serializable {

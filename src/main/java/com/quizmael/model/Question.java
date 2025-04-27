@@ -7,6 +7,9 @@ import org.hibernate.annotations.OnDeleteAction;
 /**
  * <strong>Question</strong> entity belonging to a test.
  * <p>Can contain multiple possible answers, one or more of which may be correct.</p>
+ *
+ * @author Ismael Reina Muñoz
+ * @version 1.0
  */
 @Entity
 @Table(name = "questions")

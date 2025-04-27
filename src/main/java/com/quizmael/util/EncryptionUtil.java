@@ -7,6 +7,9 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * Utility class for encrypting data using SHA-256 hashing.
+ *
+ * @author Ismael Reina Muñoz
+ * @version 1.0
  */
 public class EncryptionUtil {
 

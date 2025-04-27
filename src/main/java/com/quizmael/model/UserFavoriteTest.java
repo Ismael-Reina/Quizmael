@@ -8,6 +8,9 @@ import org.hibernate.annotations.OnDeleteAction;
  * <strong>Entity</strong> representing a test that a user has marked as favorite.
  *
  * <p>Uses a composite primary key linking a user and a test.</p>
+ *
+ * @author Ismael Reina Muñoz
+ * @version 1.0
  */
 @Entity
 @Table(name = "user_favorite_tests")

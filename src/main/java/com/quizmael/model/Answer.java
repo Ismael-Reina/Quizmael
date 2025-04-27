@@ -7,6 +7,9 @@ import org.hibernate.annotations.OnDeleteAction;
 /**
  * <strong>Answer</strong> entity representing a possible answer to a question.
  * <p>Each answer is linked to a single question and can be correct or incorrect.</p>
+ *
+ * @author Ismael Reina Muñoz
+ * @version 1.0
  */
 @Entity
 @Table(name = "answers")

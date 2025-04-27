@@ -7,6 +7,9 @@ import java.time.LocalDate;
 
 /**
  * Represents a user of the application, which may have different roles and permissions.
+ *
+ * @author Ismael Reina Muñoz
+ * @version 1.0
  */
 @Entity
 @Table(name = "users")

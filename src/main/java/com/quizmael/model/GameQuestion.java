@@ -7,6 +7,9 @@ import org.hibernate.annotations.OnDeleteAction;
 /**
  * <strong>GameQuestion</strong> entity representing a question answered during a game.
  * <p>Uses a composite key and stores whether the user's answer was correct.</p>
+ *
+ * @author Ismael Reina Muñoz
+ * @version 1.0
  */
 @Entity
 @Table(name = "game_questions")

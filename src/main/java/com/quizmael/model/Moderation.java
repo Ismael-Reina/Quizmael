@@ -11,6 +11,9 @@ import java.time.Instant;
 /**
  * <strong>Moderation</strong> entity representing the review of a test.
  * <p>Includes the moderator's decision, date of review, and optional rejection reason.</p>
+ *
+ * @author Ismael Reina Muñoz
+ * @version 1.0
  */
 @Entity
 @Table(name = "moderations")

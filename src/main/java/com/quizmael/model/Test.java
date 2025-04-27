@@ -9,6 +9,9 @@ import java.time.Instant;
 /**
  * <strong>Test</strong> entity containing a set of questions.
  * <p>Associated with a creator, has a language, topic, difficulty, and moderation <code>state</code>.</p>
+ *
+ * @author Ismael Reina Muñoz
+ * @version 1.0
  */
 @Entity
 @Table(name = "tests")

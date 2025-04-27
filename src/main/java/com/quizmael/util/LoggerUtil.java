@@ -9,6 +9,9 @@ import org.apache.logging.log4j.Logger;
  * <pre>
  *      <code>LoggerUtil.error(HibernateUtil.class, "Failed to initialize SessionFactory");</code>
  * </pre>
+ *
+ * @author Ismael Reina Muñoz
+ * @version 1.0
  */
 public class LoggerUtil {
 

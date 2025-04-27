@@ -10,6 +10,9 @@ import java.time.Instant;
 /**
  * <strong>Game</strong> entity representing a play session by a user.
  * <p>Stores the <code>user</code> who played and the <code>playedAt</code> timestamp.</p>
+ *
+ * @author Ismael Reina Muñoz
+ * @version 1.0
  */
 @Entity
 @Table(name = "games")

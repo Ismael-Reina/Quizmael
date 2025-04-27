@@ -9,6 +9,8 @@ import jakarta.persistence.Table;
  * <strong>Entity</strong> representing a topic that can be associated with multiple tests.
  *
  * <p>Each topic has a unique ID and a descriptive name.</p>
+ * @author Ismael Reina Muñoz
+ * @version 1.0
  */
 @Entity
 @Table(name = "topics")

@@ -10,6 +10,9 @@ package com.quizmael.model.enums;
  *     <li><code>MODERATOR</code> — Can moderate and approve/reject tests.</li>
  *     <li><code>ADMIN</code> — Full access, including user management.</li>
  * </ul>
+ *
+ * @author Ismael Reina Muñoz
+ * @version 1.0
  */
 public enum Role {
     ANONYMOUS,

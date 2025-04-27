@@ -12,6 +12,9 @@ import java.time.Instant;
  *
  * <p>Uses a composite primary key linking a user and a test, along with the timestamp
  * of when the test was played.</p>
+ *
+ * @author Ismael Reina Muñoz
+ * @version 1.0
  */
 @Entity
 @Table(name = "user_recent_tests")

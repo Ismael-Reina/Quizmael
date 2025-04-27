@@ -10,6 +10,9 @@ package com.quizmael.model.enums;
  * <li><code>ES</code> — Spanish.</li>
  * <li><code>EN</code> — English.</li>
  * </ul>
+ *
+ * @author Ismael Reina Muñoz
+ * @version 1.0
  */
 public enum Language {
     ES,

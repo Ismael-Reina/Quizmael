@@ -11,6 +11,9 @@ import java.util.Objects;
  * <strong>Composite primary key</strong> for the {@link TestTopic} entity.
  *
  * <p>Consists of the test ID and the topic ID.</p>
+ *
+ * @author Ismael Reina Muñoz
+ * @version 1.0
  */
 @Embeddable
 public class TestTopicId implements Serializable {
