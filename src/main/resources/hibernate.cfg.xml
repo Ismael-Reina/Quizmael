@@ -22,7 +22,17 @@
         <property name="hibernate.format_sql">true</property>
 
         <!-- Entities -->
+        <mapping class="com.quizmael.model.Answer"/>
+        <mapping class="com.quizmael.model.Game"/>
+        <mapping class="com.quizmael.model.GameQuestion"/>
+        <mapping class="com.quizmael.model.Moderation"/>
+        <mapping class="com.quizmael.model.Question"/>
+        <mapping class="com.quizmael.model.Test"/>
+        <mapping class="com.quizmael.model.TestTopic"/>
+        <mapping class="com.quizmael.model.Topic"/>
         <mapping class="com.quizmael.model.User"/>
+        <mapping class="com.quizmael.model.UserFavoriteTest"/>
+        <mapping class="com.quizmael.model.UserRecentTest"/>
 
     </session-factory>
 </hibernate-configuration>
