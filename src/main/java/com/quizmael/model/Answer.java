@@ -56,11 +56,11 @@ public class Answer {
         this.text = text;
     }
 
-    public Boolean getIsCorrect() {
+    public Boolean getCorrect() {
         return isCorrect;
     }
 
-    public void setIsCorrect(Boolean isCorrect) {
+    public void setCorrect(Boolean isCorrect) {
         this.isCorrect = isCorrect;
     }
 
