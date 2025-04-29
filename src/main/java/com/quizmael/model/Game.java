@@ -9,7 +9,8 @@ import java.time.Instant;
 
 /**
  * <strong>Game</strong> entity representing a play session by a user.
- * <p>Stores the <code>user</code> who played and the <code>playedAt</code> timestamp.</p>
+ * <p>Stores the <code>user</code> who played, the <code>score</code> achieved
+ * and the <code>playedAt</code> timestamp.</p>
  *
  * @author Ismael Reina Muñoz
  * @version 1.0
@@ -31,6 +32,10 @@ public class Game {
     @OnDelete(action = OnDeleteAction.RESTRICT)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    // The score achieved in this game, between 0.00 and 10.00
+    @Column(name = "score", nullable = false)
+    private Double score;
 
     // The timestamp when the game was played
     @ColumnDefault("current_timestamp()")
@@ -54,6 +59,14 @@ public class Game {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Double getScore() {
+        return score;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
     }
 
     public Instant getPlayedAt() {

@@ -17,7 +17,7 @@ USE quizmael_db;
 CREATE TABLE Users (
     user_id         INT AUTO_INCREMENT PRIMARY KEY,
     name            VARCHAR(20) NOT NULL UNIQUE,
-    email           VARCHAR(40) NULL UNIQUE,
+    email           VARCHAR(40) NULL,
     password        VARCHAR(20) NULL, -- Encrypted
     password_hint   VARCHAR(100) NULL,
     secret_question VARCHAR(100) NULL,
@@ -26,7 +26,7 @@ CREATE TABLE Users (
     profile_picture LONGBLOB,
     role ENUM('ANONYMOUS', 'REGISTERED', 'MODERATOR', 'ADMINISTRATOR') NOT NULL
 );
--- Email must be unique.
+-- name must be unique.
 -- Password is NULL if the user is anonymous.
 
 CREATE TABLE Tests (
@@ -98,6 +98,7 @@ CREATE TABLE Answers (
 CREATE TABLE Games (
     game_id     INT AUTO_INCREMENT PRIMARY KEY,
     user_id     INT NOT NULL,
+    score       DOUBLE NOT NULL CHECK (score >= 0.00 AND score <= 10.00),
     played_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE RESTRICT
 );
