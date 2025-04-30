@@ -2,10 +2,10 @@ package com.quizmael.dao.impl;
 
 import com.quizmael.dao.GameDao;
 import com.quizmael.model.Game;
-import org.junit.jupiter.api.*;
 
 import java.util.Optional;
 
+import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
