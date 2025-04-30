@@ -31,7 +31,7 @@ public class Moderation {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "test_id", nullable = false)
-    private Test test;
+    private QuizTest test;
 
     // The moderator who reviewed the test
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -64,11 +64,11 @@ public class Moderation {
         this.id = id;
     }
 
-    public Test getTest() {
+    public QuizTest getTest() {
         return test;
     }
 
-    public void setTest(Test test) {
+    public void setTest(QuizTest test) {
         this.test = test;
     }
 

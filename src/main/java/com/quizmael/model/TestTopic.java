@@ -27,7 +27,7 @@ public class TestTopic {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "test_id", nullable = false)
-    private Test test;
+    private QuizTest test;
 
     // Topic entity associated with the test
     @MapsId("topicId")
@@ -47,11 +47,11 @@ public class TestTopic {
         this.id = id;
     }
 
-    public Test getTest() {
+    public QuizTest getTest() {
         return test;
     }
 
-    public void setTest(Test test) {
+    public void setTest(QuizTest test) {
         this.test = test;
     }
 

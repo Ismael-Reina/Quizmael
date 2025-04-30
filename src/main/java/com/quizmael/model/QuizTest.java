@@ -15,7 +15,7 @@ import java.time.Instant;
  */
 @Entity
 @Table(name = "tests")
-public class Test {
+public class QuizTest {
 
     // ------------------------------------------------------------
     //                   Attributes / Fields

@@ -27,7 +27,7 @@
         <mapping class="com.quizmael.model.GameQuestion"/>
         <mapping class="com.quizmael.model.Moderation"/>
         <mapping class="com.quizmael.model.Question"/>
-        <mapping class="com.quizmael.model.Test"/>
+        <mapping class="com.quizmael.model.QuizTest"/>
         <mapping class="com.quizmael.model.TestTopic"/>
         <mapping class="com.quizmael.model.Topic"/>
         <mapping class="com.quizmael.model.User"/>

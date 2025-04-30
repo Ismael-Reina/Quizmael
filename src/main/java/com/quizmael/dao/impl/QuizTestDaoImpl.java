@@ -1,7 +1,7 @@
 package com.quizmael.dao.impl;
 
-import com.quizmael.dao.TestDao;
-import com.quizmael.model.Test;
+import com.quizmael.dao.QuizTestDao;
+import com.quizmael.model.QuizTest;
 import com.quizmael.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -10,15 +10,15 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Hibernate implementation of {@link TestDao}.
+ * Hibernate implementation of {@link QuizTestDao}.
  *
  * @author Ismael Reina Muñoz
  * @version 1.0
  */
-public class TestDaoImpl implements TestDao {
+public class QuizTestDaoImpl implements QuizTestDao {
 
     @Override
-    public void save(Test test) {
+    public void save(QuizTest test) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
@@ -31,7 +31,7 @@ public class TestDaoImpl implements TestDao {
     }
 
     @Override
-    public void update(Test test) {
+    public void update(QuizTest test) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
@@ -44,7 +44,7 @@ public class TestDaoImpl implements TestDao {
     }
 
     @Override
-    public void delete(Test test) {
+    public void delete(QuizTest test) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
@@ -57,16 +57,16 @@ public class TestDaoImpl implements TestDao {
     }
 
     @Override
-    public Optional<Test> findById(Integer id) {
+    public Optional<QuizTest> findById(Integer id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return Optional.ofNullable(session.get(Test.class, id));
+            return Optional.ofNullable(session.get(QuizTest.class, id));
         }
     }
 
     @Override
-    public List<Test> findAll() {
+    public List<QuizTest> findAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Test", Test.class).list();
+            return session.createQuery("FROM QuizTest", QuizTest.class).list();
         }
     }
 }

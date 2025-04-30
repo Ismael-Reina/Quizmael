@@ -38,7 +38,7 @@ public class UserRecentTest {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "test_id", nullable = false)
-    private Test test;
+    private QuizTest test;
 
     // Timestamp when the test was played
     @ColumnDefault("current_timestamp()")
@@ -64,11 +64,11 @@ public class UserRecentTest {
         this.user = user;
     }
 
-    public Test getTest() {
+    public QuizTest getTest() {
         return test;
     }
 
-    public void setTest(Test test) {
+    public void setTest(QuizTest test) {
         this.test = test;
     }
 
