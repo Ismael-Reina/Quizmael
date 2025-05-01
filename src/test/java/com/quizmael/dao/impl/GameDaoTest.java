@@ -23,6 +23,7 @@ class GameDaoTest {
         gameDao = new GameDaoImpl();
     }
 
+    // Verifies that a game can be saved and correctly retrieved by its ID.
     @Test
     void testSaveAndFindById() {
         Game game = new Game();
@@ -35,6 +36,7 @@ class GameDaoTest {
         assertEquals(10.00, retrieved.get().getScore());
     }
 
+    // Verifies that an existing game can be updated and changes are persisted.
     @Test
     void testUpdate() {
         Game game = new Game();
@@ -50,6 +52,7 @@ class GameDaoTest {
         assertEquals(5.23, updated.get().getScore());
     }
 
+    // Verifies that a game can be deleted and cannot be retrieved afterward.
     @Test
     void testDelete() {
         Game game = new Game();
@@ -61,4 +64,12 @@ class GameDaoTest {
         Optional<Game> deleted = gameDao.findById(game.getId());
         assertFalse(deleted.isPresent());
     }
+
+    // Verifies that searching for a non-existent game returns an empty Optional.
+    @Test
+    void testFindByIdNotFound() {
+        Optional<Game> result = gameDao.findById(9999);
+        assertTrue(result.isEmpty());
+    }
+
 }

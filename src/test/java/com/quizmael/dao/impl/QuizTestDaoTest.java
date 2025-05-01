@@ -37,9 +37,9 @@ class QuizTestDaoTest {
         userDao.save(user);
     }
 
+    // Save a new test and retrieve it by ID
     @Test
     void testSaveAndFindById() {
-        // Save a new test and retrieve it by ID
         QuizTest quizTest = new QuizTest();
         quizTest.setCreator(user);
         quizTest.setTitle("Título de prueba");
@@ -55,9 +55,9 @@ class QuizTestDaoTest {
         assertEquals("Título de prueba", retrieved.get().getTitle());
     }
 
+    // Save two tests and verify both are found
     @Test
     void testFindAll() {
-        // Save two tests and verify both are found
         QuizTest quizTest1 = new QuizTest();
         quizTest1.setCreator(user);
         quizTest1.setTitle("Test 1");
@@ -80,9 +80,9 @@ class QuizTestDaoTest {
         assertTrue(tests.size() >= 2);
     }
 
+    // Update test fields and verify the changes persist
     @Test
     void testUpdate() {
-        // Update test fields and verify the changes persist
         QuizTest quizTest = new QuizTest();
         quizTest.setCreator(user);
         quizTest.setTitle("Antiguo título");
@@ -102,9 +102,9 @@ class QuizTestDaoTest {
         assertEquals(90, updated.get().getTimeLimit());
     }
 
+    // Delete test and ensure it no longer exists
     @Test
     void testDelete() {
-        // Delete test and ensure it no longer exists
         QuizTest quizTest = new QuizTest();
         quizTest.setCreator(user);
         quizTest.setTitle("A eliminar");

@@ -39,9 +39,9 @@ class QuestionDaoTest {
         quizTestDao.save(test);
     }
 
+    // Save a question and retrieve it by ID
     @Test
     void testSaveAndFindById() {
-        // Save a question and retrieve it by ID
         Question question = new Question();
         question.setTest(test);
         question.setText("¿Cuál es la capital de España?");
@@ -52,9 +52,9 @@ class QuestionDaoTest {
         assertEquals("¿Cuál es la capital de España?", retrieved.get().getText());
     }
 
+    // Save two questions and verify both are found
     @Test
     void testFindAll() {
-        // Save two questions and verify both are found
         Question question1 = new Question();
         question1.setTest(test);
         question1.setText("Pregunta 1");
@@ -69,9 +69,9 @@ class QuestionDaoTest {
         assertTrue(all.size() >= 2);
     }
 
+    // Update question text and verify changes
     @Test
     void testUpdate() {
-        // Update question text and verify changes
         Question question = new Question();
         question.setTest(test);
         question.setText("Texto original");
@@ -85,9 +85,9 @@ class QuestionDaoTest {
         assertEquals("Texto modificado", updated.get().getText());
     }
 
+    // Delete a question and ensure it no longer exists
     @Test
     void testDelete() {
-        // Delete a question and ensure it no longer exists
         Question question = new Question();
         question.setTest(test);
         question.setText("A eliminar");

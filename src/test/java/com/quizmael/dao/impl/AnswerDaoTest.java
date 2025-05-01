@@ -23,6 +23,7 @@ class AnswerDaoTest {
         answerDao = new AnswerDaoImpl();
     }
 
+    // Verifies that an answer can be saved and correctly retrieved by its ID.
     @Test
     void testSaveAndFindById() {
         Answer answer = new Answer();
@@ -36,6 +37,7 @@ class AnswerDaoTest {
         assertEquals("Sample Answer", retrieved.get().getText());
     }
 
+    // Verifies that an existing answer can be updated and changes are persisted.
     @Test
     void testUpdate() {
         Answer answer = new Answer();
@@ -54,6 +56,7 @@ class AnswerDaoTest {
         assertTrue(updated.get().getCorrect());
     }
 
+    // Verifies that an answer can be deleted and cannot be retrieved afterward.
     @Test
     void testDelete() {
         Answer answer = new Answer();
@@ -66,4 +69,12 @@ class AnswerDaoTest {
         Optional<Answer> deleted = answerDao.findById(answer.getId());
         assertFalse(deleted.isPresent());
     }
+
+    // Verifies that searching for a non-existent answer returns an empty Optional.
+    @Test
+    void testFindByIdNotFound() {
+        Optional<Answer> result = answerDao.findById(9999);
+        assertTrue(result.isEmpty());
+    }
+
 }
