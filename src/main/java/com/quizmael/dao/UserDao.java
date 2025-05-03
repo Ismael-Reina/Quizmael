@@ -17,8 +17,9 @@ public interface UserDao {
      * Saves a new user into the database.
      *
      * @param user The user to save.
+     * @return The saved user, possibly with its generated ID.
      */
-    void save(User user);
+    User save(User user);
 
     /**
      * Updates an existing user in the database.
@@ -41,6 +42,14 @@ public interface UserDao {
      * @return An {@link Optional} containing the found user, or empty if not found.
      */
     Optional<User> findById(Integer id);
+
+    /**
+     * Finds a user by its user name.
+     *
+     * @param name The user name of the user.
+     * @return An {@link Optional} containing the found user, or empty if not found.
+     */
+    Optional<User> findByName(String name);
 
     /**
      * Retrieves all users from the database.

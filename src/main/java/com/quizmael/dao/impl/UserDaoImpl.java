@@ -20,12 +20,13 @@ import java.util.Optional;
 public class UserDaoImpl implements UserDao {
 
     @Override
-    public void save(User user) {
+    public User save(User user) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.persist(user);
             transaction.commit();
+            return user;
         } catch (Exception ex) {
             if (transaction != null) transaction.rollback();
             throw ex;
@@ -62,6 +63,17 @@ public class UserDaoImpl implements UserDao {
     public Optional<User> findById(Integer id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return Optional.ofNullable(session.get(User.class, id));
+        }
+    }
+
+    @Override
+    public Optional<User> findByName(String name) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            String hql = "FROM User WHERE name = :name";
+            User user = session.createQuery(hql, User.class)
+                    .setParameter("name", name)
+                    .uniqueResult();
+            return Optional.ofNullable(user);
         }
     }
 
