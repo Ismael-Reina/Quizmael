@@ -30,17 +30,25 @@ public interface QuizTestDao {
     /**
      * Deletes a test from the database.
      *
-     * @param test the test to delete
+     * @param testId the test to delete
      */
-    void delete(QuizTest test);
+    void delete(int testId);
 
     /**
      * Finds a test by its ID.
      *
-     * @param id the ID of the test to find
+     * @param testId the ID of the test to find
      * @return an Optional containing the found test, or empty if not found
      */
-    Optional<QuizTest> findById(Integer id);
+    Optional<QuizTest> findById(int testId);
+
+    /**
+     * Finds all tests created by a specific user.
+     *
+     * @param userId the ID of the user
+     * @return a list of tests created by the user
+     */
+    List<QuizTest> findByCreatorId(int userId);
 
     /**
      * Finds all tests in the database.

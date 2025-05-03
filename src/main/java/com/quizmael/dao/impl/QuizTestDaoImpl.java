@@ -44,22 +44,34 @@ public class QuizTestDaoImpl implements QuizTestDao {
     }
 
     @Override
-    public void delete(QuizTest test) {
-        Transaction tx = null;
+    public void delete(int testId) {
+        Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            tx = session.beginTransaction();
-            session.remove(test);
-            tx.commit();
-        } catch (Exception e) {
-            if (tx != null) tx.rollback();
-            throw e;
+            transaction = session.beginTransaction();
+            QuizTest test = session.get(QuizTest.class, testId);
+            if (test != null) {
+                session.remove(test);
+            }
+            transaction.commit();
+        } catch (Exception ex) {
+            if (transaction != null) transaction.rollback();
+            throw ex;
         }
     }
 
     @Override
-    public Optional<QuizTest> findById(Integer id) {
+    public Optional<QuizTest> findById(int testId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return Optional.ofNullable(session.get(QuizTest.class, id));
+            return Optional.ofNullable(session.get(QuizTest.class, testId));
+        }
+    }
+
+    @Override
+    public List<QuizTest> findByCreatorId(int userId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM QuizTest WHERE creator.id = :userId", QuizTest.class)
+                    .setParameter("userId", userId)
+                    .list();
         }
     }
 
