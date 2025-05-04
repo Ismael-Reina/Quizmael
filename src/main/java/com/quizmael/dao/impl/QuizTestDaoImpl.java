@@ -83,7 +83,7 @@ public class QuizTestDaoImpl implements QuizTestDao {
     }
 
     @Override
-    public List<QuizTest> findAllPublicTests() {
+    public List<QuizTest> findAllPublic() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
                     "FROM QuizTest WHERE state = 'VALIDATED'", QuizTest.class
@@ -92,7 +92,7 @@ public class QuizTestDaoImpl implements QuizTestDao {
     }
 
     @Override
-    public List<QuizTest> findTestsByTopic(String topicName) {
+    public List<QuizTest> findByTopic(String topicName) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
                             "SELECT qt FROM QuizTest qt JOIN qt.testTopics tt " +
@@ -103,7 +103,7 @@ public class QuizTestDaoImpl implements QuizTestDao {
     }
 
     @Override
-    public List<QuizTest> findTestsByTitle(String title) {
+    public List<QuizTest> findByTitleContaining(String title) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
                             "FROM QuizTest WHERE state = 'VALIDATED' AND LOWER(title) LIKE :title", QuizTest.class

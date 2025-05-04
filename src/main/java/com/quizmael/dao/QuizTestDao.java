@@ -62,7 +62,7 @@ public interface QuizTestDao {
      *
      * @return a list of public tests
      */
-    public List<QuizTest> findAllPublicTests();
+    public List<QuizTest> findAllPublic();
 
     /**
      * Finds public tests by topic name.
@@ -70,7 +70,7 @@ public interface QuizTestDao {
      * @param topicName the name of the topic
      * @return a list of public tests related to the given topic
      */
-    public List<QuizTest> findTestsByTopic(String topicName);
+    public List<QuizTest> findByTopic(String topicName);
 
     /**
      * Finds public tests by title.
@@ -78,6 +78,6 @@ public interface QuizTestDao {
      * @param title the title of the test
      * @return a list of public tests related to the given title
      */
-    public List<QuizTest> findTestsByTitle(String title);
+    public List<QuizTest> findByTitleContaining(String title);
 
 }
