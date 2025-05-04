@@ -36,6 +36,22 @@ class GameDaoTest {
         assertEquals(10.00, retrieved.get().getScore());
     }
 
+    // Verifies that questionCount and correctAnswers are correctly stored and retrieved.
+    @Test
+    void testSaveGameWithQuestionAndCorrectAnswers() {
+        Game game = new Game();
+        game.setScore(7.25);
+        game.setQuestionCount(10);
+        game.setCorrectAnswers(8);
+
+        gameDao.save(game);
+
+        Optional<Game> retrieved = gameDao.findById(game.getId());
+        assertTrue(retrieved.isPresent());
+        assertEquals(10, retrieved.get().getQuestionCount());
+        assertEquals(8, retrieved.get().getCorrectAnswers());
+    }
+
     // Verifies that an existing game can be updated and changes are persisted.
     @Test
     void testUpdate() {
