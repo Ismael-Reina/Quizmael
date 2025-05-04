@@ -57,4 +57,27 @@ public interface QuizTestDao {
      */
     List<QuizTest> findAll();
 
+    /**
+     * Finds all public tests (those validated and not in draft state).
+     *
+     * @return a list of public tests
+     */
+    public List<QuizTest> findAllPublicTests();
+
+    /**
+     * Finds public tests by topic name.
+     *
+     * @param topicName the name of the topic
+     * @return a list of public tests related to the given topic
+     */
+    public List<QuizTest> findTestsByTopic(String topicName);
+
+    /**
+     * Finds public tests by title.
+     *
+     * @param title the title of the test
+     * @return a list of public tests related to the given title
+     */
+    public List<QuizTest> findTestsByTitle(String title);
+
 }

@@ -81,4 +81,35 @@ public class QuizTestDaoImpl implements QuizTestDao {
             return session.createQuery("FROM QuizTest", QuizTest.class).list();
         }
     }
+
+    @Override
+    public List<QuizTest> findAllPublicTests() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "FROM QuizTest WHERE state = 'VALIDATED'", QuizTest.class
+            ).list();
+        }
+    }
+
+    @Override
+    public List<QuizTest> findTestsByTopic(String topicName) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "SELECT qt FROM QuizTest qt JOIN qt.testTopics tt " +
+                                    "WHERE qt.state = 'VALIDATED' AND tt.topic.name = :topicName", QuizTest.class
+                    ).setParameter("topicName", topicName)
+                    .list();
+        }
+    }
+
+    @Override
+    public List<QuizTest> findTestsByTitle(String title) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "FROM QuizTest WHERE state = 'VALIDATED' AND LOWER(title) LIKE :title", QuizTest.class
+                    ).setParameter("title", "%" + title.toLowerCase() + "%")
+                    .list();
+        }
+    }
+
 }
