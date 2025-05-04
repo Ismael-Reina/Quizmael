@@ -53,6 +53,7 @@ public class TestTopic {
 
     public void setTest(QuizTest test) {
         this.test = test;
+        test.getTestTopics().add(this);
     }
 
     public Topic getTopic() {

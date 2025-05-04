@@ -5,6 +5,9 @@ import com.quizmael.model.enums.State;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * <strong>Test</strong> entity containing a set of questions.
@@ -80,6 +83,10 @@ public class QuizTest {
     // Calificación promedio del test
     @Column(name = "average_rating", nullable = false, precision = 2, scale = 1)
     private Double averageRating;
+
+    // Topics associated with this test (through TestTopic)
+    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<TestTopic> testTopics = new HashSet<>();
 
     // ------------------------------------------------------------
     //                   Getters & Setters
@@ -194,6 +201,17 @@ public class QuizTest {
 
     public void setAverageRating(Double averageRating) {
         this.averageRating = averageRating;
+    }
+
+    public Set<TestTopic> getTestTopics() {
+        return testTopics;
+    }
+
+    @Transient
+    public Set<Topic> getTopics() {
+        return testTopics.stream()
+                .map(TestTopic::getTopic)
+                .collect(Collectors.toSet());
     }
 
 }
