@@ -1,6 +1,8 @@
 package com.quizmael.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -33,6 +35,18 @@ public class Game {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    // Total number of questions presented during the game
+    @Column(name = "questionCount", nullable = false)
+    @Min(1)
+    @Max(100)
+    private int questionCount;
+
+    // Total number of correctly answered questions
+    @Column(name = "correctAnswers", nullable = false)
+    @Min(0)
+    @Max(100)
+    private int correctAnswers;
+
     // The score achieved in this game, between 0.00 and 10.00
     @Column(name = "score", nullable = false)
     private Double score;
@@ -59,6 +73,22 @@ public class Game {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public int getQuestionCount() {
+        return questionCount;
+    }
+
+    public void setQuestionCount(int questionCount) {
+        this.questionCount = questionCount;
+    }
+
+    public int getCorrectAnswers() {
+        return correctAnswers;
+    }
+
+    public void setCorrectAnswers(int correctAnswers) {
+        this.correctAnswers = correctAnswers;
     }
 
     public Double getScore() {

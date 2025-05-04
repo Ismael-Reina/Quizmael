@@ -96,10 +96,12 @@ CREATE TABLE Answers (
 );
 
 CREATE TABLE Games (
-    game_id     INT AUTO_INCREMENT PRIMARY KEY,
-    user_id     INT NOT NULL,
-    score       DOUBLE NOT NULL CHECK (score >= 0.00 AND score <= 10.00),
-    played_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    game_id         INT AUTO_INCREMENT PRIMARY KEY,
+    user_id         INT NOT NULL,
+    questionCount   INT NOT NULL CHECK (questionCount BETWEEN 1 AND 100),
+    correctAnswers  INT NOT NULL CHECK (correctAnswers BETWEEN 0 AND 100),
+    score           DOUBLE NOT NULL CHECK (score >= 0.00 AND score <= 10.00),
+    played_at       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE RESTRICT
 );
 -- Users with played games cannot be deleted unless their games are reassigned (e.g. to the 'Deleted User').
