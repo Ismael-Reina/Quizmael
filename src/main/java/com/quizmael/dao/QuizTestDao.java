@@ -88,4 +88,22 @@ public interface QuizTestDao {
      * @return a list of tests in the specified state
      */
     List<QuizTest> findByState(State state);
+
+    /**
+     * Retrieves all rejected tests created by a specific user.
+     *
+     * @param userId the ID of the user who created the tests
+     * @return list of rejected tests authored by the user
+     */
+    List<QuizTest> findRejectedTestsByUser(int userId);
+
+    /**
+     * Retrieves all tests moderated by a specific moderator.
+     *
+     * @param moderatorId the ID of the moderator
+     * @return list of tests moderated by the given moderator
+     */
+    List<QuizTest> findModeratedBy(int moderatorId);
+
+
 }
