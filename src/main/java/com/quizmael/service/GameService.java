@@ -1,8 +1,6 @@
 package com.quizmael.service;
 
-import com.quizmael.model.Game;
-import com.quizmael.model.QuizTest;
-import com.quizmael.model.User;
+import com.quizmael.model.*;
 
 import java.util.List;
 
@@ -21,10 +19,9 @@ public interface GameService {
     /**
      * Submits an answer for a specific question within a game.
      *
-     * @param gameId     the game session ID
-     * @param questionId the question being answered
-     * @param answerId   the selected answer ID
+     * @param gameQuestion   the GameQuestion object representing the question in the current game
+     * @param selectedAnswer the selected answer
      */
-    void submitAnswer(int gameId, int questionId, int answerId);
+    void submitAnswer(GameQuestion gameQuestion, Answer selectedAnswer);
 
 }
