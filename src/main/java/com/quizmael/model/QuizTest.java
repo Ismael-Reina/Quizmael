@@ -92,6 +92,16 @@ public class QuizTest {
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TestTopic> testTopics = new HashSet<>();
 
+    // The user who reviewed (validated or rejected) the test
+    @ManyToOne
+    @JoinColumn(name = "moderated_by_id")
+    private User moderatedBy;
+
+    // The date and time when the test was reviewed
+    @Column(name = "moderation_date")
+    private Instant moderationDate;
+
+
     // ------------------------------------------------------------
     //                   Getters & Setters
     // ------------------------------------------------------------
@@ -220,6 +230,22 @@ public class QuizTest {
         return testTopics.stream()
                 .map(TestTopic::getTopic)
                 .collect(Collectors.toSet());
+    }
+
+    public User getModeratedBy() {
+        return moderatedBy;
+    }
+
+    public void setModeratedBy(User moderatedBy) {
+        this.moderatedBy = moderatedBy;
+    }
+
+    public Instant getModerationDate() {
+        return moderationDate;
+    }
+
+    public void setModerationDate(Instant moderationDate) {
+        this.moderationDate = moderationDate;
     }
 
 }
