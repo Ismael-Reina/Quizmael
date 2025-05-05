@@ -1,6 +1,7 @@
 package com.quizmael.dao.impl;
 
 import com.quizmael.dao.UserDao;
+import com.quizmael.model.QuizTest;
 import com.quizmael.model.User;
 import com.quizmael.util.HibernateUtil;
 import org.hibernate.Session;
@@ -83,4 +84,14 @@ public class UserDaoImpl implements UserDao {
             return session.createQuery("FROM User", User.class).list();
         }
     }
+
+    public List<QuizTest> getFavoriteTests(int userId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "SELECT t FROM User u JOIN u.favoriteTests t WHERE u.id = :userId", QuizTest.class)
+                    .setParameter("userId", userId)
+                    .list();
+        }
+    }
+
 }

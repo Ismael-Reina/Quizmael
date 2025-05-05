@@ -1,5 +1,6 @@
 package com.quizmael.dao;
 
+import com.quizmael.model.QuizTest;
 import com.quizmael.model.User;
 import java.util.List;
 import java.util.Optional;
@@ -57,4 +58,12 @@ public interface UserDao {
      * @return A list of all users.
      */
     List<User> findAll();
+
+    /**
+     * Retrieves the list of favorite tests for a given user.
+     *
+     * @param userId the ID of the user
+     * @return a list of favorite tests
+     */
+    public List<QuizTest> getFavoriteTests(int userId);
 }
