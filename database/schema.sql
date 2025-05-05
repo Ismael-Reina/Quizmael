@@ -44,7 +44,10 @@ CREATE TABLE Tests (
     times_played    INT NOT NULL DEFAULT 0,
     average_score   DECIMAL(4,2) NOT NULL DEFAULT 0.00,
     average_rating  DECIMAL(2,1) NOT NULL DEFAULT 0.0,
-    FOREIGN KEY (creator_id) REFERENCES Users(user_id) ON DELETE RESTRICT
+    moderated_by_id INT,
+    moderation_date DATETIME,
+    FOREIGN KEY (creator_id) REFERENCES Users(user_id) ON DELETE RESTRICT,
+    FOREIGN KEY (moderated_by_id) REFERENCES Users(user_id) ON DELETE RESTRICT
 );
 -- Users with created tests cannot be deleted unless their tests are reassigned (e.g. to the 'Deleted User').
 

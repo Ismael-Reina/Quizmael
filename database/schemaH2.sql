@@ -24,21 +24,25 @@ CREATE TABLE Users (
 -- Password is NULL if the user is anonymous.
 
 CREATE TABLE Tests (
-    test_id     INT PRIMARY KEY AUTO_INCREMENT,
-    title       VARCHAR(100) NOT NULL,
-    creator_id  INT NOT NULL,
-    language    VARCHAR(5) NOT NULL CHECK (language IN ('ES', 'EN')),
-    state       VARCHAR(10) NOT NULL CHECK (state IN ('DRAFT', 'PENDING', 'APPROVED', 'REFUSED')),
-    options_count INT NOT NULL CHECK (options_count BETWEEN 2 AND 6),
-    time_limit  INT NOT NULL CHECK (time_limit BETWEEN 0 AND 3600),
-    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    description TEXT,
-    image       BLOB,
-    times_played INT DEFAULT 0,
-    average_score DECIMAL(4,2) DEFAULT 0.00,
-    average_rating DECIMAL(2,1) DEFAULT 0.0,
-    FOREIGN KEY (creator_id) REFERENCES Users(user_id) ON DELETE RESTRICT
+    test_id         INT PRIMARY KEY AUTO_INCREMENT,
+    title           VARCHAR(100) NOT NULL,
+    creator_id      INT NOT NULL,
+    language        VARCHAR(5) NOT NULL CHECK (language IN ('ES', 'EN')),
+    state           VARCHAR(10) NOT NULL CHECK (state IN ('DRAFT', 'PENDING', 'APPROVED', 'REFUSED')),
+    options_count   INT NOT NULL CHECK (options_count BETWEEN 2 AND 6),
+    time_limit      INT NOT NULL CHECK (time_limit BETWEEN 0 AND 3600),
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    description     TEXT,
+    image           BLOB,
+    times_played    INT DEFAULT 0,
+    average_score   DECIMAL(4,2) DEFAULT 0.00,
+    average_rating  DECIMAL(2,1) DEFAULT 0.0,
+    moderated_by_id INT,
+    moderation_date TIMESTAMP,
+    FOREIGN KEY (creator_id) REFERENCES Users(user_id) ON DELETE RESTRICT,
+    FOREIGN KEY (moderated_by_id) REFERENCES Users(user_id) ON DELETE RESTRICT
+
 );
 -- Users with created tests cannot be deleted unless their tests are reassigned (e.g. to the 'Deleted User').
 
