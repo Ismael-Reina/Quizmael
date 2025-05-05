@@ -51,9 +51,9 @@ CREATE TABLE User_Favorite_Tests (
 );
 
 CREATE TABLE User_Recent_Tests (
-    user_id INT NOT NULL,
-    test_id INT NOT NULL,
-    played_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_id     INT NOT NULL,
+    test_id     INT NOT NULL,
+    played_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id, test_id),
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (test_id) REFERENCES Tests(test_id) ON DELETE CASCADE
@@ -65,7 +65,7 @@ CREATE TABLE Topics (
 );
 
 CREATE TABLE Test_Topics (
-    test_id INT NOT NULL,
+    test_id  INT NOT NULL,
     topic_id INT NOT NULL,
     PRIMARY KEY (test_id, topic_id),
     FOREIGN KEY (test_id) REFERENCES Tests(test_id) ON DELETE CASCADE,
@@ -92,11 +92,14 @@ CREATE TABLE Answers (
 CREATE TABLE Games (
     game_id         INT PRIMARY KEY AUTO_INCREMENT,
     user_id         INT NOT NULL,
+    test_id         INT NOT NULL,
     questionCount   INT NOT NULL CHECK (questionCount BETWEEN 1 AND 100),
     correctAnswers  INT NOT NULL CHECK (correctAnswers BETWEEN 0 AND 100),
     score           DECIMAL(4,2) NOT NULL CHECK (score >= 0.00 AND score <= 10.00),
-    played_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    start_time      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    played_at       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE RESTRICT
+    FOREIGN KEY (test_id) REFERENCES Tests(test_id) ON DELETE RESTRICT
 );
 -- Users with played games cannot be deleted unless their games are reassigned (e.g. to the 'Deleted User').
 

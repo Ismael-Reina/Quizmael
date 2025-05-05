@@ -30,20 +30,20 @@ CREATE TABLE Users (
 -- Password is NULL if the user is anonymous.
 
 CREATE TABLE Tests (
-    test_id     INT AUTO_INCREMENT PRIMARY KEY,
-    title       VARCHAR(100) NOT NULL,
-    creator_id  INT NOT NULL,
-    language    ENUM('ES', 'EN') NOT NULL,
-    state       ENUM('DRAFT', 'PENDING', 'APPROVED', 'REFUSED') NOT NULL,
-    options_count INT NOT NULL CHECK (options_count BETWEEN 2 AND 6),
-    time_limit  INT NOT NULL CHECK (time_limit BETWEEN 0 AND 3600), -- in seconds
-    created_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    description TEXT NULL,
-    image       LONGBLOB NULL,
-    times_played INT NOT NULL DEFAULT 0,
-    average_score DECIMAL(4,2) NOT NULL DEFAULT 0.00,
-    average_rating DECIMAL(2,1) NOT NULL DEFAULT 0.0,
+    test_id         INT AUTO_INCREMENT PRIMARY KEY,
+    title           VARCHAR(100) NOT NULL,
+    creator_id      INT NOT NULL,
+    language        ENUM('ES', 'EN') NOT NULL,
+    state           ENUM('DRAFT', 'PENDING', 'APPROVED', 'REFUSED') NOT NULL,
+    options_count   INT NOT NULL CHECK (options_count BETWEEN 2 AND 6),
+    time_limit      INT NOT NULL CHECK (time_limit BETWEEN 0 AND 3600), -- in seconds
+    created_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    description     TEXT NULL,
+    image           LONGBLOB NULL,
+    times_played    INT NOT NULL DEFAULT 0,
+    average_score   DECIMAL(4,2) NOT NULL DEFAULT 0.00,
+    average_rating  DECIMAL(2,1) NOT NULL DEFAULT 0.0,
     FOREIGN KEY (creator_id) REFERENCES Users(user_id) ON DELETE RESTRICT
 );
 -- Users with created tests cannot be deleted unless their tests are reassigned (e.g. to the 'Deleted User').
@@ -101,6 +101,7 @@ CREATE TABLE Games (
     questionCount   INT NOT NULL CHECK (questionCount BETWEEN 1 AND 100),
     correctAnswers  INT NOT NULL CHECK (correctAnswers BETWEEN 0 AND 100),
     score           DOUBLE NOT NULL CHECK (score >= 0.00 AND score <= 10.00),
+    start_time      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     played_at       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE RESTRICT
 );

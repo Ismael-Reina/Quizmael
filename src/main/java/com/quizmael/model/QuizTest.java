@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -47,40 +48,43 @@ public class QuizTest {
     @Column(name = "language", nullable = false)
     private Language language;
 
-    // Número de opciones por pregunta (entre 2 y 6)
+    // Number of options per question (between 2 and 6)
     @Column(name = "options_count", nullable = false)
     private Integer optionsCount;
 
-    // Límite de tiempo en segundos (entre 0 y 3600)
+    // Time limit in seconds (between 0 and 3600)
     @Column(name = "time_limit", nullable = false)
     private Integer timeLimit;
 
-    // Fecha de creación del test
+    // Test creation date
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
-    // Fecha de última actualización del test
+    // Date of last test update
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
-    // Descripción del test
+    // Test description
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    // Imagen asociada al test
+    // Questions associated with this test
+    @OneToMany(mappedBy = "quizTest", fetch = FetchType.LAZY)
+    private List<Question> questions;
+
+    // Image associated with the test
     @Lob
     @Column(name = "image")
     private byte[] image;
 
-    // Número de veces que el test ha sido jugado
-    @Column(name = "times_played", nullable = false)
+    // Number of times the test has been played    @Column(name = "times_played", nullable = false)
     private Integer timesPlayed;
 
-    // Puntuación promedio del test
+    // Average test score
     @Column(name = "average_score", nullable = false, precision = 4, scale = 2)
     private Double averageScore;
 
-    // Calificación promedio del test
+    // Average test user rating
     @Column(name = "average_rating", nullable = false, precision = 2, scale = 1)
     private Double averageRating;
 
@@ -169,6 +173,10 @@ public class QuizTest {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
     }
 
     public byte[] getImage() {

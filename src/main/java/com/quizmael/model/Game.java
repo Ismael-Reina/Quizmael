@@ -51,7 +51,11 @@ public class Game {
     @Column(name = "score", nullable = false)
     private Double score;
 
-    // The timestamp when the game was played
+    // The timestamp when the game started
+    @Column(name = "start_time", nullable = false)
+    private Instant startTime;
+
+    // The timestamp when the game finished
     @ColumnDefault("current_timestamp()")
     @Column(name = "played_at", nullable = false)
     private Instant playedAt;
@@ -97,6 +101,14 @@ public class Game {
 
     public void setScore(Double score) {
         this.score = score;
+    }
+
+    public Instant getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Instant startTime) {
+        this.startTime = startTime;
     }
 
     public Instant getPlayedAt() {
