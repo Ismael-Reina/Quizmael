@@ -2,6 +2,7 @@ package com.quizmael.dao.impl;
 
 import com.quizmael.dao.QuizTestDao;
 import com.quizmael.model.QuizTest;
+import com.quizmael.model.enums.State;
 import com.quizmael.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -108,6 +109,16 @@ public class QuizTestDaoImpl implements QuizTestDao {
             return session.createQuery(
                             "FROM QuizTest WHERE state = 'VALIDATED' AND LOWER(title) LIKE :title", QuizTest.class
                     ).setParameter("title", "%" + title.toLowerCase() + "%")
+                    .list();
+        }
+    }
+
+    @Override
+    public List<QuizTest> findByState(State state) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "FROM QuizTest q WHERE q.state = :state", QuizTest.class)
+                    .setParameter("state", state)
                     .list();
         }
     }

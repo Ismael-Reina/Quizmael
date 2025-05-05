@@ -1,6 +1,7 @@
 package com.quizmael.dao;
 
 import com.quizmael.model.QuizTest;
+import com.quizmael.model.enums.State;
 
 import java.util.List;
 import java.util.Optional;
@@ -80,4 +81,11 @@ public interface QuizTestDao {
      */
     public List<QuizTest> findByTitleContaining(String title);
 
+    /**
+     * Retrieves all tests that are in the given state.
+     *
+     * @param state the state to filter tests by
+     * @return a list of tests in the specified state
+     */
+    List<QuizTest> findByState(State state);
 }
