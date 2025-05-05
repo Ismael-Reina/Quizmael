@@ -123,4 +123,25 @@ public class QuizTestDaoImpl implements QuizTestDao {
         }
     }
 
+    @Override
+    public List<QuizTest> findRejectedTestsByUser(int userId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "FROM QuizTest q WHERE q.state = :state AND q.creator.id = :userId", QuizTest.class)
+                    .setParameter("state", State.REJECTED)
+                    .setParameter("userId", userId)
+                    .list();
+        }
+    }
+
+    @Override
+    public List<QuizTest> findModeratedBy(int moderatorId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "FROM QuizTest q WHERE q.moderatedBy.id = :moderatorId", QuizTest.class)
+                    .setParameter("moderatorId", moderatorId)
+                    .list();
+        }
+    }
+
 }
