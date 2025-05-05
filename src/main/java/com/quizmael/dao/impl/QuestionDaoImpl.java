@@ -2,6 +2,7 @@ package com.quizmael.dao.impl;
 
 import com.quizmael.dao.QuestionDao;
 import com.quizmael.model.Question;
+import com.quizmael.model.QuizTest;
 import com.quizmael.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -60,6 +61,15 @@ public class QuestionDaoImpl implements QuestionDao {
     public Optional<Question> findById(Integer id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return Optional.ofNullable(session.get(Question.class, id));
+        }
+    }
+
+    public List<Question> findByTests(List<QuizTest> tests) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "FROM Question q WHERE q.test IN :tests", Question.class)
+                    .setParameter("tests", tests)
+                    .list();
         }
     }
 
