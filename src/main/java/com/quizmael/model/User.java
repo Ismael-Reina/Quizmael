@@ -4,6 +4,8 @@ import com.quizmael.model.enums.Role;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a user of the application, which may have different roles and permissions.
@@ -60,6 +62,15 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role;
+
+    // Tests marked as favorite by the user
+    @ManyToMany
+    @JoinTable(
+            name = "user_favorite_tests",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "test_id")
+    )
+    private List<QuizTest> favoriteTests = new ArrayList<>();
 
     // ------------------------------------------------------------
     //                   Getters & Setters
@@ -142,6 +153,10 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public List<QuizTest> getFavoriteTests() {
+        return favoriteTests;
     }
 
 }
