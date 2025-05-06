@@ -13,12 +13,11 @@ import java.util.Optional;
 
 /**
  * Implementation of the {@link UserService} interface.
- * Handles user-related operations such as authentication, registration,
- * password recovery, and data updates using a {@link UserDao}.
- * Passwords are managed securely through hashing and comparison utilities.
+ * Manages user profile operations such as lookup, update and deletion,
+ * excluding authentication and password recovery, which are handled by {@link AuthService}.
  *
  * @author Ismael Reina
- * @version 1.0
+ * @version 2.0
  */
 public class UserServiceImpl implements UserService {
 
@@ -26,98 +25,6 @@ public class UserServiceImpl implements UserService {
 
     public UserServiceImpl() {
         this.userDao = new UserDaoImpl();
-    }
-
-    // ------------------------------------------------------------
-    //                 Authentication and Login
-    // ------------------------------------------------------------
-
-    @Override
-    public Optional<User> login(String name, String password) {
-        Optional<User> user = userDao.findByName(name);
-        return user.filter(u -> PasswordUtils.checkPassword(password, u.getPassword()));
-    }
-
-    @Override
-    public Optional<User> loginWithSecretAnswer(String name, String secretAnswer) {
-        Optional<User> user = userDao.findByName(name);
-        return user.filter(u -> u.getSecretAnswer() != null && u.getSecretAnswer().equals(secretAnswer));
-    }
-
-    @Override
-    public PasswordResetStatus  resetPasswordWithEmail(String name) {
-        Optional<User> userOpt = userDao.findByName(name);
-
-        // a) The username does not exist
-        if (userOpt.isEmpty()) {
-            return PasswordResetStatus.USER_NOT_FOUND;
-        }
-
-        User user = userOpt.get();
-
-        // b) The user exists but has no associated email
-        if (user.getEmail() == null || user.getEmail().isBlank()) {
-            return PasswordResetStatus.EMAIL_NOT_SET;
-        }
-
-        // c) Valid user with email: generate and set a new temporary password
-        String tempPassword = PasswordUtils.generateRandomPassword();
-        user.setPassword(PasswordUtils.hashPassword(tempPassword));
-        userDao.update(user);
-
-        // Simulate email sending
-        System.out.println("Simulated email to " + user.getEmail() + ": new temp password is " + tempPassword);
-        // TODO: Implement actual email sending logic
-
-        return PasswordResetStatus.RESET_EMAIL_SENT;
-    }
-
-    @Override
-    public Optional<String> getPasswordHint(String name) {
-        return userDao.findByName(name).map(User::getPasswordHint);
-    }
-
-    @Override
-    public Optional<String> getSecretQuestion(String name) {
-        return userDao.findByName(name).map(User::getSecretQuestion);
-    }
-
-    // ------------------------------------------------------------
-    //           User Registration and Profile Management
-    // ------------------------------------------------------------
-
-    @Override
-    public User register(User user) {
-        user.setPassword(PasswordUtils.hashPassword(user.getPassword()));
-        return userDao.save(user);
-    }
-
-    @Override
-    public void updateUser(User user) {
-        if (user.getPassword() != null && !user.getPassword().isBlank()) {
-            user.setPassword(PasswordUtils.hashPassword(user.getPassword()));
-        }
-        userDao.update(user);
-    }
-
-    @Override
-    public ChangePasswordResult changePassword(int userId, String oldPassword, String newPassword) {
-        Optional<User> userOpt = userDao.findById(userId);
-
-        if (userOpt.isEmpty()) {
-            return ChangePasswordResult.USER_NOT_FOUND;
-        }
-
-        User user = userOpt.get();
-
-        if (!PasswordUtils.checkPassword(oldPassword, user.getPassword())) {
-            return ChangePasswordResult.OLD_PASSWORD_INCORRECT;
-        }
-
-        user.setPassword(PasswordUtils.hashPassword(newPassword));
-        userDao.update(user);
-
-        return ChangePasswordResult.SUCCESS;
     }
 
     // ------------------------------------------------------------
@@ -143,4 +50,49 @@ public class UserServiceImpl implements UserService {
     public void deleteById(int id) {
         userDao.findById(id).ifPresent(userDao::delete);
     }
+
+    // ------------------------------------------------------------
+    //                      Profile Management
+    // ------------------------------------------------------------
+
+    @Override
+    public void updateUser(User user) {
+        userDao.update(user);
+    }
+
+    @Override
+    public ChangePasswordResult changePassword(int userId, String oldPassword, String newPassword) {
+        Optional<User> userOpt = userDao.findById(userId);
+
+        if (userOpt.isEmpty()) {
+            return ChangePasswordResult.USER_NOT_FOUND;
+        }
+
+        User user = userOpt.get();
+
+        if (!PasswordUtils.checkPassword(oldPassword, user.getPassword())) {
+            return ChangePasswordResult.OLD_PASSWORD_INCORRECT;
+        }
+
+        user.setPassword(PasswordUtils.hashPassword(newPassword));
+        userDao.update(user);
+
+        return ChangePasswordResult.SUCCESS;
+    }
+
+    @Override
+    public boolean changeSecretAnswer(int userId, String newSecretAnswer) {
+        Optional<User> userOpt = userDao.findById(userId);
+
+        if (userOpt.isEmpty()) {
+            return false;
+        }
+
+        User user = userOpt.get();
+        user.setSecretAnswer(PasswordUtils.hashPassword(newSecretAnswer));
+        userDao.update(user);
+
+        return true;
+    }
+
 }
