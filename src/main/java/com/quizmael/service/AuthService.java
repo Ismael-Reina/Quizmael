@@ -1,14 +1,11 @@
 package com.quizmael.service;
 
-import com.quizmael.dao.UserDao;
 import com.quizmael.model.User;
 import com.quizmael.service.enums.PasswordResetStatus;
-import com.quizmael.service.enums.ChangePasswordResult;
-import com.quizmael.util.PasswordUtils;
 
 
 import java.util.Optional;
-import java.util.List;
+
 
 /**
  * Interface for managing registration, authentication, and password recovery.

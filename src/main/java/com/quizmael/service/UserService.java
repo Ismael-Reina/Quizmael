@@ -2,7 +2,6 @@ package com.quizmael.service;
 
 import com.quizmael.model.User;
 import com.quizmael.service.enums.ChangePasswordResult;
-import com.quizmael.service.enums.PasswordResetStatus;
 
 import java.util.Optional;
 import java.util.List;

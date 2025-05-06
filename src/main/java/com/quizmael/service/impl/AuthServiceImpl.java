@@ -5,7 +5,6 @@ import com.quizmael.dao.impl.UserDaoImpl;
 import com.quizmael.model.User;
 import com.quizmael.service.AuthService;
 import com.quizmael.service.enums.PasswordResetStatus;
-import com.quizmael.service.enums.ChangePasswordResult;
 import com.quizmael.util.PasswordUtils;
 
 

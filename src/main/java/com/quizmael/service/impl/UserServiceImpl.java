@@ -2,10 +2,10 @@ package com.quizmael.service.impl;
 
 import com.quizmael.dao.UserDao;
 import com.quizmael.dao.impl.UserDaoImpl;
+import com.quizmael.service.AuthService;
 import com.quizmael.model.User;
 import com.quizmael.service.UserService;
 import com.quizmael.service.enums.ChangePasswordResult;
-import com.quizmael.service.enums.PasswordResetStatus;
 import com.quizmael.util.PasswordUtils;
 
 import java.util.List;
