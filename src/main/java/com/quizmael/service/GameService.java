@@ -4,6 +4,17 @@ import com.quizmael.model.*;
 
 import java.util.List;
 
+/**
+ * Service interface for managing game sessions in the quiz application.
+ * This includes starting a new game, submitting answers, and handling game-related logic.
+ * <p>
+ * The methods in this interface are designed to be used by the game controller
+ * to manage the flow of the game and user interactions.
+ * </p>
+ *
+ * @author Ismael Reina Muñoz
+ * @version 1.0
+ */
 public interface GameService {
 
     /**

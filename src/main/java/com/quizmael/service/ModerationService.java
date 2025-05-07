@@ -12,7 +12,7 @@ import java.util.List;
  * <p>Methods allow fetching pending tests, approving or rejecting them,
  * and retrieving moderation history.</p>
  *
- * @author Ismael
+ * @author Ismael Reina Muñoz
  * @version 1.0
  */
 public interface ModerationService {

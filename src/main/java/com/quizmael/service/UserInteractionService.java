@@ -12,7 +12,7 @@ import java.util.List;
  * outside of gameplay, helping to personalize the user experience.
  * </p>
  *
- * @author Ismael Reina
+ * @author Ismael Reina Muñoz
  * @version 1.0
  */
 public interface UserInteractionService {
