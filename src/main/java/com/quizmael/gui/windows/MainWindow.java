@@ -4,6 +4,8 @@
 
 package com.quizmael.gui.windows;
 
+import com.quizmael.gui.helpers.PanelManager;
+
 import java.awt.*;
 import javax.swing.*;
 
@@ -19,6 +21,8 @@ public class MainWindow extends JFrame {
     //                      Attributes
     // ------------------------------------------------------------
 
+    private PanelManager panelManager;
+
     // ------------------------------------------------------------
     //                      Public Methods
     // ------------------------------------------------------------
@@ -30,14 +34,27 @@ public class MainWindow extends JFrame {
 
         initComponents();
 
+        // Configures the main window
         setTitle("Quizmael");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(800, 600);
         setLocationRelativeTo(null);
 
+        // Configures the main window
+        panelManager = new PanelManager();      // Initializes the PanelManager (with CardLayout)
+        add(panelManager, BorderLayout.CENTER); // Add to the center of the window
 
+        // Shows the window
         setVisible(true);
 
+    }
+
+    /**
+     * Gets the panel manager that controls screen switching.
+     * @return the PanelManager instance
+     */
+    public PanelManager getPanelManager() {
+        return panelManager;
     }
 
 
