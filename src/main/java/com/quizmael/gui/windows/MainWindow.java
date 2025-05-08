@@ -1,7 +1,3 @@
-/*
- * Created by JFormDesigner on Wed May 07 21:46:05 CEST 2025
- */
-
 package com.quizmael.gui.windows;
 
 import com.quizmael.gui.helpers.PanelManager;
@@ -68,7 +64,7 @@ public class MainWindow extends JFrame {
 
         //======== this ========
         var contentPane = getContentPane();
-        contentPane.setLayout(new CardLayout(5, 5));
+        contentPane.setLayout(new BorderLayout());
         pack();
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
