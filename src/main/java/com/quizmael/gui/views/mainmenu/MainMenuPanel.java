@@ -5,7 +5,8 @@ import com.quizmael.gui.common.*;
 import com.quizmael.gui.views.auth.*;
 
 /**
- * TODO: generar descripción
+ * Main menu panel displayed after login.
+ * Provides navigation to play quizzes, view results, or access settings.
  * 
  * @author Ismael Reina Muñoz
  * @version 1.0

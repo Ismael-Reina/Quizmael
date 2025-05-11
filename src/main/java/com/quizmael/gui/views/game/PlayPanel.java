@@ -5,7 +5,8 @@ import com.quizmael.gui.views.profile.*;
 import com.quizmael.gui.views.auth.*;
 
 /**
- * TODO: generar descripción
+ * Panel used to display and play a quiz session.
+ * Shows questions, options, and handles user interaction.
  * 
  * @author Ismael Reina Muñoz
  * @version 1.0

@@ -3,7 +3,8 @@ package com.quizmael.gui.views.auth;
 import com.quizmael.controller.AppController;
 
 /**
- * TODO: generar descripción
+ * Panel for new user registration.
+ * Provides fields to input user details and create an account.
  * 
  * @author Ismael Reina Muñoz
  * @version 1.0

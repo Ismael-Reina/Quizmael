@@ -3,7 +3,8 @@ package com.quizmael.gui.views.profile;
 import com.quizmael.controller.AppController;
 
 /**
- * TODO: generar descripción
+ * Panel for configuring application settings.
+ * May include language, theme, sound options, and more.
  * 
  * @author Ismael Reina Muñoz
  * @version 1.0

@@ -5,7 +5,8 @@ import com.quizmael.gui.common.*;
 import com.quizmael.gui.views.auth.*;
 
 /**
- * TODO: generar descripción
+ * Administrative panel for managing users, content, and system configurations.
+ * Only accessible to users with administrator privileges.
  * 
  * @author Ismael Reina Muñoz
  * @version 1.0

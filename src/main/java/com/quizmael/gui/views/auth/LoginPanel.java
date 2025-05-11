@@ -5,7 +5,8 @@ import com.quizmael.gui.common.*;
 import com.quizmael.gui.views.auth.*;
 
 /**
- * TODO: generar descripción
+ * Panel for user authentication via login form.
+ * Allows users to log in with their credentials.
  * 
  * @author Ismael Reina Muñoz
  * @version 1.0

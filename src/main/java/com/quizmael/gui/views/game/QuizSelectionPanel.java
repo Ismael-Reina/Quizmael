@@ -5,7 +5,8 @@ import com.quizmael.gui.views.profile.*;
 import com.quizmael.gui.views.auth.*;
 
 /**
- * TODO: generar descripción
+ * Panel for browsing and selecting available quizzes.
+ * Allows users to filter or choose a quiz to play.
  * 
  * @author Ismael Reina Muñoz
  * @version 1.0

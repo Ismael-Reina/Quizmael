@@ -5,7 +5,8 @@ import com.quizmael.gui.views.profile.*;
 import com.quizmael.gui.views.auth.*;
 
 /**
- * TODO: generar descripción
+ * Panel to show quiz results after completion.
+ * Displays score, correct/incorrect answers, and statistics.
  * 
  * @author Ismael Reina Muñoz
  * @version 1.0
