@@ -16,7 +16,6 @@ public class QuizmaelApp {
         // Launches GUI on the Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
             AppController appController = new AppController();
-            appController.initApp(); // Initializes the GUI and session
         });
     }
 }
