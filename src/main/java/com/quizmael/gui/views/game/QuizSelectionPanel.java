@@ -1,5 +1,6 @@
 package com.quizmael.gui.views.game;
 
+import com.quizmael.controller.AppController;
 import com.quizmael.gui.views.profile.*;
 import com.quizmael.gui.views.auth.*;
 
@@ -23,7 +24,7 @@ public class QuizSelectionPanel extends com.quizmael.gui.common.BasePanel {
     /**
      * Creates new form LoginPanel
      */
-    public QuizSelectionPanel() {
+    public QuizSelectionPanel(AppController controller) {
         initComponents();
     }
     

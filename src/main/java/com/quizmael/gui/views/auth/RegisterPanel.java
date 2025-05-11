@@ -1,5 +1,7 @@
 package com.quizmael.gui.views.auth;
 
+import com.quizmael.controller.AppController;
+
 /**
  * TODO: generar descripción
  * 
@@ -20,7 +22,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
     /**
      * Creates new form LoginPanel
      */
-    public RegisterPanel() {
+    public RegisterPanel(AppController controller) {
         initComponents();
     }
     

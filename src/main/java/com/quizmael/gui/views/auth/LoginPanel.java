@@ -1,5 +1,6 @@
 package com.quizmael.gui.views.auth;
 
+import com.quizmael.controller.AppController;
 import com.quizmael.gui.common.*;
 import com.quizmael.gui.views.auth.*;
 
@@ -23,7 +24,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
     /**
      * Creates new form LoginPanel
      */
-    public LoginPanel() {
+    public LoginPanel(AppController controller) {
         initComponents();
     }
     

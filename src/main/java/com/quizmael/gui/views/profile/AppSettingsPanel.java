@@ -1,6 +1,6 @@
 package com.quizmael.gui.views.profile;
 
-import com.quizmael.gui.views.auth.*;
+import com.quizmael.controller.AppController;
 
 /**
  * TODO: generar descripción
@@ -8,7 +8,7 @@ import com.quizmael.gui.views.auth.*;
  * @author Ismael Reina Muñoz
  * @version 1.0
  */
-public class AppSettings extends com.quizmael.gui.common.BasePanel {
+public class AppSettingsPanel extends com.quizmael.gui.common.BasePanel {
     
     // ------------------------------------------------------------
     //                     Attributes
@@ -22,7 +22,7 @@ public class AppSettings extends com.quizmael.gui.common.BasePanel {
     /**
      * Creates new form LoginPanel
      */
-    public AppSettings() {
+    public AppSettingsPanel(AppController controller) {
         initComponents();
     }
     
