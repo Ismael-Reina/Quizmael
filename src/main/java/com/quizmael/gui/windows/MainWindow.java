@@ -16,7 +16,7 @@ public class MainWindow extends javax.swing.JFrame {
     // ------------------------------------------------------------
     //                      Attributes
     // ------------------------------------------------------------
-    public static final Dimension minSize = new Dimension(1280, 720);
+    public static final Dimension minSize = new Dimension(1400, 1200);
     public static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     private PanelManager panelManager;
