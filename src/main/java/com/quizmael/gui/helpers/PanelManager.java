@@ -16,8 +16,8 @@ public class PanelManager extends javax.swing.JPanel {
     // ------------------------------------------------------------
     //                      Attributes
     // ------------------------------------------------------------
-    private CardLayout cardLayout;
-    private Map<String, JPanel> panels;
+    private final CardLayout cardLayout;
+    private final Map<String, JPanel> panels;
     
     
     

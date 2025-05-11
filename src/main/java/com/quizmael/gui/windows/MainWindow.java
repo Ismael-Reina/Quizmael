@@ -17,9 +17,7 @@ public class MainWindow extends javax.swing.JFrame {
     //                      Attributes
     // ------------------------------------------------------------
     public static final Dimension minSize = new Dimension(1400, 1200);
-    public static final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
-    private PanelManager panelManager;
+    private final PanelManager panelManager;
     
     // ------------------------------------------------------------
     //                      Public Methods
@@ -35,7 +33,7 @@ public class MainWindow extends javax.swing.JFrame {
         setTitle("Quizmael");
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setMinimumSize(minSize);
-        setMaximumSize(screenSize);
+        setMaximumSize(Toolkit.getDefaultToolkit().getScreenSize());
         setLocationRelativeTo(null);   
         getContentPane().setLayout(new BorderLayout());
  

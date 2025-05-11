@@ -62,6 +62,7 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
         setMinimumSize(new java.awt.Dimension(800, 600));
         setLayout(new java.awt.BorderLayout());
 
+        northPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 15, 0));
         northPane.setLayout(new java.awt.BorderLayout());
 
         btnAdminPanel.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -87,7 +88,6 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
         westPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
         add(westPane, java.awt.BorderLayout.WEST);
 
-        centerPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         centerPane.setMinimumSize(new java.awt.Dimension(600, 500));
         centerPane.setLayout(new javax.swing.BoxLayout(centerPane, javax.swing.BoxLayout.Y_AXIS));
         centerPane.add(verticalGlue1);
