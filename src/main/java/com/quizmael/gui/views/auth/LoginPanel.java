@@ -84,7 +84,6 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         lblUserName.setPreferredSize(new java.awt.Dimension(50, 30));
         centerPanel.add(lblUserName);
 
-        txtUserName.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 20, 1));
         txtUserName.setMaximumSize(new java.awt.Dimension(300, 40));
         txtUserName.setMinimumSize(new java.awt.Dimension(150, 25));
         txtUserName.setPreferredSize(new java.awt.Dimension(150, 25));
@@ -104,7 +103,6 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         jPanel1.setPreferredSize(new java.awt.Dimension(50, 30));
         jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
 
-        txtPassword.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 20, 1));
         txtPassword.setMaximumSize(new java.awt.Dimension(300, 40));
         txtPassword.setMinimumSize(new java.awt.Dimension(150, 25));
         txtPassword.setPreferredSize(new java.awt.Dimension(150, 25));
