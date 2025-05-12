@@ -36,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public User register(String name, String email, String password, String passwordHint,
-                         String secretQuestion, String secretAnswer, String birthDate) {
+                         String secretQuestion, String secretAnswer, LocalDate birthDate) {
 
         // Comprobar si el nombre de usuario ya existe
         if (userDao.findByName(name).isPresent()) {
@@ -50,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
         user.setPasswordHint(passwordHint);
         user.setSecretQuestion(secretQuestion);
         user.setSecretAnswer(PasswordUtils.hashPassword(secretAnswer));
-        user.setBirthDate(LocalDate.parse(birthDate));
+        user.setBirthDate(birthDate);
         user.setRole(Role.REGISTERED);
 
         return userDao.save(user);

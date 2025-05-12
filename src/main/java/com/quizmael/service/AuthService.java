@@ -4,6 +4,7 @@ import com.quizmael.model.User;
 import com.quizmael.service.enums.PasswordResetStatus;
 
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 
@@ -32,7 +33,7 @@ public interface AuthService {
      * @return the created User with assigned ID
      */
     User register(String name, String email, String password, String passwordHint,
-                  String secretQuestion, String secretAnswer, String birthDate);
+                  String secretQuestion, String secretAnswer, LocalDate birthDate);
 
     // ------------------------------------------------------------
     //                 Authentication / Login
