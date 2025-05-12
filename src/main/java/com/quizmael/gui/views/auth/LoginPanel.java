@@ -46,11 +46,9 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         centerPanel = new javax.swing.JPanel();
         verticalGlue1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         lblUserName = new javax.swing.JLabel();
-        verticalGlue3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         txtUserName = new javax.swing.JTextField();
         verticalGlue4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         lblPassword = new javax.swing.JLabel();
-        verticalGlue5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         jPanel1 = new javax.swing.JPanel();
         txtPassword = new javax.swing.JTextField();
         btnHint = new javax.swing.JButton();
@@ -76,13 +74,13 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         centerPanel.setLayout(new javax.swing.BoxLayout(centerPanel, javax.swing.BoxLayout.Y_AXIS));
         centerPanel.add(verticalGlue1);
 
+        lblUserName.setText("Nombre de usuario");
         lblUserName.setAlignmentX(0.5F);
         lblUserName.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 20, 1));
         lblUserName.setMaximumSize(new java.awt.Dimension(300, 50));
         lblUserName.setMinimumSize(new java.awt.Dimension(50, 30));
         lblUserName.setPreferredSize(new java.awt.Dimension(50, 30));
         centerPanel.add(lblUserName);
-        centerPanel.add(verticalGlue3);
 
         txtUserName.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 20, 1));
         txtUserName.setMaximumSize(new java.awt.Dimension(300, 40));
@@ -91,13 +89,13 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         centerPanel.add(txtUserName);
         centerPanel.add(verticalGlue4);
 
+        lblPassword.setText("Contraseña");
         lblPassword.setAlignmentX(0.5F);
         lblPassword.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 20, 1));
         lblPassword.setMaximumSize(new java.awt.Dimension(300, 50));
         lblPassword.setMinimumSize(new java.awt.Dimension(50, 30));
         lblPassword.setPreferredSize(new java.awt.Dimension(50, 30));
         centerPanel.add(lblPassword);
-        centerPanel.add(verticalGlue5);
 
         jPanel1.setMaximumSize(new java.awt.Dimension(300, 50));
         jPanel1.setMinimumSize(new java.awt.Dimension(50, 30));
@@ -110,6 +108,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         txtPassword.setPreferredSize(new java.awt.Dimension(150, 25));
         jPanel1.add(txtPassword);
 
+        btnHint.setText("Pista");
         btnHint.setAlignmentX(0.5F);
         btnHint.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 20, 1));
         btnHint.setMaximumSize(new java.awt.Dimension(50, 50));
@@ -120,6 +119,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         centerPanel.add(jPanel1);
         centerPanel.add(verticalGlue6);
 
+        btnForgottenPassword.setText("He olvidado mi contraseña");
         btnForgottenPassword.setAlignmentX(0.5F);
         btnForgottenPassword.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 20, 1));
         btnForgottenPassword.setMaximumSize(new java.awt.Dimension(200, 50));
@@ -128,6 +128,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         centerPanel.add(btnForgottenPassword);
         centerPanel.add(verticalGlue7);
 
+        chkKeepSessionOpen.setText("Mantener la sesión abierta");
         chkKeepSessionOpen.setAlignmentX(0.5F);
         chkKeepSessionOpen.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 20, 1));
         chkKeepSessionOpen.setMaximumSize(new java.awt.Dimension(300, 50));
@@ -136,6 +137,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         centerPanel.add(chkKeepSessionOpen);
         centerPanel.add(verticalGlue8);
 
+        btnLogin.setText("Iniciar Sesión");
         btnLogin.setAlignmentX(0.5F);
         btnLogin.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 20, 1));
         btnLogin.setMaximumSize(new java.awt.Dimension(200, 50));
@@ -144,6 +146,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         centerPanel.add(btnLogin);
         centerPanel.add(verticalGlue9);
 
+        btnRegister.setText("Registrarse");
         btnRegister.setAlignmentX(0.5F);
         btnRegister.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 20, 1));
         btnRegister.setMaximumSize(new java.awt.Dimension(200, 50));
@@ -230,9 +233,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
     private javax.swing.JTextField txtUserName;
     private javax.swing.Box.Filler verticalGlue1;
     private javax.swing.Box.Filler verticalGlue2;
-    private javax.swing.Box.Filler verticalGlue3;
     private javax.swing.Box.Filler verticalGlue4;
-    private javax.swing.Box.Filler verticalGlue5;
     private javax.swing.Box.Filler verticalGlue6;
     private javax.swing.Box.Filler verticalGlue7;
     private javax.swing.Box.Filler verticalGlue8;
