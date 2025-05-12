@@ -3,11 +3,13 @@ package com.quizmael.service.impl;
 import com.quizmael.dao.UserDao;
 import com.quizmael.dao.impl.UserDaoImpl;
 import com.quizmael.model.User;
+import com.quizmael.model.enums.Role;
 import com.quizmael.service.AuthService;
 import com.quizmael.service.enums.PasswordResetStatus;
 import com.quizmael.util.PasswordUtils;
 
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.List;
 
@@ -33,14 +35,25 @@ public class AuthServiceImpl implements AuthService {
     // ------------------------------------------------------------
 
     @Override
-    public Optional<User> register(User user) {
-        if (userDao.findByName(user.getName()).isPresent()) {
-            return Optional.empty(); // username already exists
+    public User register(String name, String email, String password, String passwordHint,
+                         String secretQuestion, String secretAnswer, String birthDate) {
+
+        // Comprobar si el nombre de usuario ya existe
+        if (userDao.findByName(name).isPresent()) {
+            throw new IllegalArgumentException("Username already exists");
         }
 
-        user.setPassword(PasswordUtils.hashPassword(user.getPassword()));
-        User savedUser = userDao.save(user);
-        return Optional.of(savedUser);
+        User user = new User();
+        user.setName(name);
+        user.setEmail(email);
+        user.setPassword(PasswordUtils.hashPassword(password));
+        user.setPasswordHint(passwordHint);
+        user.setSecretQuestion(secretQuestion);
+        user.setSecretAnswer(PasswordUtils.hashPassword(secretAnswer));
+        user.setBirthDate(LocalDate.parse(birthDate));
+        user.setRole(Role.REGISTERED);
+
+        return userDao.save(user);
     }
 
     // ------------------------------------------------------------

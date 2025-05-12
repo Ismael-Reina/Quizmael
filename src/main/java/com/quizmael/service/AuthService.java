@@ -20,12 +20,19 @@ public interface AuthService {
     // ------------------------------------------------------------
 
     /**
-     * Registers a new user in the system.
+     * Registers a new user in the system with all necessary details.
      *
-     * @param user the user to register
-     * @return an Optional containing the registered user, or empty if the username already exists
+     * @param name the username
+     * @param email the email address
+     * @param password the plain password
+     * @param passwordHint the password hint
+     * @param secretQuestion the secret question
+     * @param secretAnswer the secret answer
+     * @param birthDate the birth date in ISO format (yyyy-MM-dd)
+     * @return the created User with assigned ID
      */
-    Optional<User>  register(User user);
+    User register(String name, String email, String password, String passwordHint,
+                  String secretQuestion, String secretAnswer, String birthDate);
 
     // ------------------------------------------------------------
     //                 Authentication / Login
