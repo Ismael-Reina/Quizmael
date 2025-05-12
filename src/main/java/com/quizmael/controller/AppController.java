@@ -113,6 +113,15 @@ public class AppController {
         panelManager.showPanel("appSettings");
     }
 
+    /**
+     * Returns the AuthController for user authentication and registration.
+     *
+     * @return the AuthController instance
+     */
+    public AuthController getAuthController() {
+        return authController;
+    }
+
     // ------------------------------------------------------------
     //                      Private Methods
     // ------------------------------------------------------------
@@ -133,5 +142,4 @@ public class AppController {
         panelManager.addPanel("results", new ResultsPanel(this));
         panelManager.addPanel("appSettings", new AppSettingsPanel(this));
     }
-
 }

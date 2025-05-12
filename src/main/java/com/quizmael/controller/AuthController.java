@@ -5,6 +5,8 @@ import com.quizmael.service.AuthService;
 import com.quizmael.session.SessionContext;
 
 import javax.swing.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
 /**
@@ -53,14 +55,34 @@ public class AuthController {
     }
 
     /**
-     * Placeholder for user registration logic.
-     * Currently displays a message indicating the feature is not yet implemented.
+     * Handles the registration of a new user.
+     * Validates that the passwords match and that the birth date is in a valid format.
+     * If all validations pass, delegates the registration to the AuthService.
      *
-     * @param username the username for the new account
-     * @param password the password for the new account
+     * @param username        the desired username for the new account
+     * @param email           the email address of the user
+     * @param password        the password for the new account
+     * @param passwordRepeat  the repeated password for confirmation
+     * @param passwordHint    a hint to help recover the password
+     * @param secretQuestion  the user's secret question for recovery
+     * @param secretAnswer    the answer to the secret question
+     * @param birthDateStr    the birth date in ISO format (yyyy-MM-dd)
+     * @throws IllegalArgumentException if passwords do not match or the birth date is invalid
      */
-    public void register(String username, String password) {
-        // TODO: implementar un registro simple
-        JOptionPane.showMessageDialog(null, "Register feature not implemented yet.");
+    public void registerUser(String username, String email, String password, String passwordRepeat,
+                             String passwordHint, String secretQuestion, String secretAnswer, String birthDateStr) {
+        if (!password.equals(passwordRepeat)) {
+            throw new IllegalArgumentException("Passwords do not match.");
+        }
+
+        LocalDate birthDate;
+        try {
+            birthDate = LocalDate.parse(birthDateStr); // ISO format (yyyy-MM-dd)
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid birth date format.");
+        }
+
+        authService.register(username, email, password, passwordHint, secretQuestion, secretAnswer, birthDate);
     }
+
 }

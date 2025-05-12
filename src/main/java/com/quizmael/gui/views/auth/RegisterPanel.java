@@ -14,7 +14,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
     // ------------------------------------------------------------
     //                     Attributes
     // ------------------------------------------------------------
-
+    private final AppController controller;
     
     // ------------------------------------------------------------
     //                     Public Methods
@@ -24,6 +24,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
      * Creates new form LoginPanel
      */
     public RegisterPanel(AppController controller) {
+        this.controller = controller;
         initComponents();
     }
     
@@ -31,6 +32,26 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
     // ------------------------------------------------------------
     //                     Private Methods
     // ------------------------------------------------------------
+    
+    private void performRegistration() {
+        try {
+            controller.getAuthController().registerUser(
+                txtUserName.getText().trim(),
+                txtEmail.getText().trim(),
+                txtPassword.getText().trim(),
+                txtPasswordRepeat.getText().trim(),
+                txtPasswordHint.getText().trim(),
+                txtSecretQuestion.getText().trim(),
+                txtSecretAnswer.getText().trim(),
+                txtBirthDate.getText().trim()
+            );
+            showMessage("Successfully registered user.", "Success");
+        } catch (IllegalArgumentException e) {
+            showError("Registration error", "Error");
+        }
+
+    }
+
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -62,10 +83,11 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         btnProfilePicture = new javax.swing.JButton();
         btnRegister = new javax.swing.JButton();
 
-        setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 35, 25, 35));
+        setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 60, 25, 60));
         setMinimumSize(new java.awt.Dimension(800, 600));
         setLayout(new java.awt.GridBagLayout());
 
+        lblUserName.setText("Nombre de usuario *");
         lblUserName.setMaximumSize(new java.awt.Dimension(300, 50));
         lblUserName.setMinimumSize(new java.awt.Dimension(50, 30));
         lblUserName.setPreferredSize(new java.awt.Dimension(50, 30));
@@ -88,6 +110,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 40);
         add(txtUserName, gridBagConstraints);
 
+        lblPassword.setText("Contraseña *");
         lblPassword.setMaximumSize(new java.awt.Dimension(300, 50));
         lblPassword.setMinimumSize(new java.awt.Dimension(50, 30));
         lblPassword.setPreferredSize(new java.awt.Dimension(50, 30));
@@ -110,6 +133,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 40);
         add(txtPassword, gridBagConstraints);
 
+        lblPasswordRepeat.setText("Repita la contraseña *");
         lblPasswordRepeat.setMaximumSize(new java.awt.Dimension(300, 50));
         lblPasswordRepeat.setMinimumSize(new java.awt.Dimension(50, 30));
         lblPasswordRepeat.setPreferredSize(new java.awt.Dimension(50, 30));
@@ -134,6 +158,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         add(txtPasswordRepeat, gridBagConstraints);
 
+        lblPasswordHint.setText("Pista de contraseña");
         lblPasswordHint.setMaximumSize(new java.awt.Dimension(300, 50));
         lblPasswordHint.setMinimumSize(new java.awt.Dimension(50, 30));
         lblPasswordHint.setPreferredSize(new java.awt.Dimension(50, 30));
@@ -156,6 +181,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 40);
         add(txtPasswordHint, gridBagConstraints);
 
+        lblSecretQuestion.setText("Pregunta secreta");
         lblSecretQuestion.setMaximumSize(new java.awt.Dimension(300, 50));
         lblSecretQuestion.setMinimumSize(new java.awt.Dimension(50, 30));
         lblSecretQuestion.setPreferredSize(new java.awt.Dimension(50, 30));
@@ -178,6 +204,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 40);
         add(txtSecretQuestion, gridBagConstraints);
 
+        lblSecretAnswer.setText("Respuesta secreta");
         lblSecretAnswer.setMaximumSize(new java.awt.Dimension(300, 50));
         lblSecretAnswer.setMinimumSize(new java.awt.Dimension(50, 30));
         lblSecretAnswer.setPreferredSize(new java.awt.Dimension(50, 30));
@@ -201,6 +228,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         add(txtSecretAnswer, gridBagConstraints);
 
+        lblEmail.setText("Correo electrónico");
         lblEmail.setMaximumSize(new java.awt.Dimension(300, 50));
         lblEmail.setMinimumSize(new java.awt.Dimension(50, 30));
         lblEmail.setPreferredSize(new java.awt.Dimension(50, 30));
@@ -223,6 +251,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 40);
         add(txtEmail, gridBagConstraints);
 
+        lblBirthDate.setText("Fecha de nacimiento");
         lblBirthDate.setMaximumSize(new java.awt.Dimension(300, 50));
         lblBirthDate.setMinimumSize(new java.awt.Dimension(50, 30));
         lblBirthDate.setPreferredSize(new java.awt.Dimension(50, 30));
@@ -245,6 +274,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         add(txtBirthDate, gridBagConstraints);
 
+        lblProfilePicture.setText("Foto de perfil");
         lblProfilePicture.setMaximumSize(new java.awt.Dimension(300, 50));
         lblProfilePicture.setMinimumSize(new java.awt.Dimension(50, 30));
         lblProfilePicture.setPreferredSize(new java.awt.Dimension(50, 30));
@@ -256,6 +286,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         add(lblProfilePicture, gridBagConstraints);
 
+        btnProfilePicture.setText("Añadir foto de perfil");
         btnProfilePicture.setMaximumSize(new java.awt.Dimension(300, 40));
         btnProfilePicture.setMinimumSize(new java.awt.Dimension(150, 25));
         btnProfilePicture.setPreferredSize(new java.awt.Dimension(150, 25));
@@ -267,9 +298,15 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         add(btnProfilePicture, gridBagConstraints);
 
+        btnRegister.setText("Registrarse");
         btnRegister.setMaximumSize(new java.awt.Dimension(200, 50));
         btnRegister.setMinimumSize(new java.awt.Dimension(150, 25));
         btnRegister.setPreferredSize(new java.awt.Dimension(150, 25));
+        btnRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegisterActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 11;
@@ -280,6 +317,10 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         add(btnRegister, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
+        performRegistration();
+    }//GEN-LAST:event_btnRegisterActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

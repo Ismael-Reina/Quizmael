@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.List;
 
 /**
- * Interface for managing user-related operations.s
+ * Interface for managing user-related operations.
  *
  * @author Ismael Reina Muñoz
  * @version 2.0
