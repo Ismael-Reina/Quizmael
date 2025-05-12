@@ -1,8 +1,6 @@
 package com.quizmael.gui.views.auth;
 
-import com.quizmael.controller.AppController;
-import com.quizmael.gui.common.*;
-import com.quizmael.gui.views.auth.*;
+import com.quizmael.controller.AuthController;
 
 /**
  * Panel for user authentication via login form.
@@ -16,7 +14,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
     // ------------------------------------------------------------
     //                     Attributes
     // ------------------------------------------------------------
-
+    private final AuthController authController;
     
     // ------------------------------------------------------------
     //                     Public Methods
@@ -25,7 +23,8 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
     /**
      * Creates new form LoginPanel
      */
-    public LoginPanel(AppController controller) {
+    public LoginPanel(AuthController authController) {
+        this.authController = authController;
         initComponents();
     }
     
@@ -143,6 +142,11 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         btnLogin.setMaximumSize(new java.awt.Dimension(200, 50));
         btnLogin.setMinimumSize(new java.awt.Dimension(80, 30));
         btnLogin.setPreferredSize(new java.awt.Dimension(80, 30));
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
         centerPanel.add(btnLogin);
         centerPanel.add(verticalGlue9);
 
@@ -152,6 +156,11 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         btnRegister.setMaximumSize(new java.awt.Dimension(200, 50));
         btnRegister.setMinimumSize(new java.awt.Dimension(80, 30));
         btnRegister.setPreferredSize(new java.awt.Dimension(80, 30));
+        btnRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegisterActionPerformed(evt);
+            }
+        });
         centerPanel.add(btnRegister);
         centerPanel.add(verticalGlue2);
 
@@ -214,6 +223,14 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
 
         add(westPanel, java.awt.BorderLayout.LINE_START);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        authController.login(txtUserName.getText().trim(), txtPassword.getText().trim());
+    }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRegisterActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

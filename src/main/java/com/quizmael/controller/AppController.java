@@ -10,6 +10,8 @@ import com.quizmael.gui.views.game.ResultsPanel;
 import com.quizmael.gui.views.mainmenu.MainMenuPanel;
 import com.quizmael.gui.views.profile.AppSettingsPanel;
 import com.quizmael.gui.windows.MainWindow;
+import com.quizmael.service.AuthService;
+import com.quizmael.service.impl.AuthServiceImpl;
 
 /**
  * Central controller for managing the application's state and navigation.
@@ -26,6 +28,9 @@ public class AppController {
 
     // Manages switching between different view panels
     private final PanelManager panelManager;
+
+    private AuthService authService;
+    private AuthController authController;
 
     // ------------------------------------------------------------
     //                      Public Methods
@@ -116,7 +121,10 @@ public class AppController {
      * Registers all application panels with the panel manager.
      */
     private void registerPanels() {
-        panelManager.addPanel("login", new LoginPanel(this));
+        authService = new AuthServiceImpl();
+        authController = new AuthController(authService, this);
+
+        panelManager.addPanel("login", new LoginPanel(authController));
         panelManager.addPanel("register", new RegisterPanel(this));
         panelManager.addPanel("mainMenu", new MainMenuPanel(this));
         panelManager.addPanel("admin", new AdminPanel(this));
