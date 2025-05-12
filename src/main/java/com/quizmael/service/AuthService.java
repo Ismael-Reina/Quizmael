@@ -23,9 +23,9 @@ public interface AuthService {
      * Registers a new user in the system.
      *
      * @param user the user to register
-     * @return the registered user with assigned ID
+     * @return an Optional containing the registered user, or empty if the username already exists
      */
-    User register(User user);
+    Optional<User>  register(User user);
 
     // ------------------------------------------------------------
     //                 Authentication / Login

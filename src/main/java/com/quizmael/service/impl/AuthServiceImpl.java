@@ -33,9 +33,14 @@ public class AuthServiceImpl implements AuthService {
     // ------------------------------------------------------------
 
     @Override
-    public User register(User user) {
+    public Optional<User> register(User user) {
+        if (userDao.findByName(user.getName()).isPresent()) {
+            return Optional.empty(); // username already exists
+        }
+
         user.setPassword(PasswordUtils.hashPassword(user.getPassword()));
-        return userDao.save(user);
+        User savedUser = userDao.save(user);
+        return Optional.of(savedUser);
     }
 
     // ------------------------------------------------------------
