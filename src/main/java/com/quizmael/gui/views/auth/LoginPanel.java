@@ -1,5 +1,6 @@
 package com.quizmael.gui.views.auth;
 
+import com.quizmael.controller.AppController;
 import com.quizmael.controller.AuthController;
 
 /**
@@ -15,6 +16,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
     //                     Attributes
     // ------------------------------------------------------------
     private final AuthController authController;
+    private final AppController appController;
     
     // ------------------------------------------------------------
     //                     Public Methods
@@ -23,8 +25,9 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
     /**
      * Creates new form LoginPanel
      */
-    public LoginPanel(AuthController authController) {
+    public LoginPanel(AuthController authController, AppController appController) {
         this.authController = authController;
+        this.appController = appController;
         initComponents();
     }
     
@@ -229,7 +232,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
-        // TODO add your handling code here:
+        appController.showRegisterPanel();
     }//GEN-LAST:event_btnRegisterActionPerformed
 
 

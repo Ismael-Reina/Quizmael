@@ -124,7 +124,7 @@ public class AppController {
         authService = new AuthServiceImpl();
         authController = new AuthController(authService, this);
 
-        panelManager.addPanel("login", new LoginPanel(authController));
+        panelManager.addPanel("login", new LoginPanel(authController, this));
         panelManager.addPanel("register", new RegisterPanel(this));
         panelManager.addPanel("mainMenu", new MainMenuPanel(this));
         panelManager.addPanel("admin", new AdminPanel(this));
