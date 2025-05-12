@@ -82,7 +82,7 @@ public abstract class BasePanel extends JPanel {
      * @param message the message to show
      * @param title dialog title
      */
-    protected void showErrorDialog(String message, String title) {
+    protected void showError(String message, String title) {
         JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
     }
     
