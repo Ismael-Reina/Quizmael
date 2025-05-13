@@ -102,7 +102,7 @@ CREATE TABLE Games (
     score           DECIMAL(4,2) NOT NULL CHECK (score >= 0.00 AND score <= 10.00),
     start_time      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     played_at       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE RESTRICT
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE RESTRICT,
     FOREIGN KEY (test_id) REFERENCES Tests(test_id) ON DELETE RESTRICT
 );
 -- Users with played games cannot be deleted unless their games are reassigned (e.g. to the 'Deleted User').
