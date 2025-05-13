@@ -18,6 +18,5 @@ public enum Role {
     ANONYMOUS,
     REGISTERED,
     MODERATOR,
-    ADMIN
+    ADMINISTRATOR
 }
-
