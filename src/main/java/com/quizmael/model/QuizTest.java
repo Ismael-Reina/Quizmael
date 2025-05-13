@@ -69,7 +69,7 @@ public class QuizTest {
     private String description;
 
     // Questions associated with this test
-    @OneToMany(mappedBy = "quizTest", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "test", fetch = FetchType.LAZY)
     private List<Question> questions;
 
     // Image associated with the test
