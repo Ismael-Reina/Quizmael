@@ -1,6 +1,8 @@
 package com.quizmael.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.hibernate.annotations.ColumnDefault;
@@ -48,6 +50,8 @@ public class Game {
     private int correctAnswers;
 
     // The score achieved in this game, between 0.00 and 10.00
+    @DecimalMin("0.00")
+    @DecimalMax("10.00")
     @Column(name = "score", nullable = false)
     private Double score;
 
@@ -100,6 +104,9 @@ public class Game {
     }
 
     public void setScore(Double score) {
+        if (score < 0.0 || score > 10.0) {
+            throw new IllegalArgumentException("Average score must be between 0.00 and 10.00");
+        }
         this.score = score;
     }
 
