@@ -3,6 +3,8 @@ package com.quizmael.model;
 import com.quizmael.model.enums.Language;
 import com.quizmael.model.enums.State;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 
 import java.time.Instant;
 import java.util.HashSet;
@@ -81,11 +83,15 @@ public class QuizTest {
     private Integer timesPlayed;
 
     // Average test score
-    @Column(name = "average_score", nullable = false, precision = 4, scale = 2)
+    @DecimalMin("0.00")
+    @DecimalMax("10.00")
+    @Column(name = "average_score", nullable = false)
     private Double averageScore;
 
     // Average test user rating
-    @Column(name = "average_rating", nullable = false, precision = 2, scale = 1)
+    @DecimalMin("0.00")
+    @DecimalMax("10.00")
+    @Column(name = "average_rating", nullable = false)
     private Double averageRating;
 
     // Topics associated with this test (through TestTopic)
@@ -210,6 +216,9 @@ public class QuizTest {
     }
 
     public void setAverageScore(Double averageScore) {
+        if (averageScore < 0.0 || averageScore > 10.0) {
+            throw new IllegalArgumentException("Average score must be between 0.00 and 10.00");
+        }
         this.averageScore = averageScore;
     }
 
@@ -218,6 +227,9 @@ public class QuizTest {
     }
 
     public void setAverageRating(Double averageRating) {
+        if (averageRating < 0.0 || averageRating > 10.0) {
+            throw new IllegalArgumentException("Average score must be between 0.00 and 10.00");
+        }
         this.averageRating = averageRating;
     }
 
