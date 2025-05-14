@@ -46,19 +46,10 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
                     txtBirthDate.getText().trim()
             );
 
-            showMessage("User registered successfully.", "Registration");
-
-            // Automatic login after registration
-            controller.getAuthController().login(
-                    txtUserName.getText().trim(),
-                    txtPassword.getText().trim()
-            );
-
         } catch (IllegalArgumentException e) {
-            showError("Registration error: " + e.getMessage(), "Error");
+            showError("Registration or validation error.", "Error");
         } catch (Exception e) {
-            e.printStackTrace();
-            showError("Unexpected error: " + e.getMessage(), "Error");
+            showError("Unexpected error during registration.", "Error");
         }
     }
 
