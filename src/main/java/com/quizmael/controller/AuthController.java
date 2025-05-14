@@ -48,8 +48,32 @@ public class AuthController {
         if (user.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Invalid credentials.", "Login Failed", JOptionPane.ERROR_MESSAGE);
         } else {
-            SessionContext.getInstance().setCurrentUser(user.orElse(null));
-            JOptionPane.showMessageDialog(null, "Welcome, " + user.get().getName() + "!", "Login Successful", JOptionPane.INFORMATION_MESSAGE);
+            User loggedInUser = user.get();
+            SessionContext.getInstance().setCurrentUser(loggedInUser);
+            JOptionPane.showMessageDialog(null, "Welcome, " + loggedInUser.getName() + "!", "Login Successful", JOptionPane.INFORMATION_MESSAGE);
+            appController.showMainMenuPanel();
+        }
+
+    }
+
+
+    /**
+     * Logs in the user as an anonymous guest.
+     * <p>
+     * Retrieves the predefined guest user (e.g., with ID = 1) from the database and sets it as the current session user.
+     * Displays appropriate dialogs based on whether the guest user could be loaded.
+     * </p>
+     *
+     * @see com.quizmael.service.AuthService#loginAsGuest()
+     */
+    public void loginAsGuest() {
+        Optional<User> guest = authService.loginAsGuest();
+
+        if (guest.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Unable to load guest account.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            SessionContext.getInstance().setCurrentUser(guest.get());
+            JOptionPane.showMessageDialog(null, "Logged in as guest.", "Guest Login", JOptionPane.INFORMATION_MESSAGE);
             appController.showMainMenuPanel();
         }
     }

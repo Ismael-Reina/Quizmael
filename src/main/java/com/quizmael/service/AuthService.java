@@ -57,6 +57,13 @@ public interface AuthService {
      */
     Optional<User> loginWithSecretAnswer(String name, String secretAnswer);
 
+    /**
+     * Logs in a user as a guest, creating a temporary account.
+     *
+     * @return the guest user
+     */
+    public Optional<User> loginAsGuest();
+
     // ------------------------------------------------------------
     //                      Account Recovery
     // ------------------------------------------------------------
