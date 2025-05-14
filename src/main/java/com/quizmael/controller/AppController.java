@@ -27,7 +27,7 @@ public class AppController {
     //                      Attributes
     // ------------------------------------------------------------
 
-    // Singleton instance of the application controller
+    // Singleton instance of the session context
     private final SessionContext sessionContext = SessionContext.getInstance();
 
     // Manages switching between different view panels
@@ -35,6 +35,7 @@ public class AppController {
 
     private AuthService authService;
     private AuthController authController;
+
 
     // ------------------------------------------------------------
     //                      Public Methods
@@ -46,24 +47,15 @@ public class AppController {
     public AppController() {
 
         MainWindow mainWindow = new MainWindow();    // Create the main application window
-
         panelManager = mainWindow.getPanelManager(); // Obtain the panel manager from the main window
-
         registerPanels();                            // Register all view panels to the panel manager
-
         showLoginPanel();                            // Show the initial panel (Login)
-
         mainWindow.setVisible(true);                 // Display the main window
     }
 
-    /**
-     * Returns the current session context.
-     *
-     * @return the session context
-     */
-    public SessionContext getSessionContext() {
-        return sessionContext;
-    }
+    // ------------------------------------------------------------
+    //                 Navigation Between Panels
+    // ------------------------------------------------------------
 
     /**
      * Displays the login panel.
@@ -121,6 +113,19 @@ public class AppController {
         panelManager.showPanel("appSettings");
     }
 
+    // ------------------------------------------------------------
+    //                        Getters
+    // ------------------------------------------------------------
+
+    /**
+     * Returns the current session context.
+     *
+     * @return the session context
+     */
+    public SessionContext getSessionContext() {
+        return sessionContext;
+    }
+
     /**
      * Returns the AuthController for user authentication and registration.
      *
@@ -141,7 +146,7 @@ public class AppController {
         authService = new AuthServiceImpl();
         authController = new AuthController(authService, this);
 
-        panelManager.addPanel("login", new LoginPanel(authController, this));
+        panelManager.addPanel("login", new LoginPanel(this));
         panelManager.addPanel("register", new RegisterPanel(this));
         panelManager.addPanel("mainMenu", new MainMenuPanel(this));
         panelManager.addPanel("admin", new AdminPanel(this));
