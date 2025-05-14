@@ -1,8 +1,6 @@
 package com.quizmael.gui.views.mainmenu;
 
 import com.quizmael.controller.AppController;
-import com.quizmael.gui.common.*;
-import com.quizmael.gui.views.auth.*;
 
 /**
  * Main menu panel displayed after login.
@@ -16,7 +14,7 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
     // ------------------------------------------------------------
     //                     Attributes
     // ------------------------------------------------------------
-
+    private final AppController appController;
     
     // ------------------------------------------------------------
     //                     Public Methods
@@ -25,7 +23,8 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
     /**
      * Creates new form LoginPanel
      */
-    public MainMenuPanel(AppController controller) {
+    public MainMenuPanel(AppController appController) {
+        this.appController = appController;
         initComponents();
     }
     
@@ -67,19 +66,23 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
         northPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 15, 0));
         northPane.setLayout(new java.awt.BorderLayout());
 
+        btnAdminPanel.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        btnAdminPanel.setText("Administrar");
         btnAdminPanel.setMargin(new java.awt.Insets(0, 0, 0, 0));
         btnAdminPanel.setMaximumSize(new java.awt.Dimension(400, 200));
         btnAdminPanel.setMinimumSize(new java.awt.Dimension(300, 100));
         btnAdminPanel.setPreferredSize(new java.awt.Dimension(300, 100));
         northPane.add(btnAdminPanel, java.awt.BorderLayout.WEST);
 
-        btnProfileManagement.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        btnProfileManagement.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        btnProfileManagement.setText("Mi cuenta");
         btnProfileManagement.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnProfileManagement.setMaximumSize(new java.awt.Dimension(200, 200));
         btnProfileManagement.setMinimumSize(new java.awt.Dimension(100, 100));
         btnProfileManagement.setPreferredSize(new java.awt.Dimension(100, 100));
         btnProfileManagement.setVerifyInputWhenFocusTarget(false);
-        btnProfileManagement.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        btnProfileManagement.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btnProfileManagement.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         northPane.add(btnProfileManagement, java.awt.BorderLayout.EAST);
 
         add(northPane, java.awt.BorderLayout.NORTH);
@@ -100,10 +103,17 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
         panelBtnPlay.setPreferredSize(new java.awt.Dimension(170, 120));
         panelBtnPlay.setLayout(new java.awt.BorderLayout());
 
+        btnPlay.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        btnPlay.setText("Jugar test");
         btnPlay.setMargin(new java.awt.Insets(0, 0, 0, 0));
         btnPlay.setMaximumSize(new java.awt.Dimension(400, 200));
         btnPlay.setMinimumSize(new java.awt.Dimension(170, 100));
         btnPlay.setPreferredSize(new java.awt.Dimension(170, 100));
+        btnPlay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPlayActionPerformed(evt);
+            }
+        });
         panelBtnPlay.add(btnPlay, java.awt.BorderLayout.CENTER);
 
         centerPane.add(panelBtnPlay);
@@ -115,6 +125,8 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
         panelBtnCreateQuiz.setPreferredSize(new java.awt.Dimension(170, 120));
         panelBtnCreateQuiz.setLayout(new java.awt.BorderLayout());
 
+        btnCreateQuiz.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        btnCreateQuiz.setText("Crear test");
         btnCreateQuiz.setMargin(new java.awt.Insets(0, 0, 0, 0));
         btnCreateQuiz.setMaximumSize(new java.awt.Dimension(400, 200));
         btnCreateQuiz.setMinimumSize(new java.awt.Dimension(170, 100));
@@ -130,6 +142,8 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
         panelBtnAppOptions.setPreferredSize(new java.awt.Dimension(170, 120));
         panelBtnAppOptions.setLayout(new java.awt.BorderLayout());
 
+        btnAppOptions.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        btnAppOptions.setText("Opciones");
         btnAppOptions.setMargin(new java.awt.Insets(0, 0, 0, 0));
         btnAppOptions.setMaximumSize(new java.awt.Dimension(400, 200));
         btnAppOptions.setMinimumSize(new java.awt.Dimension(170, 100));
@@ -147,6 +161,10 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
         eastPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
         add(eastPane, java.awt.BorderLayout.EAST);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayActionPerformed
+        appController.getGameController().showQuizSelection();
+    }//GEN-LAST:event_btnPlayActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

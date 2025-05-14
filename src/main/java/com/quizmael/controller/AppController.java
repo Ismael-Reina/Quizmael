@@ -35,6 +35,7 @@ public class AppController {
 
     private AuthService authService;
     private AuthController authController;
+    private GameController gameController;
 
 
     // ------------------------------------------------------------
@@ -135,6 +136,15 @@ public class AppController {
         return authController;
     }
 
+    /**
+     * Returns the GameController for managing the game logic and flow.
+     *
+     * @return the GameController instance
+     */
+    public GameController getGameController() {
+        return gameController;
+    }
+
     // ------------------------------------------------------------
     //                      Private Methods
     // ------------------------------------------------------------
@@ -145,6 +155,7 @@ public class AppController {
     private void registerPanels() {
         authService = new AuthServiceImpl();
         authController = new AuthController(authService, this);
+        gameController = new GameController(this);
 
         panelManager.addPanel("login", new LoginPanel(this));
         panelManager.addPanel("register", new RegisterPanel(this));
