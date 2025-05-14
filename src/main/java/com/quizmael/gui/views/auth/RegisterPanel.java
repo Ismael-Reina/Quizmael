@@ -32,25 +32,39 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
     // ------------------------------------------------------------
     //                     Private Methods
     // ------------------------------------------------------------
-    
+
     private void performRegistration() {
         try {
             controller.getAuthController().registerUser(
-                txtUserName.getText().trim(),
-                txtEmail.getText().trim(),
-                txtPassword.getText().trim(),
-                txtPasswordRepeat.getText().trim(),
-                txtPasswordHint.getText().trim(),
-                txtSecretQuestion.getText().trim(),
-                txtSecretAnswer.getText().trim(),
-                txtBirthDate.getText().trim()
+                    txtUserName.getText().trim(),
+                    txtEmail.getText().trim(),
+                    txtPassword.getText().trim(),
+                    txtPasswordRepeat.getText().trim(),
+                    txtPasswordHint.getText().trim(),
+                    txtSecretQuestion.getText().trim(),
+                    txtSecretAnswer.getText().trim(),
+                    txtBirthDate.getText().trim()
             );
-            showMessage("Successfully registered user.", "Success");
-        } catch (IllegalArgumentException e) {
-            showError("Registration error", "Error");
-        }
 
+            showMessage("User registered successfully.", "Registration");
+
+            // Automatic login after registration
+            controller.getAuthController().login(
+                    txtUserName.getText().trim(),
+                    txtPassword.getText().trim()
+            );
+
+        } catch (IllegalArgumentException e) {
+            showError("Registration error: " + e.getMessage(), "Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Unexpected error: " + e.getMessage(), "Error");
+        }
     }
+
+
+
+
 
     
     /**
