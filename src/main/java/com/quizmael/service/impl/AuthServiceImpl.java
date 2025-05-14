@@ -11,7 +11,6 @@ import com.quizmael.util.PasswordUtils;
 
 import java.time.LocalDate;
 import java.util.Optional;
-import java.util.List;
 
 /**
  * Implementation of the {@link AuthService} interface.
@@ -70,6 +69,11 @@ public class AuthServiceImpl implements AuthService {
     public Optional<User> loginWithSecretAnswer(String name, String secretAnswer) {
         Optional<User> user = userDao.findByName(name);
         return user.filter(u -> u.getSecretAnswer() != null && PasswordUtils.checkPassword(secretAnswer, u.getSecretAnswer()));
+    }
+
+    @Override
+    public Optional<User> loginAsGuest() {
+        return userDao.findById(1); // Guest user ID
     }
 
     // ------------------------------------------------------------
