@@ -34,7 +34,7 @@ public class User {
     private String email;
 
     // Encrypted password of the user
-    @Column(name = "password", length = 20)
+    @Column(name = "password")
     private String password;
 
     // Hint to aid the user in recalling their password
@@ -46,7 +46,7 @@ public class User {
     private String secretQuestion;
 
     // Encrypted answer to the secret question
-    @Column(name = "secret_answer", length = 20)
+    @Column(name = "secret_answer")
     private String secretAnswer;
 
     // Fecha de nacimiento del usuario
