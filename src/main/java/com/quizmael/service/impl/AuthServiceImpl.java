@@ -37,7 +37,7 @@ public class AuthServiceImpl implements AuthService {
     public User register(String name, String email, String password, String passwordHint,
                          String secretQuestion, String secretAnswer, LocalDate birthDate) {
 
-        // Comprobar si el nombre de usuario ya existe
+        // Check if the username already exists
         if (userDao.findByName(name).isPresent()) {
             throw new IllegalArgumentException("Username already exists");
         }

@@ -106,7 +106,12 @@ public class AuthController {
             throw new IllegalArgumentException("Invalid birth date format.");
         }
 
-        authService.register(username, email, password, passwordHint, secretQuestion, secretAnswer, birthDate);
+        try {
+            authService.register(username, email, password, passwordHint, secretQuestion, secretAnswer, birthDate);
+        } catch (IllegalArgumentException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Registration Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         // Automatic login after registration
         Optional<User> loggedIn = authService.login(username, password);

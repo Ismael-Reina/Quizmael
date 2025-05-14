@@ -52,7 +52,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         verticalGlue4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         lblPassword = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        txtPassword = new javax.swing.JTextField();
+        txtPassword = new javax.swing.JPasswordField();
         btnHint = new javax.swing.JButton();
         verticalGlue6 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         btnForgottenPassword = new javax.swing.JButton();
@@ -105,9 +105,8 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         jPanel1.setPreferredSize(new java.awt.Dimension(50, 30));
         jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
 
-        txtPassword.setMaximumSize(new java.awt.Dimension(300, 40));
-        txtPassword.setMinimumSize(new java.awt.Dimension(150, 25));
-        txtPassword.setPreferredSize(new java.awt.Dimension(150, 25));
+        txtPassword.setMinimumSize(new java.awt.Dimension(40, 22));
+        txtPassword.setPreferredSize(new java.awt.Dimension(40, 22));
         jPanel1.add(txtPassword);
 
         btnHint.setText("Pista");
@@ -268,7 +267,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
     private javax.swing.JLabel lblUserName;
     private javax.swing.JPanel northPanel;
     private javax.swing.JPanel southPanel;
-    private javax.swing.JTextField txtPassword;
+    private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUserName;
     private javax.swing.Box.Filler verticalGlue1;
     private javax.swing.Box.Filler verticalGlue2;

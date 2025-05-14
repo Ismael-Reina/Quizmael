@@ -1,6 +1,10 @@
 package com.quizmael.gui.views.auth;
 
 import com.quizmael.controller.AppController;
+import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.JTextField;
 
 /**
  * Panel for new user registration.
@@ -22,10 +26,21 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
     
     /**
      * Creates new form LoginPanel
+     * 
+     * @param controller the application controller
      */
     public RegisterPanel(AppController controller) {
         this.controller = controller;
         initComponents();
+        
+        // Apply input restrictions to text fields
+        limitTextFieldInput(txtUserName, 20, "[a-zA-Z0-9_]");
+        limitTextFieldInput(txtEmail, 40, ".");
+        limitTextFieldInput(txtPassword, 20, ".");
+        limitTextFieldInput(txtPasswordRepeat, 20, ".");
+        limitTextFieldInput(txtPasswordHint, 100, ".");
+        limitTextFieldInput(txtSecretQuestion, 100, ".");
+        limitTextFieldInput(txtSecretAnswer, 100, ".");
     }
     
     
@@ -34,28 +49,87 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
     // ------------------------------------------------------------
 
     private void performRegistration() {
+
+        String username = txtUserName.getText().trim();
+        String password = txtPassword.getText().trim();
+        String passwordRepeat = txtPasswordRepeat.getText().trim();
+        String email = txtEmail.getText().trim();
+
+        // Check for empty fields
+        if (username.isBlank() || password.isBlank() || passwordRepeat.isBlank()) {
+            showError("All fields marked with * are required.", "Validation Error");
+            return;
+        }
+
+        // Username format (alphanumeric, underscores, 3-20 characters)
+        if (!username.matches("^[a-zA-Z0-9_]{3,20}$")) {
+            showError( "Username must be 3-20 characters and only letters, numbers or underscores.", "Validation Error");
+            return;
+        }
+
+        // Email format (optional, but must be valid if provided)
+        
+        if (!email.isBlank() && !email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+            showError("Invalid email format.", "Validation Error");
+            return;
+        }
+
+        // Password must be 6-20 characters long, and include at least one uppercase letter, one lowercase letter, one number, and one special character.
+        if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,20}$")) {
+            showError("Password must be 6-20 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.", "Validation Error");
+            return;
+        }
+
         try {
             controller.getAuthController().registerUser(
-                    txtUserName.getText().trim(),
-                    txtEmail.getText().trim(),
-                    txtPassword.getText().trim(),
-                    txtPasswordRepeat.getText().trim(),
-                    txtPasswordHint.getText().trim(),
-                    txtSecretQuestion.getText().trim(),
-                    txtSecretAnswer.getText().trim(),
-                    txtBirthDate.getText().trim()
+                username.trim(),
+                email.trim(),
+                password.trim(),
+                passwordRepeat.trim(),
+                txtPasswordHint.getText().trim(),
+                txtSecretQuestion.getText().trim(),
+                txtSecretAnswer.getText().trim(),
+                txtBirthDate.getText().trim()
             );
-
         } catch (IllegalArgumentException e) {
-            showError("Registration or validation error.", "Error");
+            switch (e.getMessage()) {
+                case "Username already exists" -> showError("That username is already taken. Please choose another.", "Username Exists");
+                case "Passwords do not match." -> showError("Passwords do not match.", "Validation Error");
+                case "Invalid birth date format." -> showError("Please enter a valid birth date in the format yyyy-MM-dd.", "Validation Error");
+                default -> showError("Registration or validation error: " + e.getMessage(), "Error");
+            }
         } catch (Exception e) {
-            showError("Unexpected error during registration.", "Error");
+            showError("Unexpected error during registration: " + e.getMessage(), "Error");
         }
     }
 
+    /**
+     * Limits input in a JTextField by maximum length and allowed characters.
+     *
+     * @param field the text field to restrict
+     * @param maxLength the maximum number of characters allowed
+     * @param allowedRegex a regex defining allowed characters (applied per keystroke)
+     */
+    private void limitTextFieldInput(JTextField field, int maxLength, String allowedRegex) {
+        field.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                String currentText = field.getText();
+                char keyChar = e.getKeyChar();
 
+                // Ignorar teclas de control (como borrar)
+                if (Character.isISOControl(keyChar)) {
+                    return;
+                }
 
-
+                // Comprobar longitud y formato permitido
+                if (currentText.length() >= maxLength || !String.valueOf(keyChar).matches(allowedRegex)) {
+                    e.consume(); // Evita que se escriba
+                    Toolkit.getDefaultToolkit().beep(); // Feedback sonoro
+                }
+            }
+        });
+    }
 
     
     /**
@@ -71,19 +145,19 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         lblUserName = new javax.swing.JLabel();
         txtUserName = new javax.swing.JTextField();
         lblPassword = new javax.swing.JLabel();
-        txtPassword = new javax.swing.JTextField();
+        txtPassword = new javax.swing.JPasswordField();
         lblPasswordRepeat = new javax.swing.JLabel();
-        txtPasswordRepeat = new javax.swing.JTextField();
+        txtPasswordRepeat = new javax.swing.JPasswordField();
         lblPasswordHint = new javax.swing.JLabel();
         txtPasswordHint = new javax.swing.JTextField();
         lblSecretQuestion = new javax.swing.JLabel();
         txtSecretQuestion = new javax.swing.JTextField();
         lblSecretAnswer = new javax.swing.JLabel();
-        txtSecretAnswer = new javax.swing.JTextField();
+        txtSecretAnswer = new javax.swing.JPasswordField();
         lblEmail = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
         lblBirthDate = new javax.swing.JLabel();
-        txtBirthDate = new javax.swing.JTextField();
+        txtBirthDate = new javax.swing.JFormattedTextField();
         lblProfilePicture = new javax.swing.JLabel();
         btnProfilePicture = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
@@ -128,9 +202,8 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 40);
         add(lblPassword, gridBagConstraints);
 
-        txtPassword.setMaximumSize(new java.awt.Dimension(300, 40));
-        txtPassword.setMinimumSize(new java.awt.Dimension(150, 25));
-        txtPassword.setPreferredSize(new java.awt.Dimension(150, 25));
+        txtPassword.setMinimumSize(new java.awt.Dimension(40, 22));
+        txtPassword.setPreferredSize(new java.awt.Dimension(40, 22));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -152,11 +225,9 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         add(lblPasswordRepeat, gridBagConstraints);
 
-        txtPasswordRepeat.setMaximumSize(new java.awt.Dimension(300, 40));
-        txtPasswordRepeat.setMinimumSize(new java.awt.Dimension(150, 25));
-        txtPasswordRepeat.setPreferredSize(new java.awt.Dimension(150, 25));
+        txtPasswordRepeat.setMinimumSize(new java.awt.Dimension(40, 22));
+        txtPasswordRepeat.setPreferredSize(new java.awt.Dimension(40, 22));
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -223,9 +294,8 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         add(lblSecretAnswer, gridBagConstraints);
 
-        txtSecretAnswer.setMaximumSize(new java.awt.Dimension(300, 40));
-        txtSecretAnswer.setMinimumSize(new java.awt.Dimension(150, 25));
-        txtSecretAnswer.setPreferredSize(new java.awt.Dimension(150, 25));
+        txtSecretAnswer.setMinimumSize(new java.awt.Dimension(40, 22));
+        txtSecretAnswer.setPreferredSize(new java.awt.Dimension(40, 22));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -269,6 +339,8 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         add(lblBirthDate, gridBagConstraints);
 
+        txtBirthDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("yyyy-MM-dd"))));
+        txtBirthDate.setToolTipText("Formato: yyyy-MM-dd");
         txtBirthDate.setMaximumSize(new java.awt.Dimension(300, 40));
         txtBirthDate.setMinimumSize(new java.awt.Dimension(150, 25));
         txtBirthDate.setPreferredSize(new java.awt.Dimension(150, 25));
@@ -365,12 +437,12 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
     private javax.swing.JLabel lblSecretAnswer;
     private javax.swing.JLabel lblSecretQuestion;
     private javax.swing.JLabel lblUserName;
-    private javax.swing.JTextField txtBirthDate;
+    private javax.swing.JFormattedTextField txtBirthDate;
     private javax.swing.JTextField txtEmail;
-    private javax.swing.JTextField txtPassword;
+    private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtPasswordHint;
-    private javax.swing.JTextField txtPasswordRepeat;
-    private javax.swing.JTextField txtSecretAnswer;
+    private javax.swing.JPasswordField txtPasswordRepeat;
+    private javax.swing.JPasswordField txtSecretAnswer;
     private javax.swing.JTextField txtSecretQuestion;
     private javax.swing.JTextField txtUserName;
     // End of variables declaration//GEN-END:variables
