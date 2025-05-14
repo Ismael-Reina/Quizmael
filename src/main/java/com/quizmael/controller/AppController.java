@@ -12,6 +12,7 @@ import com.quizmael.gui.views.profile.AppSettingsPanel;
 import com.quizmael.gui.windows.MainWindow;
 import com.quizmael.service.AuthService;
 import com.quizmael.service.impl.AuthServiceImpl;
+import com.quizmael.session.SessionContext;
 
 /**
  * Central controller for managing the application's state and navigation.
@@ -25,6 +26,9 @@ public class AppController {
     // ------------------------------------------------------------
     //                      Attributes
     // ------------------------------------------------------------
+
+    // Singleton instance of the application controller
+    private final SessionContext sessionContext = SessionContext.getInstance();
 
     // Manages switching between different view panels
     private final PanelManager panelManager;
@@ -41,20 +45,24 @@ public class AppController {
      */
     public AppController() {
 
-        // Create the main application window
-        MainWindow mainWindow = new MainWindow();
+        MainWindow mainWindow = new MainWindow();    // Create the main application window
 
-        // Obtain the panel manager from the main window
-        panelManager = mainWindow.getPanelManager();
+        panelManager = mainWindow.getPanelManager(); // Obtain the panel manager from the main window
 
-        // Register all view panels to the panel manager
-        registerPanels();
+        registerPanels();                            // Register all view panels to the panel manager
 
-        // Show the initial panel (Login)
-        showLoginPanel();
+        showLoginPanel();                            // Show the initial panel (Login)
 
-        // Display the main window
-        mainWindow.setVisible(true);
+        mainWindow.setVisible(true);                 // Display the main window
+    }
+
+    /**
+     * Returns the current session context.
+     *
+     * @return the session context
+     */
+    public SessionContext getSessionContext() {
+        return sessionContext;
     }
 
     /**
