@@ -18,10 +18,10 @@ CREATE TABLE Users (
     user_id         INT AUTO_INCREMENT PRIMARY KEY,
     name            VARCHAR(20) NOT NULL UNIQUE,
     email           VARCHAR(40) NULL,
-    password        VARCHAR(20) NULL, -- Encrypted
+    password        VARCHAR(255) NULL, -- Encrypted
     password_hint   VARCHAR(100) NULL,
     secret_question VARCHAR(100) NULL,
-    secret_answer   VARCHAR(20) NULL, -- Encrypted
+    secret_answer   VARCHAR(255) NULL, -- Encrypted
     birth_date DATE,
     profile_picture LONGBLOB,
     role ENUM('ANONYMOUS', 'REGISTERED', 'MODERATOR', 'ADMINISTRATOR') NOT NULL

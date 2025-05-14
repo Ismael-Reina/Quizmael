@@ -12,10 +12,10 @@ CREATE TABLE Users (
     user_id         INT PRIMARY KEY AUTO_INCREMENT,
     name            VARCHAR(20) NOT NULL UNIQUE,
     email           VARCHAR(40),
-    password        VARCHAR(20),
+    password        VARCHAR(255),
     password_hint   VARCHAR(100),
     secret_question VARCHAR(100),
-    secret_answer   VARCHAR(20),
+    secret_answer   VARCHAR(255),
     birth_date DATE,
     profile_picture BLOB,
     role VARCHAR(20) NOT NULL CHECK (role IN ('ANONYMOUS', 'REGISTERED', 'MODERATOR', 'ADMINISTRATOR'))
