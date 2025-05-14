@@ -63,6 +63,8 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         verticalGlue9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         btnRegister = new javax.swing.JButton();
         verticalGlue2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        btnEnterGuest = new javax.swing.JButton();
+        verticalGlue3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         northPanel = new javax.swing.JPanel();
         southPanel = new javax.swing.JPanel();
         eastPanel = new javax.swing.JPanel();
@@ -165,6 +167,20 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         centerPanel.add(btnRegister);
         centerPanel.add(verticalGlue2);
 
+        btnEnterGuest.setText("Entrar como invitado");
+        btnEnterGuest.setAlignmentX(0.5F);
+        btnEnterGuest.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 20, 1));
+        btnEnterGuest.setMaximumSize(new java.awt.Dimension(200, 50));
+        btnEnterGuest.setMinimumSize(new java.awt.Dimension(80, 30));
+        btnEnterGuest.setPreferredSize(new java.awt.Dimension(80, 30));
+        btnEnterGuest.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnterGuestActionPerformed(evt);
+            }
+        });
+        centerPanel.add(btnEnterGuest);
+        centerPanel.add(verticalGlue3);
+
         add(centerPanel, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout northPanelLayout = new javax.swing.GroupLayout(northPanel);
@@ -233,8 +249,13 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         appController.showRegisterPanel();
     }//GEN-LAST:event_btnRegisterActionPerformed
 
+    private void btnEnterGuestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnterGuestActionPerformed
+        authController.loginAsGuest();
+    }//GEN-LAST:event_btnEnterGuestActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEnterGuest;
     private javax.swing.JButton btnForgottenPassword;
     private javax.swing.JButton btnHint;
     private javax.swing.JButton btnLogin;
@@ -251,6 +272,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
     private javax.swing.JTextField txtUserName;
     private javax.swing.Box.Filler verticalGlue1;
     private javax.swing.Box.Filler verticalGlue2;
+    private javax.swing.Box.Filler verticalGlue3;
     private javax.swing.Box.Filler verticalGlue4;
     private javax.swing.Box.Filler verticalGlue6;
     private javax.swing.Box.Filler verticalGlue7;
