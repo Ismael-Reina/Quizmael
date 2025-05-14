@@ -94,19 +94,31 @@ public class AuthController {
      * @throws IllegalArgumentException if passwords do not match or the birth date is invalid
      */
     public void registerUser(String username, String email, String password, String passwordRepeat,
-                             String passwordHint, String secretQuestion, String secretAnswer, String birthDateStr) {
+                            String passwordHint, String secretQuestion, String secretAnswer, String birthDateStr) {
         if (!password.equals(passwordRepeat)) {
             throw new IllegalArgumentException("Passwords do not match.");
         }
 
         LocalDate birthDate;
         try {
-            birthDate = LocalDate.parse(birthDateStr); // ISO format (yyyy-MM-dd)
+            birthDate = birthDateStr.isEmpty() ? null : LocalDate.parse(birthDateStr); // ISO format (yyyy-MM-dd)
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Invalid birth date format.");
         }
 
         authService.register(username, email, password, passwordHint, secretQuestion, secretAnswer, birthDate);
+
+        // Automatic login after registration
+        Optional<User> loggedIn = authService.login(username, password);
+        if (loggedIn.isPresent()) {
+            SessionContext.getInstance().setCurrentUser(loggedIn.get());
+            JOptionPane.showMessageDialog(null, "Registration successful! Welcome, " + loggedIn.get().getName() + "!",
+                    "Success", JOptionPane.INFORMATION_MESSAGE);
+            appController.showMainMenuPanel();
+        } else {
+            JOptionPane.showMessageDialog(null, "Registration succeeded, but automatic login failed.",
+                    "Warning", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
 }
