@@ -1,7 +1,6 @@
 package com.quizmael.gui.views.auth;
 
 import com.quizmael.controller.AppController;
-import com.quizmael.controller.AuthController;
 
 /**
  * Panel for user authentication via login form.
@@ -15,7 +14,6 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
     // ------------------------------------------------------------
     //                     Attributes
     // ------------------------------------------------------------
-    private final AuthController authController;
     private final AppController appController;
     
     // ------------------------------------------------------------
@@ -25,8 +23,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
     /**
      * Creates new form LoginPanel
      */
-    public LoginPanel(AuthController authController, AppController appController) {
-        this.authController = authController;
+    public LoginPanel(AppController appController) {
         this.appController = appController;
         initComponents();
     }
@@ -107,6 +104,11 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
 
         txtPassword.setMinimumSize(new java.awt.Dimension(40, 22));
         txtPassword.setPreferredSize(new java.awt.Dimension(40, 22));
+        txtPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPasswordActionPerformed(evt);
+            }
+        });
         jPanel1.add(txtPassword);
 
         btnHint.setText("Pista");
@@ -241,7 +243,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        authController.login(txtUserName.getText().trim(), txtPassword.getText().trim());
+        appController.getAuthController().login(txtUserName.getText().trim(), txtPassword.getText().trim());
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
@@ -249,8 +251,12 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void btnEnterGuestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnterGuestActionPerformed
-        authController.loginAsGuest();
+        appController.getAuthController().loginAsGuest();
     }//GEN-LAST:event_btnEnterGuestActionPerformed
+
+    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
+        btnLogin.doClick();
+    }//GEN-LAST:event_txtPasswordActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
