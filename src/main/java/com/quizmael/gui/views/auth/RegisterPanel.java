@@ -18,7 +18,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
     // ------------------------------------------------------------
     //                     Attributes
     // ------------------------------------------------------------
-    private final AppController controller;
+    private final AppController appController;
     
     // ------------------------------------------------------------
     //                     Public Methods
@@ -27,10 +27,10 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
     /**
      * Creates new form LoginPanel
      * 
-     * @param controller the application controller
+     * @param appController the application controller
      */
-    public RegisterPanel(AppController controller) {
-        this.controller = controller;
+    public RegisterPanel(AppController appController) {
+        this.appController = appController;
         initComponents();
         
         // Apply input restrictions to text fields
@@ -81,7 +81,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         }
 
         try {
-            controller.getAuthController().registerUser(
+            appController.getAuthController().registerUser(
                 username.trim(),
                 email.trim(),
                 password.trim(),
@@ -420,7 +420,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        controller.getAuthController().goBackToLogin();
+        appController.getAuthController().goBackToLogin();
     }//GEN-LAST:event_btnBackActionPerformed
 
 
