@@ -121,4 +121,11 @@ public class AuthController {
         }
     }
 
+    /**
+     * Navigates back to the login screen.
+     */
+    public void goBackToLogin() {
+        appController.showLoginPanel();
+    }
+
 }

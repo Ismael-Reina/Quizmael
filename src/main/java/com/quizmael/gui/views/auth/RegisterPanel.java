@@ -86,6 +86,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         txtBirthDate = new javax.swing.JTextField();
         lblProfilePicture = new javax.swing.JLabel();
         btnProfilePicture = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
         btnRegister = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 60, 25, 60));
@@ -303,6 +304,25 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
         add(btnProfilePicture, gridBagConstraints);
 
+        btnBack.setText("Atrás");
+        btnBack.setMaximumSize(new java.awt.Dimension(200, 50));
+        btnBack.setMinimumSize(new java.awt.Dimension(150, 25));
+        btnBack.setPreferredSize(new java.awt.Dimension(150, 25));
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 5, 10, 5);
+        add(btnBack, gridBagConstraints);
+
         btnRegister.setText("Registrarse");
         btnRegister.setMaximumSize(new java.awt.Dimension(200, 50));
         btnRegister.setMinimumSize(new java.awt.Dimension(150, 25));
@@ -314,7 +334,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.weightx = 1.0;
@@ -327,8 +347,13 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         performRegistration();
     }//GEN-LAST:event_btnRegisterActionPerformed
 
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        controller.getAuthController().goBackToLogin();
+    }//GEN-LAST:event_btnBackActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBack;
     private javax.swing.JButton btnProfilePicture;
     private javax.swing.JButton btnRegister;
     private javax.swing.JLabel lblBirthDate;
