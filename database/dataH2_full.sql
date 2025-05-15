@@ -14,10 +14,10 @@ INSERT INTO Topics (name) VALUES
 ('Science'), ('History'), ('Geography'), ('Literature');
 
 -- Insert tests
-INSERT INTO Tests (title, creator_id, language, state, options_count, time_limit, description, image, moderated_by_id) VALUES
-('Basic Science Test', 10, 'EN', 'APPROVED', 4, 300, 'A basic science test.', NULL, 11),
-('European Capitals', 10, 'EN', 'APPROVED', 4, 300, 'Test your knowledge of European capitals.', NULL, 11),
-('Famous Books', 11, 'ES', 'PENDING', 4, 600, 'Identify books by famous authors.', NULL, NULL);
+INSERT INTO Tests (title, creator_id, language, state, options_count, time_limit, description, difficulty, image, moderated_by_id) VALUES
+('Basic Science Test', 10, 'EN', 'PUBLISHED', 4, 300, 'A basic science test.', 3, NULL, 11),
+('European Capitals', 10, 'EN', 'PUBLISHED', 4, 300, 'Test your knowledge of European capitals.', 3, NULL, 11),
+('Famous Books', 11, 'ES', 'PENDING', 4, 600, 'Identify books by famous authors.', 3, NULL, NULL);
 
 -- Insert test topics
 INSERT INTO Test_Topics (test_id, topic_id) VALUES

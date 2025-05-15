@@ -74,6 +74,10 @@ public class QuizTest {
     @OneToMany(mappedBy = "test", fetch = FetchType.LAZY)
     private List<Question> questions;
 
+    // Difficulty level of the test (1 to 5)
+    @Column(name = "difficulty")
+    private Integer difficulty;
+
     // Image associated with the test
     @Lob
     @Column(name = "image")
@@ -193,6 +197,14 @@ public class QuizTest {
 
     public List<Question> getQuestions() {
         return questions;
+    }
+
+    public Integer getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Integer difficulty) {
+        this.difficulty = difficulty;
     }
 
     public byte[] getImage() {
