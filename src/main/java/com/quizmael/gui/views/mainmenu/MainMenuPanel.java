@@ -1,6 +1,9 @@
 package com.quizmael.gui.views.mainmenu;
 
 import com.quizmael.controller.AppController;
+import com.quizmael.model.User;
+import com.quizmael.session.SessionContext;
+import java.awt.Dimension;
 
 /**
  * Main menu panel displayed after login.
@@ -26,12 +29,17 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
     public MainMenuPanel(AppController appController) {
         this.appController = appController;
         initComponents();
+        
     }
     
     
     // ------------------------------------------------------------
     //                     Private Methods
     // ------------------------------------------------------------
+    
+    public void refreshUserName(String userName) {
+        lblProfile.setText(userName);
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -43,8 +51,8 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
     private void initComponents() {
 
         northPane = new javax.swing.JPanel();
+        lblProfile = new javax.swing.JLabel();
         btnAdminPanel = new javax.swing.JButton();
-        btnProfileManagement = new javax.swing.JButton();
         westPane = new javax.swing.JPanel();
         centerPane = new javax.swing.JPanel();
         verticalGlue1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
@@ -66,6 +74,16 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
         northPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 15, 0));
         northPane.setLayout(new java.awt.BorderLayout());
 
+        lblProfile.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblProfile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/user100.png"))); // NOI18N
+        lblProfile.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        lblProfile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblProfile.setMaximumSize(new java.awt.Dimension(200, 200));
+        lblProfile.setMinimumSize(new java.awt.Dimension(120, 120));
+        lblProfile.setPreferredSize(new java.awt.Dimension(120, 120));
+        lblProfile.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        northPane.add(lblProfile, java.awt.BorderLayout.EAST);
+
         btnAdminPanel.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
         btnAdminPanel.setText("Administrar");
         btnAdminPanel.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -73,17 +91,6 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
         btnAdminPanel.setMinimumSize(new java.awt.Dimension(300, 100));
         btnAdminPanel.setPreferredSize(new java.awt.Dimension(300, 100));
         northPane.add(btnAdminPanel, java.awt.BorderLayout.WEST);
-
-        btnProfileManagement.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        btnProfileManagement.setText("Mi cuenta");
-        btnProfileManagement.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnProfileManagement.setMaximumSize(new java.awt.Dimension(200, 200));
-        btnProfileManagement.setMinimumSize(new java.awt.Dimension(100, 100));
-        btnProfileManagement.setPreferredSize(new java.awt.Dimension(100, 100));
-        btnProfileManagement.setVerifyInputWhenFocusTarget(false);
-        btnProfileManagement.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        btnProfileManagement.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        northPane.add(btnProfileManagement, java.awt.BorderLayout.EAST);
 
         add(northPane, java.awt.BorderLayout.NORTH);
 
@@ -173,9 +180,9 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
     private javax.swing.JButton btnAppOptions;
     private javax.swing.JButton btnCreateQuiz;
     private javax.swing.JButton btnPlay;
-    private javax.swing.JButton btnProfileManagement;
     private javax.swing.JPanel centerPane;
     private javax.swing.JPanel eastPane;
+    private javax.swing.JLabel lblProfile;
     private javax.swing.JPanel northPane;
     private javax.swing.JPanel panelBtnAppOptions;
     private javax.swing.JPanel panelBtnCreateQuiz;
