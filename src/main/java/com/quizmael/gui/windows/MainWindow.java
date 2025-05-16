@@ -4,6 +4,7 @@ import com.quizmael.gui.helpers.PanelManager;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 
 /**
  * Main application window that hosts the main content panel (PanelManager).
@@ -16,8 +17,9 @@ public class MainWindow extends javax.swing.JFrame {
     // ------------------------------------------------------------
     //                      Attributes
     // ------------------------------------------------------------
-    public static final Dimension minSize = new Dimension(1400, 1200);
+    public static final Dimension minSize = new Dimension(1300, 1000);
     private final PanelManager panelManager;
+    ImageIcon icon;
     
     // ------------------------------------------------------------
     //                      Public Methods
@@ -31,12 +33,15 @@ public class MainWindow extends javax.swing.JFrame {
         
         // Configures the main window
         setTitle("Quizmael");
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setMinimumSize(minSize);
         setMaximumSize(Toolkit.getDefaultToolkit().getScreenSize());
         setLocationRelativeTo(null);   
         getContentPane().setLayout(new BorderLayout());
- 
+        icon = new ImageIcon(getClass().getResource("/icons/logo_32.png"));
+        setIconImage(icon.getImage());
+        
+        
         // Adds PanelManager
         panelManager = new PanelManager();
         add(panelManager, BorderLayout.CENTER);
@@ -66,6 +71,7 @@ public class MainWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Quizmael");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
