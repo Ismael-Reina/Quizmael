@@ -1,5 +1,6 @@
 package com.quizmael.controller;
 
+import com.quizmael.dao.impl.QuizTestDaoImpl;
 import com.quizmael.gui.helpers.PanelManager;
 import com.quizmael.gui.views.admin.AdminPanel;
 import com.quizmael.gui.views.auth.LoginPanel;
@@ -97,6 +98,11 @@ public class AppController {
      * Displays the quiz selection panel.
      */
     public void showQuizSelectionPanel() {
+        // Reset and reload dynamic components before showing the Quiz Selection Panel
+        // This includes clearing filters, updating combo boxes with current DB values, etc.
+        QuizSelectionPanel panel = (QuizSelectionPanel) panelManager.getPanel("quizSelection");
+        panel.resetFilters();
+
         panelManager.showPanel("quizSelection");
     }
 
@@ -128,6 +134,24 @@ public class AppController {
     }
 
     /**
+     * Returns the Main Menu panel.
+     *
+     * @return the Main Menu panel
+     */
+    public MainMenuPanel getMainMenuPanel() {
+        return (MainMenuPanel) panelManager.getPanel("mainMenu");
+    }
+
+    /**
+     * Returns the Play panel.
+     *
+     * @return the Play panel
+     */
+    public PlayPanel getPlayPanel() {
+        return (PlayPanel) panelManager.getPanel("play");
+    }
+
+    /**
      * Returns the AuthController for user authentication and registration.
      *
      * @return the AuthController instance
@@ -155,7 +179,7 @@ public class AppController {
     private void registerPanels() {
         authService = new AuthServiceImpl();
         authController = new AuthController(authService, this);
-        gameController = new GameController(this);
+        gameController = new GameController(this, new QuizTestDaoImpl());
 
         panelManager.addPanel("login", new LoginPanel(this));
         panelManager.addPanel("register", new RegisterPanel(this));
