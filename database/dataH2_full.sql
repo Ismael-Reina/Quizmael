@@ -1,5 +1,5 @@
 
--- Author: ChatGPT for Ismael
+-- Author: Ismael Reina Muñoz
 -- Version: 1.0
 -- Description: Full test dataset for Quizmael
 

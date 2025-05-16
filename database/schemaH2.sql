@@ -1,4 +1,4 @@
--- Author: Ismael
+-- Author: Ismael Reina Muñoz
 -- Version: 1.0
 
 
