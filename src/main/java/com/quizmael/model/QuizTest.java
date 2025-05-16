@@ -83,7 +83,8 @@ public class QuizTest {
     @Column(name = "image")
     private byte[] image;
 
-    // Number of times the test has been played    @Column(name = "times_played", nullable = false)
+    // Number of times the test has been played
+    @Column(name = "times_played", nullable = false)
     private Integer timesPlayed;
 
     // Average test score
@@ -254,6 +255,12 @@ public class QuizTest {
         return testTopics.stream()
                 .map(TestTopic::getTopic)
                 .collect(Collectors.toSet());
+    }
+
+    public String getTopicsAsString() {
+        return testTopics.stream()
+                .map(tt -> tt.getTopic().getName())
+                .collect(Collectors.joining(", "));
     }
 
     public User getModeratedBy() {
