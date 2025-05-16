@@ -1,10 +1,12 @@
 package com.quizmael.dao;
 
 import com.quizmael.model.QuizTest;
+import com.quizmael.model.enums.Language;
 import com.quizmael.model.enums.State;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Data Access Object interface for {@link QuizTest} entity.
@@ -105,5 +107,29 @@ public interface QuizTestDao {
      */
     List<QuizTest> findModeratedBy(int moderatorId);
 
+    /**
+     * Retrieves all distinct topics from published tests.
+     *
+     * @return a list of unique topics
+     */
+    List<String> findDistinctTopicsInPublishedTests();
+
+    /**
+     * Retrieves all distinct creators of published tests.
+     *
+     * @return a list of unique creator names
+     */
+    List<String> findAllCreatorsOfPublishedTests();
+
+    /**
+     * Finds public tests by various filters.
+     *
+     * @param topicName   the name of the topic
+     * @param creatorName the name of the creator
+     * @param difficulty  the difficulty level
+     * @param languages   a set of languages
+     * @return a list of public tests matching the filters
+     */
+    List<QuizTest> findPublicByFilters(String topicName, String creatorName, Integer difficulty, Set<Language> languages);
 
 }
