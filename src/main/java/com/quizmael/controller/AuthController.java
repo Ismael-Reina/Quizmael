@@ -40,17 +40,20 @@ public class AuthController {
      */
     public void login(String username, String password) {
         if (username.isBlank() || password.isBlank()) {
-            JOptionPane.showMessageDialog(null, "Username and password are required.", "Login Error", JOptionPane.ERROR_MESSAGE);
+            // JOptionPane.showMessageDialog(null, "Username and password are required.", "Login Error", JOptionPane.ERROR_MESSAGE); // TODO: Move this literal to a resource bundle
+            JOptionPane.showMessageDialog(null, "El nombre de usuario y la contraseña son obligatorios.", "Error de inicio de sesión", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         Optional<User> user = authService.login(username, password);
         if (user.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Invalid credentials.", "Login Failed", JOptionPane.ERROR_MESSAGE);
+            // JOptionPane.showMessageDialog(null, "Invalid credentials.", "Login Failed", JOptionPane.ERROR_MESSAGE); // TODO: Move this literal to a resource bundle
+            JOptionPane.showMessageDialog(null, "Credenciales inválidas.", "Inicio de sesión fallido", JOptionPane.ERROR_MESSAGE);
         } else {
             User loggedInUser = user.get();
             SessionContext.getInstance().setCurrentUser(loggedInUser);
-            JOptionPane.showMessageDialog(null, "Welcome, " + loggedInUser.getName() + "!", "Login Successful", JOptionPane.INFORMATION_MESSAGE);
+            // JOptionPane.showMessageDialog(null, "Welcome, " + loggedInUser.getName() + "!", "Login Successful", JOptionPane.INFORMATION_MESSAGE); // TODO: Move this literal to a resource bundle. Use showTimedMessage to show this message
+            appController.getMainMenuPanel().refreshUserName(SessionContext.getInstance().getCurrentUser().getName()); // Refresh the username in the main menu
             appController.showMainMenuPanel();
         }
 
@@ -70,10 +73,12 @@ public class AuthController {
         Optional<User> guest = authService.loginAsGuest();
 
         if (guest.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Unable to load guest account.", "Error", JOptionPane.ERROR_MESSAGE);
+            // JOptionPane.showMessageDialog(null, "Unable to load guest account.", "Error", JOptionPane.ERROR_MESSAGE); // TODO: Move this literal to a resource bundle
+            JOptionPane.showMessageDialog(null, "No se pudo cargar la cuenta de invitado.", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             SessionContext.getInstance().setCurrentUser(guest.get());
-            JOptionPane.showMessageDialog(null, "Logged in as guest.", "Guest Login", JOptionPane.INFORMATION_MESSAGE);
+            // JOptionPane.showMessageDialog(null, "Logged in as guest.", "Guest Login", JOptionPane.INFORMATION_MESSAGE); // TODO: Move this literal to a resource bundle. Use showTimedMessage to show this message
+            appController.getMainMenuPanel().refreshUserName(SessionContext.getInstance().getCurrentUser().getName()); // Refresh the username in the main menu
             appController.showMainMenuPanel();
         }
     }
@@ -96,20 +101,24 @@ public class AuthController {
     public void registerUser(String username, String email, String password, String passwordRepeat,
                             String passwordHint, String secretQuestion, String secretAnswer, String birthDateStr) {
         if (!password.equals(passwordRepeat)) {
-            throw new IllegalArgumentException("Passwords do not match.");
+            // throw new IllegalArgumentException("Passwords do not match."); // TODO: Move this literal to a resource bundle
+            throw new IllegalArgumentException("Las contraseñas no coinciden.");
+
         }
 
         LocalDate birthDate;
         try {
             birthDate = birthDateStr.isEmpty() ? null : LocalDate.parse(birthDateStr); // ISO format (yyyy-MM-dd)
         } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid birth date format.");
+            // throw new IllegalArgumentException("Invalid birth date format."); // TODO: Move this literal to a resource bundle
+            throw new IllegalArgumentException("Formato de fecha de nacimiento inválido.");
         }
 
         try {
             authService.register(username, email, password, passwordHint, secretQuestion, secretAnswer, birthDate);
         } catch (IllegalArgumentException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage(), "Registration Error", JOptionPane.ERROR_MESSAGE);
+            // JOptionPane.showMessageDialog(null, e.getMessage(), "Registration Error", JOptionPane.ERROR_MESSAGE); // TODO: Move this literal to a resource bundle
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Error de registro", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -117,12 +126,14 @@ public class AuthController {
         Optional<User> loggedIn = authService.login(username, password);
         if (loggedIn.isPresent()) {
             SessionContext.getInstance().setCurrentUser(loggedIn.get());
-            JOptionPane.showMessageDialog(null, "Registration successful! Welcome, " + loggedIn.get().getName() + "!",
-                    "Success", JOptionPane.INFORMATION_MESSAGE);
+            // JOptionPane.showMessageDialog(null, "Registration successful! Welcome, " + loggedIn.get().getName() + "!",
+            //        "Success", JOptionPane.INFORMATION_MESSAGE); // TODO: Move this literal to a resource bundle. Use showTimedMessage to show this message
+            appController.getMainMenuPanel().refreshUserName(SessionContext.getInstance().getCurrentUser().getName()); // Refresh the username in the main menu
             appController.showMainMenuPanel();
         } else {
-            JOptionPane.showMessageDialog(null, "Registration succeeded, but automatic login failed.",
-                    "Warning", JOptionPane.WARNING_MESSAGE);
+            // JOptionPane.showMessageDialog(null, "Registration succeeded, but automatic login failed.", // TODO: Move this literal to a resource bundle
+            //        "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "El registro fue exitoso, pero no se pudo iniciar sesión automáticamente.", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     }
 
