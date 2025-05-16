@@ -85,6 +85,24 @@ public abstract class BasePanel extends JPanel {
     protected void showError(String message, String title) {
         JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
     }
-    
+
     // TODO: ¿agregar el resto de tipos de mensaje de showMessageDialog: QUESTION_MESSAGE, WARNING_MESSAGE?
+    
+    /**
+     * Utility to show a message dialog with a timeout.
+     *
+     * @param message      the message to show
+     * @param title        dialog title
+     * @param milliseconds time in milliseconds before the dialog closes
+     */
+    public static void showTimedMessage(String message, String title, int milliseconds) {
+        JOptionPane pane = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE);
+        JDialog dialog = pane.createDialog(title);
+        dialog.setModal(false);
+        dialog.setVisible(true);
+
+        // Cerrar automáticamente después del tiempo indicado
+        new Timer(milliseconds, e -> dialog.dispose()).start();
+    }
+    
 }
