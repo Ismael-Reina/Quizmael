@@ -1,6 +1,7 @@
 package com.quizmael.gui.views.auth;
 
 import com.quizmael.controller.AppController;
+import java.awt.Dimension;
 
 /**
  * Panel for user authentication via login form.
@@ -26,6 +27,17 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
     public LoginPanel(AppController appController) {
         this.appController = appController;
         initComponents();
+        
+        // TODO: hace visibles estos componentes cuando implemente su funcionalidad ----------------------------
+        btnHint.setVisible(false);
+        btnHint.setPreferredSize(new Dimension(0, 0));
+        btnForgottenPassword.setVisible(false);
+        btnForgottenPassword.setPreferredSize(new Dimension(0, 0));
+        chkKeepSessionOpen.setVisible(false);
+        chkKeepSessionOpen.setPreferredSize(new Dimension(0, 0));
+        verticalGlue6.setVisible(false);
+        verticalGlue7.setVisible(false);
+        // -----------------------------------------------------------------------------------------------------
     }
     
     
@@ -58,9 +70,9 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         verticalGlue8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         btnLogin = new javax.swing.JButton();
         verticalGlue9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        btnRegister = new javax.swing.JButton();
-        verticalGlue2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         btnEnterGuest = new javax.swing.JButton();
+        verticalGlue2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        btnRegister = new javax.swing.JButton();
         verticalGlue3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         northPanel = new javax.swing.JPanel();
         southPanel = new javax.swing.JPanel();
@@ -72,6 +84,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         setPreferredSize(new java.awt.Dimension(1280, 720));
         setLayout(new java.awt.BorderLayout());
 
+        centerPanel.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(110, 20, 110, 20), javax.swing.BorderFactory.createEtchedBorder()));
         centerPanel.setLayout(new javax.swing.BoxLayout(centerPanel, javax.swing.BoxLayout.Y_AXIS));
         centerPanel.add(verticalGlue1);
 
@@ -144,8 +157,8 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         btnLogin.setAlignmentX(0.5F);
         btnLogin.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 20, 1));
         btnLogin.setMaximumSize(new java.awt.Dimension(200, 50));
-        btnLogin.setMinimumSize(new java.awt.Dimension(80, 30));
-        btnLogin.setPreferredSize(new java.awt.Dimension(80, 30));
+        btnLogin.setMinimumSize(new java.awt.Dimension(80, 50));
+        btnLogin.setPreferredSize(new java.awt.Dimension(80, 50));
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLoginActionPerformed(evt);
@@ -154,32 +167,32 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         centerPanel.add(btnLogin);
         centerPanel.add(verticalGlue9);
 
-        btnRegister.setText("Registrarse");
-        btnRegister.setAlignmentX(0.5F);
-        btnRegister.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 20, 1));
-        btnRegister.setMaximumSize(new java.awt.Dimension(200, 50));
-        btnRegister.setMinimumSize(new java.awt.Dimension(80, 30));
-        btnRegister.setPreferredSize(new java.awt.Dimension(80, 30));
-        btnRegister.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegisterActionPerformed(evt);
-            }
-        });
-        centerPanel.add(btnRegister);
-        centerPanel.add(verticalGlue2);
-
         btnEnterGuest.setText("Entrar como invitado");
         btnEnterGuest.setAlignmentX(0.5F);
         btnEnterGuest.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 20, 1));
         btnEnterGuest.setMaximumSize(new java.awt.Dimension(200, 50));
-        btnEnterGuest.setMinimumSize(new java.awt.Dimension(80, 30));
-        btnEnterGuest.setPreferredSize(new java.awt.Dimension(80, 30));
+        btnEnterGuest.setMinimumSize(new java.awt.Dimension(80, 50));
+        btnEnterGuest.setPreferredSize(new java.awt.Dimension(80, 50));
         btnEnterGuest.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEnterGuestActionPerformed(evt);
             }
         });
         centerPanel.add(btnEnterGuest);
+        centerPanel.add(verticalGlue2);
+
+        btnRegister.setText("Registrarse");
+        btnRegister.setAlignmentX(0.5F);
+        btnRegister.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 20, 1));
+        btnRegister.setMaximumSize(new java.awt.Dimension(200, 50));
+        btnRegister.setMinimumSize(new java.awt.Dimension(80, 40));
+        btnRegister.setPreferredSize(new java.awt.Dimension(80, 40));
+        btnRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegisterActionPerformed(evt);
+            }
+        });
+        centerPanel.add(btnRegister);
         centerPanel.add(verticalGlue3);
 
         add(centerPanel, java.awt.BorderLayout.CENTER);
@@ -221,7 +234,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         );
         eastPanelLayout.setVerticalGroup(
             eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
+            .addGap(0, 651, Short.MAX_VALUE)
         );
 
         add(eastPanel, java.awt.BorderLayout.LINE_END);
@@ -236,7 +249,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
         );
         westPanelLayout.setVerticalGroup(
             westPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
+            .addGap(0, 651, Short.MAX_VALUE)
         );
 
         add(westPanel, java.awt.BorderLayout.LINE_START);
