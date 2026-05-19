@@ -44,12 +44,20 @@ public interface QuestionDao {
     Optional<Question> findById(Integer id);
 
     /**
+     * Finds all questions associated with a specific quiz test.
+     *
+     * @param quizTest the quiz test to search for questions
+     * @return a list of questions associated with the specified quiz test
+     */
+    List<Question> findByQuizTest(QuizTest quizTest);
+
+    /**
      * Finds all questions associated with some specific tests.
      *
      * @param tests the tests to search for questions
      * @return a list of questions associated with the specified tests
      */
-    public List<Question> findByTests(List<QuizTest> tests);
+    public List<Question> findByTests(List<QuizTest> tests); // TODO: now it is not used, but it will be used in the future if a user can select multiple tests
 
     /**
      * Finds all questions in the database.

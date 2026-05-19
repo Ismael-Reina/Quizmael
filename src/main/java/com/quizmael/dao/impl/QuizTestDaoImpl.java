@@ -49,18 +49,11 @@ public class QuizTestDaoImpl implements QuizTestDao {
     }
 
     @Override
-    public void delete(int testId) {
-        Transaction transaction = null;
+    public void delete(QuizTest test) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            QuizTest test = session.get(QuizTest.class, testId);
-            if (test != null) {
-                session.remove(test);
-            }
-            transaction.commit();
-        } catch (Exception ex) {
-            if (transaction != null) transaction.rollback();
-            throw ex;
+            Transaction tx = session.beginTransaction();
+            session.remove(test); // O session.delete(test) según tu versión
+            tx.commit();
         }
     }
 
@@ -68,6 +61,16 @@ public class QuizTestDaoImpl implements QuizTestDao {
     public Optional<QuizTest> findById(int testId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return Optional.ofNullable(session.get(QuizTest.class, testId));
+        }
+    }
+
+    @Override
+    public List<QuizTest> findFavoritesByUserId(int userId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "SELECT t FROM User u JOIN u.favoriteTests t WHERE u.id = :userId", QuizTest.class)
+                    .setParameter("userId", userId)
+                    .list();
         }
     }
 
@@ -83,7 +86,14 @@ public class QuizTestDaoImpl implements QuizTestDao {
     @Override
     public List<QuizTest> findAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM QuizTest", QuizTest.class).list();
+            // We use DISTINCT to avoid row duplication due to the collection join Cartesian product
+            return session.createQuery(
+                    "SELECT DISTINCT qt FROM QuizTest qt " +
+                            "JOIN FETCH qt.creator " +
+                            "LEFT JOIN FETCH qt.testTopics tt " +
+                            "LEFT JOIN FETCH tt.topic",
+                    QuizTest.class
+            ).list();
         }
     }
 

@@ -68,6 +68,16 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public Optional<User> findByIdWithFavorites(int userId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "SELECT u FROM User u LEFT JOIN FETCH u.favoriteTests WHERE u.id = :userId", User.class)
+                    .setParameter("userId", userId)
+                    .uniqueResultOptional();
+        }
+    }
+
+    @Override
     public Optional<User> findByName(String name) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             String hql = "FROM User WHERE name = :name";

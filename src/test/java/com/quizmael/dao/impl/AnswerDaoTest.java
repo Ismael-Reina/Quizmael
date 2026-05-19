@@ -53,7 +53,7 @@ class AnswerDaoTest {
         Optional<Answer> updated = answerDao.findById(answer.getId());
         assertTrue(updated.isPresent());
         assertEquals("Updated", updated.get().getText());
-        assertTrue(updated.get().getCorrect());
+        assertTrue(updated.get().isCorrect());
     }
 
     // Verifies that an answer can be deleted and cannot be retrieved afterward.

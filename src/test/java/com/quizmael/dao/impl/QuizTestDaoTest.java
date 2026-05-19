@@ -114,7 +114,7 @@ class QuizTestDaoTest {
         quizTest.setTimeLimit(15);
         quizTestDao.save(quizTest);
 
-        quizTestDao.delete(quizTest.getId());
+        quizTestDao.delete(quizTest);
 
         Optional<QuizTest> deleted = quizTestDao.findById(quizTest.getId());
         assertTrue(deleted.isEmpty());

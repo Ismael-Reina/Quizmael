@@ -45,6 +45,14 @@ public interface UserDao {
     Optional<User> findById(Integer id);
 
     /**
+     * Finds a user by ID and eagerly loads their favorite tests collection.
+     *
+     * @param userId the ID of the user
+     * @return an Optional containing the user with favorites initialized, or empty if not found
+     */
+    Optional<User> findByIdWithFavorites(int userId);
+
+    /**
      * Finds a user by its user name.
      *
      * @param name The user name of the user.

@@ -3,6 +3,7 @@ package com.quizmael.dao.impl;
 import com.quizmael.dao.GameDao;
 import com.quizmael.model.Game;
 import com.quizmael.util.HibernateUtil;
+import com.quizmael.util.LoggerUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -24,10 +25,19 @@ public class GameDaoImpl implements GameDao {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
+
             session.persist(game);
+
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            LoggerUtil.error(getClass(), "CRITICAL DATABASE ERROR: " + e.getMessage(), e);
+            if (transaction != null) {
+                try {
+                    transaction.rollback();
+                } catch (Exception rollbackEx) {
+                    LoggerUtil.warn(getClass(), "Rollback failed (Normal if connection closed): " + rollbackEx.getMessage());
+                }
+            }
             throw e;
         }
     }
@@ -40,7 +50,14 @@ public class GameDaoImpl implements GameDao {
             session.merge(game);
             transaction.commit();
         } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
+            LoggerUtil.error(getClass(), "CRITICAL DATABASE ERROR: " + e.getMessage(), e);
+            if (transaction != null) {
+                try {
+                    transaction.rollback();
+                } catch (Exception rollbackEx) {
+                    LoggerUtil.warn(getClass(), "Rollback failed (Normal if connection closed): " + rollbackEx.getMessage());
+                }
+            }
             throw e;
         }
     }

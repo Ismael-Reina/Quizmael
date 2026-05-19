@@ -31,11 +31,11 @@ public interface QuizTestDao {
     void update(QuizTest test);
 
     /**
-     * Deletes a test from the database.
+     * Deletes a quiz test from the database.
      *
-     * @param testId the test to delete
+     * @param test the test to delete
      */
-    void delete(int testId);
+    void delete(QuizTest test);
 
     /**
      * Finds a test by its ID.
@@ -52,6 +52,14 @@ public interface QuizTestDao {
      * @return a list of tests created by the user
      */
     List<QuizTest> findByCreatorId(int userId);
+
+    /**
+     * Finds all tests marked as favorite by a specific user.
+     *
+     * @param userId the ID of the user
+     * @return a list of favorite quiz tests for the given user
+     */
+    public List<QuizTest> findFavoritesByUserId(int userId);
 
     /**
      * Finds all tests in the database.

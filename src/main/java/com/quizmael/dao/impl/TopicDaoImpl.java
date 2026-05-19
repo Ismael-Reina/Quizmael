@@ -51,6 +51,16 @@ public class TopicDaoImpl implements TopicDao {
     }
 
     @Override
+    public Optional<Topic> findByName(String name) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "SELECT t FROM Topic t WHERE lower(t.name) = lower(:name)", Topic.class)
+                    .setParameter("name", name)
+                    .uniqueResultOptional();
+        }
+    }
+
+    @Override
     public List<Topic> findAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("FROM Topic", Topic.class).list();

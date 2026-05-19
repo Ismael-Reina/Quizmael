@@ -42,6 +42,14 @@ public interface TopicDao {
     Optional<Topic> findById(Integer id);
 
     /**
+     * Finds a topic by its name (case-insensitive recommended).
+     *
+     * @param name the name of the topic
+     * @return an Optional containing the found topic, or empty if not found
+     */
+    Optional<Topic> findByName(String name);
+
+    /**
      * Finds all topics in the database.
      *
      * @return a list of all topics

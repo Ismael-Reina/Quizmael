@@ -64,6 +64,16 @@ public class QuestionDaoImpl implements QuestionDao {
         }
     }
 
+    @Override
+    public List<Question> findByQuizTest(QuizTest quizTest) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                            "FROM Question q WHERE q.test = :quizTest", Question.class)
+                    .setParameter("quizTest", quizTest)
+                    .list();
+        }
+    }
+
     public List<Question> findByTests(List<QuizTest> tests) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(

@@ -1,5 +1,6 @@
 package com.quizmael.dao;
 
+import com.quizmael.model.Game;
 import com.quizmael.model.GameQuestion;
 import com.quizmael.model.GameQuestionId;
 
@@ -49,5 +50,13 @@ public interface GameQuestionDao {
      * @return a List of all GameQuestion entities
      */
     List<GameQuestion> findAll();
+
+    /**
+     * Finds all GameQuestion entities associated with a specific game.
+     *
+     * @param game the Game entity for which to find GameQuestion entities
+     * @return a List of GameQuestion entities associated with the specified game
+     */
+    public List<GameQuestion> findByGame(Game game);
 
 }
