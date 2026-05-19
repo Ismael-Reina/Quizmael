@@ -10,7 +10,7 @@
     <session-factory>
         <!-- JDBC Database connection settings -->
         <property name="hibernate.connection.driver_class">org.h2.Driver</property>
-        <property name="hibernate.connection.url">jdbc:h2:./data/quizmael</property>
+        <property name="hibernate.connection.url">jdbc:h2:./data/quizmael;AUTO_SERVER=TRUE</property> <!-- ;INIT=RUNSCRIPT FROM 'database/schemaH2.sql'\;RUNSCRIPT FROM 'database/dataH2_basic.sql'\;RUNSCRIPT FROM 'database/dataH2_full.sql'\;RUNSCRIPT FROM 'database/dataH2_new.sql' -->
         <property name="hibernate.connection.username">sa</property>
         <property name="hibernate.connection.password"></property>
 
@@ -31,8 +31,6 @@
         <mapping class="com.quizmael.model.TestTopic"/>
         <mapping class="com.quizmael.model.Topic"/>
         <mapping class="com.quizmael.model.User"/>
-        <mapping class="com.quizmael.model.UserFavoriteTest"/>
-        <mapping class="com.quizmael.model.UserRecentTest"/>
 
     </session-factory>
 </hibernate-configuration>

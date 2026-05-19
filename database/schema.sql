@@ -45,29 +45,12 @@ CREATE TABLE Tests (
     times_played    INT NOT NULL DEFAULT 0,
     average_score   DECIMAL(4,2) NOT NULL DEFAULT 0.00,
     average_rating  DECIMAL(2,1) NOT NULL DEFAULT 0.0,
-    moderated_by_id INT,
-    moderation_date DATETIME,
+    moderated_by_id INT NULL,
+    moderation_date DATETIME NULL,
     FOREIGN KEY (creator_id) REFERENCES Users(user_id) ON DELETE RESTRICT,
     FOREIGN KEY (moderated_by_id) REFERENCES Users(user_id) ON DELETE RESTRICT
 );
 -- Users with created tests cannot be deleted unless their tests are reassigned (e.g. to the 'Deleted User').
-
-CREATE TABLE User_Favorite_Tests (
-    user_id INT NOT NULL,
-    test_id INT NOT NULL,
-    PRIMARY KEY (user_id, test_id),
-    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
-    FOREIGN KEY (test_id) REFERENCES Tests(test_id) ON DELETE CASCADE
-);
-
-CREATE TABLE User_Recent_Tests (
-    user_id INT NOT NULL,
-    test_id INT NOT NULL,
-    played_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (user_id, test_id),
-    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
-    FOREIGN KEY (test_id) REFERENCES Tests(test_id) ON DELETE CASCADE
-);
 
 CREATE TABLE Topics (
     topic_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -106,7 +89,7 @@ CREATE TABLE Games (
     correctAnswers  INT NOT NULL CHECK (correctAnswers BETWEEN 0 AND 100),
     score           DOUBLE NOT NULL CHECK (score >= 0.00 AND score <= 10.00),
     start_time      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    played_at       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    end_time        DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE RESTRICT
 );
 -- Users with played games cannot be deleted unless their games are reassigned (e.g. to the 'Deleted User').

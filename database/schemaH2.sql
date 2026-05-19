@@ -43,26 +43,17 @@ CREATE TABLE Tests (
     moderation_date TIMESTAMP,
     FOREIGN KEY (creator_id) REFERENCES Users(user_id) ON DELETE RESTRICT,
     FOREIGN KEY (moderated_by_id) REFERENCES Users(user_id) ON DELETE RESTRICT
-
 );
 -- Users with created tests cannot be deleted unless their tests are reassigned (e.g. to the 'Deleted User').
 
 CREATE TABLE User_Favorite_Tests (
-    user_id INT NOT NULL,
-    test_id INT NOT NULL,
-    PRIMARY KEY (user_id, test_id),
-    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
-    FOREIGN KEY (test_id) REFERENCES Tests(test_id) ON DELETE CASCADE
+     user_id INT NOT NULL,
+     test_id INT NOT NULL,
+     PRIMARY KEY (user_id, test_id),
+     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+     FOREIGN KEY (test_id) REFERENCES Tests(test_id) ON DELETE CASCADE
 );
-
-CREATE TABLE User_Recent_Tests (
-    user_id     INT NOT NULL,
-    test_id     INT NOT NULL,
-    played_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (user_id, test_id),
-    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
-    FOREIGN KEY (test_id) REFERENCES Tests(test_id) ON DELETE CASCADE
-);
+-- If a user or a test is deleted, their favorite relationship links are also deleted.
 
 CREATE TABLE Topics (
     topic_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -76,6 +67,7 @@ CREATE TABLE Test_Topics (
     FOREIGN KEY (test_id) REFERENCES Tests(test_id) ON DELETE CASCADE,
     FOREIGN KEY (topic_id) REFERENCES Topics(topic_id) ON DELETE CASCADE
 );
+-- If a test or a topic category is deleted, the relationship association is also deleted.
 
 CREATE TABLE Questions (
     question_id     INT PRIMARY KEY AUTO_INCREMENT,
@@ -93,6 +85,7 @@ CREATE TABLE Answers (
     question_id INT NOT NULL,
     FOREIGN KEY (question_id) REFERENCES Questions(question_id) ON DELETE CASCADE
 );
+-- If a question is deleted, its corresponding multiple-choice answers are also deleted.
 
 CREATE TABLE Games (
     game_id         INT PRIMARY KEY AUTO_INCREMENT,
@@ -102,7 +95,7 @@ CREATE TABLE Games (
     correctAnswers  INT NOT NULL CHECK (correctAnswers BETWEEN 0 AND 100),
     score           DECIMAL(4,2) NOT NULL CHECK (score >= 0.00 AND score <= 10.00),
     start_time      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    played_at       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    end_time        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE RESTRICT,
     FOREIGN KEY (test_id) REFERENCES Tests(test_id) ON DELETE RESTRICT
 );
@@ -116,7 +109,7 @@ CREATE TABLE Game_Questions (
     FOREIGN KEY (game_id) REFERENCES Games(game_id) ON DELETE CASCADE,
     FOREIGN KEY (question_id) REFERENCES Questions(question_id) ON DELETE CASCADE
 );
--- Tracks which questions appeared in a game and if the user answered correctly.
+-- Tracks which questions appeared in a game. Link drops automatically if the game or question is removed.
 
 CREATE TABLE Moderations (
     moderation_id     INT PRIMARY KEY AUTO_INCREMENT,
@@ -128,5 +121,5 @@ CREATE TABLE Moderations (
     FOREIGN KEY (test_id) REFERENCES Tests(test_id) ON DELETE CASCADE,
     FOREIGN KEY (moderator_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
--- A test can be moderated multiple times.
 -- Only users with roles MODERATOR or ADMINISTRATOR should appear here.
+-- If a test or a moderator account is deleted, the historical moderation logs are clean-deleted.
