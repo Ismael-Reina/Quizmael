@@ -1,6 +1,8 @@
 package com.quizmael.gui.views.auth;
 
-import com.quizmael.controller.AppController;
+import com.quizmael.controller.AuthController;
+import com.quizmael.util.I18nUtil;
+
 import java.awt.Dimension;
 
 /**
@@ -15,8 +17,8 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
     // ------------------------------------------------------------
     //                     Attributes
     // ------------------------------------------------------------
-    private final AppController appController;
-    
+    private final AuthController authController;
+
     // ------------------------------------------------------------
     //                     Public Methods
     // ------------------------------------------------------------
@@ -24,8 +26,8 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
     /**
      * Creates new form LoginPanel
      */
-    public LoginPanel(AppController appController) {
-        this.appController = appController;
+    public LoginPanel(AuthController authController) {
+        this.authController = authController;
         initComponents();
         
         // TODO: hace visibles estos componentes cuando implemente su funcionalidad ----------------------------
@@ -155,7 +157,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
 
         btnLogin.setText("Iniciar Sesión");
         btnLogin.setAlignmentX(0.5F);
-        btnLogin.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 20, 1));
+        btnLogin.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(170, 170, 170)));
         btnLogin.setMaximumSize(new java.awt.Dimension(200, 50));
         btnLogin.setMinimumSize(new java.awt.Dimension(80, 50));
         btnLogin.setPreferredSize(new java.awt.Dimension(80, 50));
@@ -169,7 +171,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
 
         btnEnterGuest.setText("Entrar como invitado");
         btnEnterGuest.setAlignmentX(0.5F);
-        btnEnterGuest.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 20, 1));
+        btnEnterGuest.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(170, 170, 170)));
         btnEnterGuest.setMaximumSize(new java.awt.Dimension(200, 50));
         btnEnterGuest.setMinimumSize(new java.awt.Dimension(80, 50));
         btnEnterGuest.setPreferredSize(new java.awt.Dimension(80, 50));
@@ -183,7 +185,7 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
 
         btnRegister.setText("Registrarse");
         btnRegister.setAlignmentX(0.5F);
-        btnRegister.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 1, 20, 1));
+        btnRegister.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(170, 170, 170)));
         btnRegister.setMaximumSize(new java.awt.Dimension(200, 50));
         btnRegister.setMinimumSize(new java.awt.Dimension(80, 40));
         btnRegister.setPreferredSize(new java.awt.Dimension(80, 40));
@@ -256,15 +258,24 @@ public class LoginPanel extends com.quizmael.gui.common.BasePanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        appController.getAuthController().login(txtUserName.getText().trim(), txtPassword.getText().trim());
+        String username = txtUserName.getText().trim();
+        // Securely obtaining the password for JPasswordField
+        String password = new String(txtPassword.getPassword()).trim();
+
+        if (username.isEmpty() || password.isEmpty()) {
+            showError("login.error.empty_fields");
+            return;
+        }
+
+        authController.handleLogin(username, password);
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
-        appController.showRegisterPanel();
+        authController.navigateToRegister();
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void btnEnterGuestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnterGuestActionPerformed
-        appController.getAuthController().loginAsGuest();
+        authController.loginAsGuest();
     }//GEN-LAST:event_btnEnterGuestActionPerformed
 
     private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed

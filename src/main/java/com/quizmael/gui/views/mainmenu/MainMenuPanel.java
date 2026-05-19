@@ -1,9 +1,12 @@
 package com.quizmael.gui.views.mainmenu;
 
-import com.quizmael.controller.AppController;
+import com.quizmael.controller.AuthController;
+import com.quizmael.controller.GameController;
+import com.quizmael.controller.UserController;
 import com.quizmael.model.User;
 import com.quizmael.session.SessionContext;
-import java.awt.Dimension;
+import com.quizmael.util.I18nUtil;
+import com.quizmael.util.LoggerUtil;
 
 /**
  * Main menu panel displayed after login.
@@ -13,32 +16,82 @@ import java.awt.Dimension;
  * @version 1.0
  */
 public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
-    
+
     // ------------------------------------------------------------
     //                     Attributes
     // ------------------------------------------------------------
-    private final AppController appController;
-    
+    private final AuthController authController;
+    private final GameController gameController;
+    private final UserController userController;
+
     // ------------------------------------------------------------
     //                     Public Methods
     // ------------------------------------------------------------
-    
+
     /**
-     * Creates new form LoginPanel
+     * Creates new form MainMenuPanel with Dependency Injection.
+     * * @param gameController the controller for game and quiz navigation
+     * @param userController the controller for user management and admin access
      */
-    public MainMenuPanel(AppController appController) {
-        this.appController = appController;
+    public MainMenuPanel(AuthController authController, GameController gameController, UserController userController) {
+        this.authController = authController;
+        this.gameController = gameController;
+        this.userController = userController;
+
         initComponents();
-        
+        setupI18n();
+
+        btnAdminPanel.setVisible(false);
     }
-    
+
+    /**
+     * Overrides setVisible to automatically refresh user data every time
+     * this panel is shown by the CardLayout.
+     */
+    @Override
+    public void setVisible(boolean aFlag) {
+        super.setVisible(aFlag);
+        if (aFlag) {
+            refreshSessionData();
+        }
+    }
     
     // ------------------------------------------------------------
     //                     Private Methods
     // ------------------------------------------------------------
-    
-    public void refreshUserName(String userName) {
-        lblProfile.setText(userName);
+
+    /**
+     * Applies internationalized texts to all translatable UI components in this panel,
+     * including checkboxes, buttons, and table column headers, ensuring proper
+     * localization on language changes.
+     */
+    private void setupI18n() {
+        btnPlay.setText(I18nUtil.getMessage("mainmenu.btn.play"));
+        btnCreateQuiz.setText(I18nUtil.getMessage("mainmenu.btn.create"));
+        btnAppOptions.setText(I18nUtil.getMessage("mainmenu.btn.options"));
+        btnAdminPanel.setText(I18nUtil.getMessage("mainmenu.btn.admin"));
+        lblAvailableSoon1.setText(I18nUtil.getMessage("general.coming_soon"));
+        lblAvailableSoon2.setText(I18nUtil.getMessage("general.coming_soon"));
+        btnLogout.setText(I18nUtil.getMessage("mainmenu.btn.logout"));
+
+        // Initialize the language combo box state based on current system locale context
+        if ("en".equals(I18nUtil.getLocale().getLanguage())) {
+            cboLang.setSelectedIndex(1); // Focuses "English"
+        } else {
+            cboLang.setSelectedIndex(0); // Focuses "Español" default
+        }
+    }
+
+    /**
+     * Retrieves the current user from the session and updates the UI accordingly.
+     */
+    private void refreshSessionData() {
+        User currentUser = SessionContext.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            lblProfile.setText(currentUser.getName());
+            // Admin button is only visible if the user has admin privileges
+            btnAdminPanel.setVisible(SessionContext.getInstance().isAdmin());
+        }
     }
     
     /**
@@ -51,8 +104,10 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
     private void initComponents() {
 
         northPane = new javax.swing.JPanel();
-        lblProfile = new javax.swing.JLabel();
         btnAdminPanel = new javax.swing.JButton();
+        northCenterPane = new javax.swing.JPanel();
+        cboLang = new javax.swing.JComboBox<>();
+        lblProfile = new javax.swing.JLabel();
         westPane = new javax.swing.JPanel();
         centerPane = new javax.swing.JPanel();
         verticalGlue1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
@@ -61,11 +116,15 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
         verticalGlue2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         panelBtnCreateQuiz = new javax.swing.JPanel();
         btnCreateQuiz = new javax.swing.JButton();
+        lblAvailableSoon1 = new javax.swing.JLabel();
         verticalGlue3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         panelBtnAppOptions = new javax.swing.JPanel();
         btnAppOptions = new javax.swing.JButton();
+        lblAvailableSoon2 = new javax.swing.JLabel();
         botVerticalGlue4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         eastPane = new javax.swing.JPanel();
+        botVerticalGlue5 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        btnLogout = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createEmptyBorder(25, 25, 25, 25));
         setMinimumSize(new java.awt.Dimension(800, 600));
@@ -73,6 +132,31 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
 
         northPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 15, 0));
         northPane.setLayout(new java.awt.BorderLayout());
+
+        btnAdminPanel.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
+        btnAdminPanel.setText("Administrar");
+        btnAdminPanel.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        btnAdminPanel.setMaximumSize(new java.awt.Dimension(400, 200));
+        btnAdminPanel.setMinimumSize(new java.awt.Dimension(300, 100));
+        btnAdminPanel.setPreferredSize(new java.awt.Dimension(300, 100));
+        btnAdminPanel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdminPanelActionPerformed(evt);
+            }
+        });
+        northPane.add(btnAdminPanel, java.awt.BorderLayout.WEST);
+
+        northCenterPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+
+        cboLang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Español", "English" }));
+        cboLang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboLangActionPerformed(evt);
+            }
+        });
+        northCenterPane.add(cboLang);
+
+        northPane.add(northCenterPane, java.awt.BorderLayout.CENTER);
 
         lblProfile.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblProfile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/user100.png"))); // NOI18N
@@ -84,27 +168,18 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
         lblProfile.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         northPane.add(lblProfile, java.awt.BorderLayout.EAST);
 
-        btnAdminPanel.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
-        btnAdminPanel.setText("Administrar");
-        btnAdminPanel.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        btnAdminPanel.setMaximumSize(new java.awt.Dimension(400, 200));
-        btnAdminPanel.setMinimumSize(new java.awt.Dimension(300, 100));
-        btnAdminPanel.setPreferredSize(new java.awt.Dimension(300, 100));
-        northPane.add(btnAdminPanel, java.awt.BorderLayout.WEST);
-
         add(northPane, java.awt.BorderLayout.NORTH);
 
         westPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 1, 1));
         westPane.setMinimumSize(new java.awt.Dimension(150, 600));
-        westPane.setPreferredSize(new java.awt.Dimension(116, 116));
+        westPane.setPreferredSize(new java.awt.Dimension(140, 140));
         westPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
         add(westPane, java.awt.BorderLayout.WEST);
 
-        centerPane.setMinimumSize(new java.awt.Dimension(600, 500));
+        centerPane.setMinimumSize(new java.awt.Dimension(400, 300));
         centerPane.setLayout(new javax.swing.BoxLayout(centerPane, javax.swing.BoxLayout.Y_AXIS));
         centerPane.add(verticalGlue1);
 
-        panelBtnPlay.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         panelBtnPlay.setMaximumSize(new java.awt.Dimension(400, 200));
         panelBtnPlay.setMinimumSize(new java.awt.Dimension(170, 120));
         panelBtnPlay.setPreferredSize(new java.awt.Dimension(170, 120));
@@ -126,7 +201,6 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
         centerPane.add(panelBtnPlay);
         centerPane.add(verticalGlue2);
 
-        panelBtnCreateQuiz.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         panelBtnCreateQuiz.setMaximumSize(new java.awt.Dimension(400, 200));
         panelBtnCreateQuiz.setMinimumSize(new java.awt.Dimension(170, 120));
         panelBtnCreateQuiz.setPreferredSize(new java.awt.Dimension(170, 120));
@@ -134,16 +208,23 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
 
         btnCreateQuiz.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
         btnCreateQuiz.setText("Crear test");
+        btnCreateQuiz.setEnabled(false);
         btnCreateQuiz.setMargin(new java.awt.Insets(0, 0, 0, 0));
         btnCreateQuiz.setMaximumSize(new java.awt.Dimension(400, 200));
         btnCreateQuiz.setMinimumSize(new java.awt.Dimension(170, 100));
         btnCreateQuiz.setPreferredSize(new java.awt.Dimension(170, 100));
         panelBtnCreateQuiz.add(btnCreateQuiz, java.awt.BorderLayout.CENTER);
 
+        lblAvailableSoon1.setForeground(new java.awt.Color(153, 153, 153));
+        lblAvailableSoon1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblAvailableSoon1.setText("Disponible muy pronto");
+        lblAvailableSoon1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        lblAvailableSoon1.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        panelBtnCreateQuiz.add(lblAvailableSoon1, java.awt.BorderLayout.SOUTH);
+
         centerPane.add(panelBtnCreateQuiz);
         centerPane.add(verticalGlue3);
 
-        panelBtnAppOptions.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         panelBtnAppOptions.setMaximumSize(new java.awt.Dimension(400, 200));
         panelBtnAppOptions.setMinimumSize(new java.awt.Dimension(170, 120));
         panelBtnAppOptions.setPreferredSize(new java.awt.Dimension(170, 120));
@@ -151,11 +232,19 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
 
         btnAppOptions.setFont(new java.awt.Font("Dialog", 0, 36)); // NOI18N
         btnAppOptions.setText("Opciones");
+        btnAppOptions.setEnabled(false);
         btnAppOptions.setMargin(new java.awt.Insets(0, 0, 0, 0));
         btnAppOptions.setMaximumSize(new java.awt.Dimension(400, 200));
         btnAppOptions.setMinimumSize(new java.awt.Dimension(170, 100));
         btnAppOptions.setPreferredSize(new java.awt.Dimension(170, 100));
         panelBtnAppOptions.add(btnAppOptions, java.awt.BorderLayout.CENTER);
+
+        lblAvailableSoon2.setForeground(new java.awt.Color(153, 153, 153));
+        lblAvailableSoon2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblAvailableSoon2.setText("Disponible muy pronto");
+        lblAvailableSoon2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        lblAvailableSoon2.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        panelBtnAppOptions.add(lblAvailableSoon2, java.awt.BorderLayout.SOUTH);
 
         centerPane.add(panelBtnAppOptions);
         centerPane.add(botVerticalGlue4);
@@ -164,25 +253,69 @@ public class MainMenuPanel extends com.quizmael.gui.common.BasePanel {
 
         eastPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 1, 1));
         eastPane.setMinimumSize(new java.awt.Dimension(150, 600));
-        eastPane.setPreferredSize(new java.awt.Dimension(116, 116));
-        eastPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+        eastPane.setPreferredSize(new java.awt.Dimension(140, 140));
+        eastPane.setLayout(new javax.swing.BoxLayout(eastPane, javax.swing.BoxLayout.Y_AXIS));
+        eastPane.add(botVerticalGlue5);
+
+        btnLogout.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
+        btnLogout.setText("Cerrar Sesión");
+        btnLogout.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnLogout.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        btnLogout.setMaximumSize(new java.awt.Dimension(180, 60));
+        btnLogout.setMinimumSize(new java.awt.Dimension(140, 40));
+        btnLogout.setPreferredSize(new java.awt.Dimension(140, 40));
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+        eastPane.add(btnLogout);
+
         add(eastPane, java.awt.BorderLayout.EAST);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPlayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayActionPerformed
-        appController.getGameController().showQuizSelection();
+        gameController.navigateToQuizSelection();
     }//GEN-LAST:event_btnPlayActionPerformed
+
+    private void btnAdminPanelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminPanelActionPerformed
+        userController.navigateToAdminPanel();
+    }//GEN-LAST:event_btnAdminPanelActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        authController.handleLogout();
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void cboLangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboLangActionPerformed
+        int selectedIndex = cboLang.getSelectedIndex();
+
+        // Adjusted to comply with two-argument (language, country) signature definition
+        if (selectedIndex == 1) {
+            I18nUtil.setLocale("en", "US");
+        } else {
+            I18nUtil.setLocale("es", "ES");
+        }
+
+        // Reload all button texts, titles, and localized labels on this view
+        setupI18n();
+    }//GEN-LAST:event_cboLangActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler botVerticalGlue4;
+    private javax.swing.Box.Filler botVerticalGlue5;
     private javax.swing.JButton btnAdminPanel;
     private javax.swing.JButton btnAppOptions;
     private javax.swing.JButton btnCreateQuiz;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnPlay;
+    private javax.swing.JComboBox<String> cboLang;
     private javax.swing.JPanel centerPane;
     private javax.swing.JPanel eastPane;
+    private javax.swing.JLabel lblAvailableSoon1;
+    private javax.swing.JLabel lblAvailableSoon2;
     private javax.swing.JLabel lblProfile;
+    private javax.swing.JPanel northCenterPane;
     private javax.swing.JPanel northPane;
     private javax.swing.JPanel panelBtnAppOptions;
     private javax.swing.JPanel panelBtnCreateQuiz;

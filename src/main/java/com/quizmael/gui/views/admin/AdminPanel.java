@@ -27,6 +27,10 @@ public class AdminPanel extends com.quizmael.gui.common.BasePanel {
      */
     public AdminPanel(AppController controller) {
         initComponents();
+        // TODO: hacer visibles estos componentes cuando implemente su funcionalidad ----------------------------
+        
+        
+        // -----------------------------------------------------------------------------------------------------
     }
     
     

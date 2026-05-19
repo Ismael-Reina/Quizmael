@@ -1,18 +1,19 @@
 package com.quizmael.gui.views.game;
 
-import com.quizmael.controller.AppController;
-import com.quizmael.gui.views.profile.*;
-import com.quizmael.gui.views.auth.*;
+import com.quizmael.controller.*;
 import com.quizmael.model.QuizTest;
 import com.quizmael.model.enums.Language;
+import com.quizmael.util.I18nUtil;
+import com.quizmael.util.LoggerUtil;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
 
 /**
  * Panel for browsing and selecting available quizzes.
@@ -22,25 +23,36 @@ import javax.swing.table.TableModel;
  * @version 1.0
  */
 public class QuizSelectionPanel extends com.quizmael.gui.common.BasePanel {
-    
+
     // ------------------------------------------------------------
     //                     Attributes
     // ------------------------------------------------------------
-    private final AppController appController;
-    private SpinnerNumberModel spinnerModel;
-    private DefaultTableModel tableModel;
-    private List<QuizTest> filteredQuizzesList = new ArrayList<>();
+    private final QuizTestController quizTestController;
+    private final TopicController topicController;
+    private final UserController userController;
+    private final GameController gameController;
+
+    private final SpinnerNumberModel spinnerModel;
+    private final DefaultTableModel tableModel;
+    private final List<QuizTest> filteredQuizzesList = new ArrayList<>();
     
     // ------------------------------------------------------------
     //                     Public Methods
     // ------------------------------------------------------------
-    
+
     /**
-     * Creates new form LoginPanel
+     * Creates new form QuizSelectionPanel
      */
-    public QuizSelectionPanel(AppController appController) {
-        this.appController = appController;
+    public QuizSelectionPanel(QuizTestController quizTestController, TopicController topicController,
+                              UserController userController, GameController gameController) {
+        this.quizTestController = quizTestController;
+        this.topicController = topicController;
+        this.userController = userController;
+        this.gameController = gameController;
+        
         initComponents();
+        setupI18n();
+
         // TODO: hace visibles estos componentes cuando implemente su funcionalidad ----------------------------
         tabbedPanel.setVisible(false);
         lblAnswerOptions.setVisible(false);
@@ -56,41 +68,93 @@ public class QuizSelectionPanel extends com.quizmael.gui.common.BasePanel {
         // Table configuration
         tableQuizzes.setFillsViewportHeight(true);
         tableQuizzes.setAutoCreateRowSorter(true);
+        tableQuizzes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // the user can only select one row
+
         TableColumnModel columnModel = tableQuizzes.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(250); // Title
         columnModel.getColumn(1).setPreferredWidth(400); // Description
         columnModel.getColumn(2).setPreferredWidth(250); // Topics
         columnModel.getColumn(3).setPreferredWidth(100); // Language
 
-        // Table listener
+        // Table selection listener
         tableQuizzes.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
-                int selectedRow = tableQuizzes.getSelectedRow();
-                handleQuizTableSelection(selectedRow);
+                handleQuizTableSelection(tableQuizzes.getSelectedRow());
             }
         });
     }
-    
+
+    /**
+     * Automatically triggers when this panel is shown to the user via CardLayout.
+     * Ensures data is always fresh.
+     */
+    @Override
+    public void setVisible(boolean aFlag) {
+        super.setVisible(aFlag);
+        if (aFlag) {
+            setupI18n(); // Refresh translations if language changed
+            resetFilters();
+        }
+    }
+
     /**
      * Resets the filter components to their default values and reloads
      * the available topics and creators for the filter dropdowns.
      */
     public void resetFilters() {
-        loadTopics();
-        loadCreators();
+        LoggerUtil.info(getClass(), "Resetting quiz selection filters and reloading dropdown models.");
+        cboTopics.setModel(topicController.getTopicComboBoxModel());
+        cboCreators.setModel(userController.getCreatorsComboBoxModel());
+
         chkDifficulty.setSelected(false);
         sldDifficulty.setEnabled(false);
         sldDifficulty.setValue(3);
         chkSpanish.setSelected(true);
         chkEnglish.setSelected(true);
+
+        filteredQuizzesList.clear();
         tableModel.setRowCount(0);
         spnNumQuestions.setValue(10);
+        btnStartQuiz.setEnabled(false);
+        cleanSelectedQuizLabels();
+
+        // Perform an initial search with empty filters to populate the table
+        onFilterButtonClick();
     }
     
     // ------------------------------------------------------------
     //                     Private Methods
     // ------------------------------------------------------------
-    
+
+    /**
+     * Applies internationalized texts to all translatable UI components in this panel,
+     * including checkboxes, buttons, and table column headers, ensuring proper
+     * localization on language changes.
+     */
+    private void setupI18n() {
+        chkDifficulty.setText(I18nUtil.getMessage("quizselection.chk.difficulty"));
+        chkSpanish.setText(I18nUtil.getMessage("quizselection.chk.spanish"));
+        chkEnglish.setText(I18nUtil.getMessage("quizselection.chk.english"));
+        btnFilter.setText(I18nUtil.getMessage("quizselection.btn.filter"));
+        btnGoBack.setText(I18nUtil.getMessage("quizselection.btn.back"));
+        btnStartQuiz.setText(I18nUtil.getMessage("quizselection.btn.start"));
+        btnClearFilters.setText(I18nUtil.getMessage("quizselection.btn.clear_filters"));
+
+        TableColumnModel cm = tableQuizzes.getColumnModel();
+        cm.getColumn(0).setHeaderValue(I18nUtil.getMessage("quizselection.table.col.title"));
+        cm.getColumn(1).setHeaderValue(I18nUtil.getMessage("quizselection.table.col.desc"));
+        cm.getColumn(2).setHeaderValue(I18nUtil.getMessage("quizselection.table.col.topics"));
+        cm.getColumn(3).setHeaderValue(I18nUtil.getMessage("quizselection.table.col.lang"));
+        tableQuizzes.getTableHeader().repaint();
+    }
+
+    /**
+     * Handles the selection event of a quiz from the table. It maps the visual row index
+     * to the underlying model, dynamically adjusts the maximum question count constraint
+     * for the spinner, and updates the detailed quiz preview labels.
+     *
+     * @param selectedRow the visually selected row index in the table, or -1 if selection is cleared.
+     */
     private void handleQuizTableSelection(int selectedRow) {
         if (selectedRow >= 0) {
             // Get the selected QuizTest object 
@@ -98,11 +162,11 @@ public class QuizSelectionPanel extends com.quizmael.gui.common.BasePanel {
             
             // Enable the Start Quiz Button
             btnStartQuiz.setEnabled(true);
-            
             // Enable and set the spinner with the valid range of questions
             spnNumQuestions.setEnabled(true);
+
             int totalQuestions = selectedTest.getQuestions().size();
-            spinnerModel.setMaximum(totalQuestions);
+            spinnerModel.setMaximum(Math.min(totalQuestions, 100)); // Max 100 or total questions if less
 
             // Update labels with details
             lblSelectedQuizCreator.setText(selectedTest.getCreator().getName());
@@ -119,7 +183,10 @@ public class QuizSelectionPanel extends com.quizmael.gui.common.BasePanel {
         }
     }
 
-    
+    /**
+     * Resets all detailed quiz information and metadata labels (such as creator, rating,
+     * difficulty, etc.) back to their default placeholder values ("-").
+     */
     private void cleanSelectedQuizLabels() {
         lblSelectedQuizCreator.setText("-");
         lblSelectedQuizAnswerOptions.setText("-");
@@ -129,45 +196,47 @@ public class QuizSelectionPanel extends com.quizmael.gui.common.BasePanel {
         lblSelectedQuizTimesPlayed.setText("-");
     }
 
-    
+    /**
+     * Collects active criteria from filtering components (topic, creator, difficulty, and languages),
+     * performs validation to ensure at least one language is checked, queries the controller
+     * layer for public tests, and refreshes the table content with the results.
+     */
     public void onFilterButtonClick() {
         // 1. Language verification
         if (!chkSpanish.isSelected() && !chkEnglish.isSelected()) {
-            showError("Debes seleccionar al menos un idioma.", "Error");
+            showError("quizselection.error.no_language");
             return;
         }
 
         // 2. Get selected filters
-        String topicName = null;
-        if (cboTopics.getSelectedIndex() > 0) {
-            topicName = (String) cboTopics.getSelectedItem();
-        }
-        
-        String creatorName = null;
-        if (cboCreators.getSelectedIndex() > 0) {
-            creatorName = (String) cboCreators.getSelectedItem();
-        }
-        
+        String topicName = cboTopics.getSelectedIndex() > 0 ? (String) cboTopics.getSelectedItem() : null;
+        String creatorName = cboCreators.getSelectedIndex() > 0 ? (String) cboCreators.getSelectedItem() : null;
         Integer difficulty = chkDifficulty.isSelected() ? sldDifficulty.getValue() : null;
 
         Set<Language> selectedLanguages = new HashSet<>();
         if (chkSpanish.isSelected()) selectedLanguages.add(Language.ES);
         if (chkEnglish.isSelected()) selectedLanguages.add(Language.EN);
 
+        // Tracking Log
+        LoggerUtil.info(getClass(), String.format(
+                "Applying quiz filters -> Topic: [%s], Creator: [%s], Difficulty: [%s], Languages: %s",
+                topicName, creatorName, difficulty, selectedLanguages
+        ));
+
         // 3. Call the controller
-        List<QuizTest> results = appController.getGameController().findFilteredPublicTests(
+        List<QuizTest> results = quizTestController.findFilteredPublicTests(
                 topicName, creatorName, difficulty, selectedLanguages);
 
         // 4. Show results
         filteredQuizzesList.clear();
         tableModel.setRowCount(0);
+
         if (results.isEmpty()) {
-            showMessage("No se encontraron tests con los filtros aplicados.", "Sin resultados");
+            showInfo("quizselection.info.no_results");
         } else {
             for (QuizTest qt : results) {
                 // Add test to the quizzes list attribute
                 filteredQuizzesList.add(qt);
-                
                 // Fill table rows
                 tableModel.addRow(new Object[]{
                         qt.getTitle(),
@@ -176,33 +245,6 @@ public class QuizSelectionPanel extends com.quizmael.gui.common.BasePanel {
                         qt.getLanguage().toString()
                 });
             }
-        }
-    }
-    
-    /**
-     * Loads available topics from the database and populates the topic combo box.
-     * The first item is a placeholder for selecting all topics.
-     */
-    private void loadTopics() {
-        cboTopics.removeAllItems();
-        cboTopics.addItem("-- Selecciona un tema --");
-        List<String> topics = appController.getGameController().loadAvailableTopics();
-        for (String topicName : topics) {
-            cboTopics.addItem(topicName);
-        }
-    }
-    
-    /**
-     * Loads all test creators from the database and populates the creator combo box.
-     * The first item is a placeholder for selecting all creators.
-     */
-    private void loadCreators() {
-        cboCreators.removeAllItems();
-        cboCreators.addItem("-- Selecciona un creador --");
-
-        List<String> creators = appController.getGameController().loadAvailableCreators();
-        for (String creatorName : creators) {
-            cboCreators.addItem(creatorName);
         }
     }
     
@@ -226,6 +268,7 @@ public class QuizSelectionPanel extends com.quizmael.gui.common.BasePanel {
         languagesPanel = new javax.swing.JPanel();
         chkSpanish = new javax.swing.JCheckBox();
         chkEnglish = new javax.swing.JCheckBox();
+        btnClearFilters = new javax.swing.JButton();
         btnFilter = new javax.swing.JButton();
         scpTableQujzzes = new javax.swing.JScrollPane();
         tableQuizzes = new javax.swing.JTable();
@@ -364,6 +407,28 @@ public class QuizSelectionPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.weighty = 1.0;
         centerPanel.add(languagesPanel, gridBagConstraints);
 
+        btnClearFilters.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        btnClearFilters.setText("Limpiar");
+        btnClearFilters.setMaximumSize(new java.awt.Dimension(65, 40));
+        btnClearFilters.setMinimumSize(new java.awt.Dimension(55, 30));
+        btnClearFilters.setPreferredSize(new java.awt.Dimension(55, 30));
+        btnClearFilters.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearFiltersActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.ipadx = 1;
+        gridBagConstraints.ipady = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHEAST;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+        centerPanel.add(btnClearFilters, gridBagConstraints);
+
         btnFilter.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         btnFilter.setText("Filtrar");
         btnFilter.setMaximumSize(new java.awt.Dimension(65, 40));
@@ -383,6 +448,7 @@ public class QuizSelectionPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHEAST;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         centerPanel.add(btnFilter, gridBagConstraints);
 
         scpTableQujzzes.setMinimumSize(new java.awt.Dimension(1000, 150));
@@ -496,7 +562,7 @@ public class QuizSelectionPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
         quizConfigurationPanel.add(lblNumQuestions, gridBagConstraints);
 
-        spnNumQuestions.setModel(new javax.swing.SpinnerNumberModel(10, 10, null, 1));
+        spnNumQuestions.setModel(new javax.swing.SpinnerNumberModel(10, 10, 100, 1));
         spnNumQuestions.setEnabled(false);
         spnNumQuestions.setMaximumSize(new java.awt.Dimension(50, 35));
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -731,7 +797,6 @@ public class QuizSelectionPanel extends com.quizmael.gui.common.BasePanel {
 
         btnGoBack.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         btnGoBack.setText("Atrás");
-        btnGoBack.setEnabled(false);
         btnGoBack.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnGoBack.setMargin(new java.awt.Insets(0, 0, 0, 0));
         btnGoBack.setMaximumSize(new java.awt.Dimension(140, 40));
@@ -781,13 +846,13 @@ public class QuizSelectionPanel extends com.quizmael.gui.common.BasePanel {
     }//GEN-LAST:event_btnFilterActionPerformed
 
     private void btnGoBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoBackActionPerformed
-        appController.showMainMenuPanel();
+        gameController.navigateToMainMenu();
     }//GEN-LAST:event_btnGoBackActionPerformed
 
     private void btnStartQuizActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartQuizActionPerformed
         int selectedRow = tableQuizzes.getSelectedRow();
         if (selectedRow == -1) {
-            showError("Por favor, selecciona un test.", "Error");
+            showError("quizselection.error.no_selection");
             return;
         }
 
@@ -796,12 +861,24 @@ public class QuizSelectionPanel extends com.quizmael.gui.common.BasePanel {
         QuizTest selectedTest = filteredQuizzesList.get(modelIndex);
 
         // Load the test and display the game panel
-        appController.getPlayPanel().loadQuizTest(selectedTest);
-        appController.showPlayPanel();
+        int numQuestions = (Integer) spnNumQuestions.getValue();
+
+        // Action Log
+        LoggerUtil.info(getClass(), String.format(
+                "User selected quiz '%s' (ID: %d). Launching game session with %d questions.",
+                selectedTest.getTitle(), selectedTest.getId(), numQuestions
+        ));
+
+        gameController.startNewGame(selectedTest, numQuestions);
     }//GEN-LAST:event_btnStartQuizActionPerformed
+
+    private void btnClearFiltersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearFiltersActionPerformed
+        resetFilters();
+    }//GEN-LAST:event_btnClearFiltersActionPerformed
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnClearFilters;
     private javax.swing.JButton btnFilter;
     private javax.swing.JButton btnGoBack;
     private javax.swing.JButton btnStartQuiz;

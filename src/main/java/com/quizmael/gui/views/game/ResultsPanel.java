@@ -1,12 +1,13 @@
 package com.quizmael.gui.views.game;
 
-import com.quizmael.controller.AppController;
-import com.quizmael.gui.views.profile.*;
-import com.quizmael.gui.views.auth.*;
+import com.quizmael.controller.GameController;
+import com.quizmael.model.Game;
+import com.quizmael.util.I18nUtil;
 
 /**
- * Panel to show quiz results after completion.
- * Displays score, correct/incorrect answers, and statistics.
+ * Panel to display the results of a completed quiz session.
+ * Shows the final score, correct/wrong answers, and provides options to replay
+ * or return to the main menu.
  * 
  * @author Ismael Reina Muñoz
  * @version 1.0
@@ -16,23 +17,101 @@ public class ResultsPanel extends com.quizmael.gui.common.BasePanel {
     // ------------------------------------------------------------
     //                     Attributes
     // ------------------------------------------------------------
+    private final GameController gameController;
 
-    
     // ------------------------------------------------------------
-    //                     Public Methods
+    //                     Constructor
     // ------------------------------------------------------------
-    
+
     /**
-     * Creates new form LoginPanel
+     * Creates new form ResultsPanel with Dependency Injection.
+     * * @param gameController the controller managing game session data
      */
-    public ResultsPanel(AppController controller) {
+    public ResultsPanel(GameController gameController) {
+        this.gameController = gameController;
         initComponents();
+        setupStaticI18n();
+
+        // Disable the favorites button visually to indicate it's a future feature
+        btnAddFavorite.setEnabled(false);
     }
-    
-    
+
+    // ------------------------------------------------------------
+    //                     Lifecycle Methods
+    // ------------------------------------------------------------
+
+    /**
+     * Overrides setVisible to automatically pull the results from the active
+     * game session right before the panel is displayed to the user.
+     */
+    @Override
+    public void setVisible(boolean aFlag) {
+        super.setVisible(aFlag);
+        if (aFlag) {
+            loadResults();
+        }
+    }
+
     // ------------------------------------------------------------
     //                     Private Methods
     // ------------------------------------------------------------
+
+    /**
+     * Configures the static texts for buttons and labels that don't depend
+     * on the specific game session data.
+     */
+    private void setupStaticI18n() {
+        // Texts for the buttons
+        btnMainMenu.setText(I18nUtil.getMessage("results.btn.mainmenu"));
+        btnRepeatTest.setText(I18nUtil.getMessage("results.btn.repeat"));
+        btnAddFavorite.setText(I18nUtil.getMessage("results.btn.favorite"));
+
+        // Texts for the description labels
+        lblScore.setText(I18nUtil.getMessage("results.lbl.score"));
+        lblCorrect.setText(I18nUtil.getMessage("results.lbl.correct"));
+        lblWrong.setText(I18nUtil.getMessage("results.lbl.wrong"));
+        lblAvailableSoon.setText(I18nUtil.getMessage("general.coming_soon"));
+    }
+
+    /**
+     * Retrieves the latest game data from the controller and populates the UI.
+     */
+    private void loadResults() {
+        Game currentGame = gameController.getCurrentGame();
+
+        // Safety check to prevent NullPointerException
+        if (currentGame == null || currentGame.getQuizTest() == null) {
+            return;
+        }
+
+        // 1. Set counters and score
+        lblScoreNumber.setText(String.format("%.2f", currentGame.getScore()));
+        lblCorrectNumber.setText(String.valueOf(currentGame.getCorrectAnswers()));
+
+        int wrongAnswers = currentGame.getQuestionCount() - currentGame.getCorrectAnswers();
+        lblWrongNumber.setText(String.valueOf(wrongAnswers));
+
+        // 2. Set the main title with the quiz name
+        if (currentGame.getQuizTest() != null) {
+            lblTitle.setText(currentGame.getQuizTest().getTitle());
+        } else {
+            lblTitle.setText(I18nUtil.getMessage("results.title.default"));
+        }
+
+        // 3. Set the adaptive subtitle based on the final score
+        double score = currentGame.getScore();
+        String subtitleText;
+
+        if (score >= 9.0) {
+            subtitleText = I18nUtil.getMessage("results.subtitle.perfect");
+        } else if (score >= 5.0) {
+            subtitleText = I18nUtil.getMessage("results.subtitle.passed");
+        } else {
+            subtitleText = I18nUtil.getMessage("results.subtitle.failed");
+        }
+
+        lblSubtitle.setText(subtitleText);
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -45,8 +124,10 @@ public class ResultsPanel extends com.quizmael.gui.common.BasePanel {
         java.awt.GridBagConstraints gridBagConstraints;
 
         northPanel = new javax.swing.JPanel();
-        lblQuestion = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
+        lblSubtitle = new javax.swing.JLabel();
         centerPanel = new javax.swing.JPanel();
+        verticalGlue3 = new javax.swing.Box.Filler(new java.awt.Dimension(30, 150), new java.awt.Dimension(30, 150), new java.awt.Dimension(30, 32767));
         answersPanel = new javax.swing.JPanel();
         lblWrong = new javax.swing.JLabel();
         lblWrongNumber = new javax.swing.JLabel();
@@ -58,12 +139,13 @@ public class ResultsPanel extends com.quizmael.gui.common.BasePanel {
         southPanel = new javax.swing.JPanel();
         feedBackPanel = new javax.swing.JPanel();
         verticalGlue1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        btnAnswer1 = new javax.swing.JButton();
+        btnMainMenu = new javax.swing.JButton();
         StartGamePanel = new javax.swing.JPanel();
         verticalGlue = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        btnAnswer = new javax.swing.JButton();
+        btnRepeatTest = new javax.swing.JButton();
         addFavoritePanel = new javax.swing.JPanel();
         verticalGlue2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        lblAvailableSoon = new javax.swing.JLabel();
         btnAddFavorite = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createEmptyBorder(50, 100, 50, 100));
@@ -74,28 +156,50 @@ public class ResultsPanel extends com.quizmael.gui.common.BasePanel {
         northPanel.setPreferredSize(new java.awt.Dimension(600, 120));
         northPanel.setLayout(new java.awt.GridBagLayout());
 
-        lblQuestion.setMaximumSize(new java.awt.Dimension(300, 50));
-        lblQuestion.setMinimumSize(new java.awt.Dimension(50, 30));
-        lblQuestion.setPreferredSize(new java.awt.Dimension(50, 30));
+        lblTitle.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTitle.setMaximumSize(new java.awt.Dimension(300, 50));
+        lblTitle.setMinimumSize(new java.awt.Dimension(50, 30));
+        lblTitle.setPreferredSize(new java.awt.Dimension(50, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.weighty = 2.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
-        northPanel.add(lblQuestion, gridBagConstraints);
+        northPanel.add(lblTitle, gridBagConstraints);
+
+        lblSubtitle.setFont(new java.awt.Font("Segoe UI", 2, 16)); // NOI18N
+        lblSubtitle.setForeground(new java.awt.Color(102, 102, 102));
+        lblSubtitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSubtitle.setMaximumSize(new java.awt.Dimension(300, 50));
+        lblSubtitle.setMinimumSize(new java.awt.Dimension(50, 30));
+        lblSubtitle.setPreferredSize(new java.awt.Dimension(50, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        northPanel.add(lblSubtitle, gridBagConstraints);
 
         add(northPanel, java.awt.BorderLayout.NORTH);
 
         centerPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(15, 0, 15, 0));
         centerPanel.setLayout(new java.awt.BorderLayout());
+        centerPanel.add(verticalGlue3, java.awt.BorderLayout.NORTH);
 
         answersPanel.setMinimumSize(new java.awt.Dimension(300, 60));
         answersPanel.setPreferredSize(new java.awt.Dimension(300, 100));
         answersPanel.setLayout(new java.awt.GridBagLayout());
 
+        lblWrong.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         lblWrong.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblWrong.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         lblWrong.setMaximumSize(new java.awt.Dimension(300, 50));
         lblWrong.setMinimumSize(new java.awt.Dimension(100, 50));
         lblWrong.setPreferredSize(new java.awt.Dimension(100, 50));
@@ -108,7 +212,9 @@ public class ResultsPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         answersPanel.add(lblWrong, gridBagConstraints);
 
+        lblWrongNumber.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         lblWrongNumber.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblWrongNumber.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         lblWrongNumber.setMaximumSize(new java.awt.Dimension(300, 50));
         lblWrongNumber.setMinimumSize(new java.awt.Dimension(100, 50));
         lblWrongNumber.setPreferredSize(new java.awt.Dimension(100, 50));
@@ -121,7 +227,9 @@ public class ResultsPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         answersPanel.add(lblWrongNumber, gridBagConstraints);
 
+        lblCorrect.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         lblCorrect.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblCorrect.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         lblCorrect.setMaximumSize(new java.awt.Dimension(300, 50));
         lblCorrect.setMinimumSize(new java.awt.Dimension(100, 50));
         lblCorrect.setPreferredSize(new java.awt.Dimension(100, 50));
@@ -135,7 +243,9 @@ public class ResultsPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
         answersPanel.add(lblCorrect, gridBagConstraints);
 
+        lblCorrectNumber.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         lblCorrectNumber.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblCorrectNumber.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         lblCorrectNumber.setMaximumSize(new java.awt.Dimension(300, 50));
         lblCorrectNumber.setMinimumSize(new java.awt.Dimension(100, 50));
         lblCorrectNumber.setPreferredSize(new java.awt.Dimension(100, 50));
@@ -155,14 +265,21 @@ public class ResultsPanel extends com.quizmael.gui.common.BasePanel {
         scorePanel.setPreferredSize(new java.awt.Dimension(200, 200));
         scorePanel.setLayout(new javax.swing.BoxLayout(scorePanel, javax.swing.BoxLayout.Y_AXIS));
 
+        lblScore.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblScore.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblScore.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         lblScore.setMaximumSize(new java.awt.Dimension(300, 50));
         lblScore.setMinimumSize(new java.awt.Dimension(150, 30));
         lblScore.setPreferredSize(new java.awt.Dimension(150, 30));
         scorePanel.add(lblScore);
 
+        lblScoreNumber.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblScoreNumber.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblScoreNumber.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        lblScoreNumber.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         lblScoreNumber.setMaximumSize(new java.awt.Dimension(300, 150));
         lblScoreNumber.setMinimumSize(new java.awt.Dimension(150, 80));
-        lblScoreNumber.setPreferredSize(new java.awt.Dimension(150, 80));
+        lblScoreNumber.setPreferredSize(new java.awt.Dimension(200, 130));
         scorePanel.add(lblScoreNumber);
 
         centerPanel.add(scorePanel, java.awt.BorderLayout.EAST);
@@ -173,19 +290,23 @@ public class ResultsPanel extends com.quizmael.gui.common.BasePanel {
         southPanel.setPreferredSize(new java.awt.Dimension(600, 150));
         southPanel.setLayout(new java.awt.BorderLayout());
 
-        feedBackPanel.setMinimumSize(new java.awt.Dimension(140, 100));
-        feedBackPanel.setPreferredSize(new java.awt.Dimension(140, 100));
+        feedBackPanel.setMinimumSize(new java.awt.Dimension(210, 70));
+        feedBackPanel.setPreferredSize(new java.awt.Dimension(210, 70));
         feedBackPanel.setLayout(new javax.swing.BoxLayout(feedBackPanel, javax.swing.BoxLayout.Y_AXIS));
         feedBackPanel.add(verticalGlue1);
 
-        btnAnswer1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        btnAnswer1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnAnswer1.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        btnAnswer1.setMaximumSize(new java.awt.Dimension(250, 150));
-        btnAnswer1.setMinimumSize(new java.awt.Dimension(140, 100));
-        btnAnswer1.setPreferredSize(new java.awt.Dimension(140, 100));
-        btnAnswer1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        feedBackPanel.add(btnAnswer1);
+        btnMainMenu.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        btnMainMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnMainMenu.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        btnMainMenu.setMaximumSize(new java.awt.Dimension(250, 150));
+        btnMainMenu.setMinimumSize(new java.awt.Dimension(190, 70));
+        btnMainMenu.setPreferredSize(new java.awt.Dimension(190, 70));
+        btnMainMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMainMenuActionPerformed(evt);
+            }
+        });
+        feedBackPanel.add(btnMainMenu);
 
         southPanel.add(feedBackPanel, java.awt.BorderLayout.WEST);
 
@@ -194,27 +315,41 @@ public class ResultsPanel extends com.quizmael.gui.common.BasePanel {
         StartGamePanel.setLayout(new javax.swing.BoxLayout(StartGamePanel, javax.swing.BoxLayout.Y_AXIS));
         StartGamePanel.add(verticalGlue);
 
-        btnAnswer.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        btnAnswer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnAnswer.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        btnAnswer.setMaximumSize(new java.awt.Dimension(250, 150));
-        btnAnswer.setMinimumSize(new java.awt.Dimension(190, 70));
-        btnAnswer.setPreferredSize(new java.awt.Dimension(190, 70));
-        btnAnswer.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        StartGamePanel.add(btnAnswer);
+        btnRepeatTest.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        btnRepeatTest.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRepeatTest.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        btnRepeatTest.setMaximumSize(new java.awt.Dimension(250, 150));
+        btnRepeatTest.setMinimumSize(new java.awt.Dimension(190, 70));
+        btnRepeatTest.setPreferredSize(new java.awt.Dimension(190, 70));
+        btnRepeatTest.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRepeatTestActionPerformed(evt);
+            }
+        });
+        StartGamePanel.add(btnRepeatTest);
 
         southPanel.add(StartGamePanel, java.awt.BorderLayout.EAST);
 
         addFavoritePanel.setLayout(new javax.swing.BoxLayout(addFavoritePanel, javax.swing.BoxLayout.Y_AXIS));
         addFavoritePanel.add(verticalGlue2);
 
+        lblAvailableSoon.setForeground(new java.awt.Color(153, 153, 153));
+        lblAvailableSoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblAvailableSoon.setText("Disponible muy pronto");
+        lblAvailableSoon.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblAvailableSoon.setMaximumSize(new java.awt.Dimension(250, 40));
+        lblAvailableSoon.setMinimumSize(new java.awt.Dimension(100, 20));
+        lblAvailableSoon.setPreferredSize(new java.awt.Dimension(100, 20));
+        lblAvailableSoon.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        addFavoritePanel.add(lblAvailableSoon);
+
+        btnAddFavorite.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         btnAddFavorite.setAlignmentX(0.5F);
         btnAddFavorite.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnAddFavorite.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        btnAddFavorite.setMaximumSize(new java.awt.Dimension(170, 150));
-        btnAddFavorite.setMinimumSize(new java.awt.Dimension(140, 55));
-        btnAddFavorite.setPreferredSize(new java.awt.Dimension(140, 55));
-        btnAddFavorite.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btnAddFavorite.setMaximumSize(new java.awt.Dimension(250, 150));
+        btnAddFavorite.setMinimumSize(new java.awt.Dimension(190, 70));
+        btnAddFavorite.setPreferredSize(new java.awt.Dimension(190, 70));
         addFavoritePanel.add(btnAddFavorite);
 
         southPanel.add(addFavoritePanel, java.awt.BorderLayout.CENTER);
@@ -222,21 +357,30 @@ public class ResultsPanel extends com.quizmael.gui.common.BasePanel {
         add(southPanel, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnMainMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMainMenuActionPerformed
+        gameController.navigateToMainMenu();
+    }//GEN-LAST:event_btnMainMenuActionPerformed
+
+    private void btnRepeatTestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRepeatTestActionPerformed
+        gameController.restartCurrentGame();
+    }//GEN-LAST:event_btnRepeatTestActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel StartGamePanel;
     private javax.swing.JPanel addFavoritePanel;
     private javax.swing.JPanel answersPanel;
     private javax.swing.JButton btnAddFavorite;
-    private javax.swing.JButton btnAnswer;
-    private javax.swing.JButton btnAnswer1;
+    private javax.swing.JButton btnMainMenu;
+    private javax.swing.JButton btnRepeatTest;
     private javax.swing.JPanel centerPanel;
     private javax.swing.JPanel feedBackPanel;
+    private javax.swing.JLabel lblAvailableSoon;
     private javax.swing.JLabel lblCorrect;
     private javax.swing.JLabel lblCorrectNumber;
-    private javax.swing.JLabel lblQuestion;
     private javax.swing.JLabel lblScore;
     private javax.swing.JLabel lblScoreNumber;
+    private javax.swing.JLabel lblSubtitle;
+    private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblWrong;
     private javax.swing.JLabel lblWrongNumber;
     private javax.swing.JPanel northPanel;
@@ -245,5 +389,6 @@ public class ResultsPanel extends com.quizmael.gui.common.BasePanel {
     private javax.swing.Box.Filler verticalGlue;
     private javax.swing.Box.Filler verticalGlue1;
     private javax.swing.Box.Filler verticalGlue2;
+    private javax.swing.Box.Filler verticalGlue3;
     // End of variables declaration//GEN-END:variables
 }

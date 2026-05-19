@@ -1,9 +1,15 @@
 package com.quizmael.gui.views.auth;
 
-import com.quizmael.controller.AppController;
+import com.quizmael.controller.AuthController;
+import com.quizmael.model.User;
+import com.quizmael.util.I18nUtil;
+import com.quizmael.util.ValidationConstants;
+
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import javax.swing.JTextField;
 
 /**
@@ -18,7 +24,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
     // ------------------------------------------------------------
     //                     Attributes
     // ------------------------------------------------------------
-    private final AppController appController;
+    private final AuthController authController;
     
     // ------------------------------------------------------------
     //                     Public Methods
@@ -27,13 +33,14 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
     /**
      * Creates new form LoginPanel
      * 
-     * @param appController the application controller
+     * @param authController the controller handling registration logic
      */
-    public RegisterPanel(AppController appController) {
-        this.appController = appController;
+    public RegisterPanel(AuthController authController) {
+        this.authController = authController;
         initComponents();
-    // TODO: hace visibles estos componentes cuando implemente su funcionalidad ----------------------------
-    btnProfilePicture.setVisible(false);
+
+        // TODO: hace visibles estos componentes cuando implemente su funcionalidad ----------------------------
+        btnProfilePicture.setVisible(false);
     // -----------------------------------------------------------------------------------------------------
                 
         // Apply input restrictions to text fields
@@ -54,56 +61,84 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
     private void performRegistration() {
 
         String username = txtUserName.getText().trim();
-        String password = txtPassword.getText().trim();
-        String passwordRepeat = txtPasswordRepeat.getText().trim();
+        // Secure password retrieval from JPasswordField
+        String password = new String(txtPassword.getPassword()).trim();
+        String passwordRepeat = new String(txtPasswordRepeat.getPassword()).trim();
+        String secretAnswer = new String(txtSecretAnswer.getPassword()).trim();
         String email = txtEmail.getText().trim();
+        String birthDateStr = txtBirthDate.getText().trim();
 
-        // Check for empty fields
+        // 1. Basic Validation: Check for empty mandatory fields
         if (username.isBlank() || password.isBlank() || passwordRepeat.isBlank()) {
-            showError("All fields marked with * are required.", "Validation Error");
+            showError("register.error.required_fields");
             return;
         }
 
-        // Username format (alphanumeric, underscores, 3-20 characters)
-        if (!username.matches("^[a-zA-Z0-9_]{3,20}$")) {
-            showError( "Username must be 3-20 characters and only letters, numbers or underscores.", "Validation Error");
+        // 1b. Validate Interdependent Secret Fields (Pair matching)
+        boolean hasQuestion = !txtSecretQuestion.getText().trim().isEmpty();
+        boolean hasAnswer = !secretAnswer.isEmpty();
+
+        if (hasQuestion != hasAnswer) {
+            showError("register.error.secret_pair");
             return;
         }
 
-        // Email format (optional, but must be valid if provided)
-        
-        if (!email.isBlank() && !email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
-            showError("Invalid email format.", "Validation Error");
+        // 2. Validate Password Match
+        if (!password.equals(passwordRepeat)) {
+            showError("register.error.password_mismatch");
             return;
         }
 
-        // Password must be 6-20 characters long, and include at least one uppercase letter, one lowercase letter, one number, and one special character.
-        if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,20}$")) {
-            showError("Password must be 6-20 characters long and include at least one uppercase letter, one lowercase letter, one number, "
-                    + "and one of the next special character: @, $, !, %, *, ?, &.", "Validation Error");
+        // 3. Username format (alphanumeric, underscores, 3-20 characters)
+        if (!username.matches(ValidationConstants.USERNAME_REGEX)) {
+            showError("register.error.username_format");
             return;
         }
 
-        try {
-            appController.getAuthController().registerUser(
-                username.trim(),
-                email.trim(),
-                password.trim(),
-                passwordRepeat.trim(),
-                txtPasswordHint.getText().trim(),
-                txtSecretQuestion.getText().trim(),
-                txtSecretAnswer.getText().trim(),
-                txtBirthDate.getText().trim()
-            );
-        } catch (IllegalArgumentException e) {
-            switch (e.getMessage()) {
-                case "Username already exists" -> showError("That username is already taken. Please choose another.", "Username Exists");
-                case "Passwords do not match." -> showError("Passwords do not match.", "Validation Error");
-                case "Invalid birth date format." -> showError("Please enter a valid birth date in the format yyyy-MM-dd.", "Validation Error");
-                default -> showError("Registration or validation error: " + e.getMessage(), "Error");
+        // 4. Email format (optional, but must be valid if provided)
+        if (!email.isBlank() && !email.matches(ValidationConstants.EMAIL_REGEX)) {
+            showError("register.error.email_format");
+            return;
+        }
+
+        // 5. Password strength
+        if (!password.matches(ValidationConstants.PASSWORD_REGEX)) {
+            showError("error.validation.password_strength");
+            return;
+        }
+
+        // 6. Parse Birth Date
+        LocalDate birthDate = null;
+        if (!birthDateStr.isBlank()) {
+            try {
+                birthDate = LocalDate.parse(birthDateStr);
+            } catch (DateTimeParseException e) {
+                showError("register.error.birthdate_format");
+                return;
             }
+        }
+
+        // 7. Create User Entity
+        try {
+            User newUser = new User();
+            newUser.setName(username);
+            newUser.setEmail(email);
+            newUser.setPassword(password); // Service layer will hash this
+            newUser.setPasswordHint(txtPasswordHint.getText().trim());
+            newUser.setSecretQuestion(txtSecretQuestion.getText().trim());
+            newUser.setSecretAnswer(secretAnswer);
+            newUser.setBirthDate(birthDate);
+
+            // 8. Delegate to Controller
+            authController.handleRegister(newUser);
+
+            // Registration successful notification (Optional, since AuthController navigates to Login)
+            showTimedMessage("Registration successful!", "Success", 3000);
+
+        } catch (IllegalArgumentException e) {
+            showError("error.validation_prefix");
         } catch (Exception e) {
-            showError("Unexpected error during registration: " + e.getMessage(), "Error");
+            showError("error.unexpected_prefix");
         }
     }
 
@@ -121,15 +156,15 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
                 String currentText = field.getText();
                 char keyChar = e.getKeyChar();
 
-                // Ignorar teclas de control (como borrar)
+                // Ignore control keys like Backspace
                 if (Character.isISOControl(keyChar)) {
                     return;
                 }
 
-                // Comprobar longitud y formato permitido
+                // Check length and allowed format
                 if (currentText.length() >= maxLength || !String.valueOf(keyChar).matches(allowedRegex)) {
-                    e.consume(); // Evita que se escriba
-                    Toolkit.getDefaultToolkit().beep(); // Feedback sonoro
+                    e.consume(); // Prevent input
+                    Toolkit.getDefaultToolkit().beep(); // Audio feedback
                 }
             }
         });
@@ -168,7 +203,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(25, 25), new java.awt.Dimension(25, 25), new java.awt.Dimension(25, 25));
 
         setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(30, 80, 30, 80), javax.swing.BorderFactory.createEtchedBorder()));
-        setMinimumSize(new java.awt.Dimension(800, 600));
+        setMinimumSize(new java.awt.Dimension(800, 841));
         setLayout(new java.awt.GridBagLayout());
 
         lblUserName.setText("Nombre de usuario *");
@@ -179,7 +214,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(200, 25, 10, 40);
+        gridBagConstraints.insets = new java.awt.Insets(20, 25, 10, 40);
         add(lblUserName, gridBagConstraints);
 
         txtUserName.setToolTipText("Username");
@@ -348,9 +383,9 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         add(txtBirthDate, gridBagConstraints);
 
         btnProfilePicture.setText("Añadir foto de perfil");
-        btnProfilePicture.setMaximumSize(new java.awt.Dimension(300, 40));
-        btnProfilePicture.setMinimumSize(new java.awt.Dimension(150, 25));
-        btnProfilePicture.setPreferredSize(new java.awt.Dimension(150, 25));
+        btnProfilePicture.setMaximumSize(new java.awt.Dimension(200, 50));
+        btnProfilePicture.setMinimumSize(new java.awt.Dimension(160, 45));
+        btnProfilePicture.setPreferredSize(new java.awt.Dimension(160, 45));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
@@ -359,10 +394,11 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 25, 10, 40);
         add(btnProfilePicture, gridBagConstraints);
 
+        btnBack.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnBack.setText("Atrás");
         btnBack.setMaximumSize(new java.awt.Dimension(200, 50));
-        btnBack.setMinimumSize(new java.awt.Dimension(150, 35));
-        btnBack.setPreferredSize(new java.awt.Dimension(150, 35));
+        btnBack.setMinimumSize(new java.awt.Dimension(160, 45));
+        btnBack.setPreferredSize(new java.awt.Dimension(160, 45));
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBackActionPerformed(evt);
@@ -377,10 +413,11 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 25, 25, 40);
         add(btnBack, gridBagConstraints);
 
+        btnRegister.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btnRegister.setText("Registrarse");
         btnRegister.setMaximumSize(new java.awt.Dimension(200, 50));
-        btnRegister.setMinimumSize(new java.awt.Dimension(150, 35));
-        btnRegister.setPreferredSize(new java.awt.Dimension(150, 35));
+        btnRegister.setMinimumSize(new java.awt.Dimension(160, 45));
+        btnRegister.setPreferredSize(new java.awt.Dimension(160, 45));
         btnRegister.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegisterActionPerformed(evt);
@@ -408,7 +445,7 @@ public class RegisterPanel extends com.quizmael.gui.common.BasePanel {
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        appController.getAuthController().goBackToLogin();
+        authController.navigateToLogin();
     }//GEN-LAST:event_btnBackActionPerformed
 
 
