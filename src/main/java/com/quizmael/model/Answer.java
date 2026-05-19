@@ -29,7 +29,7 @@ public class Answer {
 
     // Indicates whether the answer is correct
     @Column(name = "is_correct", nullable = false)
-    private Boolean isCorrect = false;
+    private Boolean correct = false;
 
     // The question to which this answer belongs
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -56,12 +56,12 @@ public class Answer {
         this.text = text;
     }
 
-    public Boolean getCorrect() {
-        return isCorrect;
+    public Boolean isCorrect() {
+        return correct;
     }
 
     public void setCorrect(Boolean isCorrect) {
-        this.isCorrect = isCorrect;
+        this.correct = isCorrect;
     }
 
     public Question getQuestion() {

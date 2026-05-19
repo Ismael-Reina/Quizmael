@@ -37,6 +37,12 @@ public class Game {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    // The test associated with this game
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.RESTRICT)
+    @JoinColumn(name = "test_id", nullable = false)
+    private QuizTest quizTest;
+
     // Total number of questions presented during the game
     @Column(name = "questionCount", nullable = false)
     @Min(1)
@@ -61,8 +67,8 @@ public class Game {
 
     // The timestamp when the game finished
     @ColumnDefault("current_timestamp()")
-    @Column(name = "played_at", nullable = false)
-    private Instant playedAt;
+    @Column(name = "end_time", nullable = true)
+    private Instant endTime;
 
     // ------------------------------------------------------------
     //                   Getters & Setters
@@ -81,6 +87,14 @@ public class Game {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public QuizTest getQuizTest() {
+        return quizTest;
+    }
+
+    public void setQuizTest(QuizTest quizTest) {
+        this.quizTest = quizTest;
     }
 
     public int getQuestionCount() {
@@ -118,12 +132,12 @@ public class Game {
         this.startTime = startTime;
     }
 
-    public Instant getPlayedAt() {
-        return playedAt;
+    public Instant getEndTime() {
+        return endTime;
     }
 
-    public void setPlayedAt(Instant playedAt) {
-        this.playedAt = playedAt;
+    public void setEndTime(Instant playedAt) {
+        this.endTime = playedAt;
     }
 
 }

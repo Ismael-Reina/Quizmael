@@ -66,7 +66,7 @@ public class User {
     // Tests marked as favorite by the user
     @ManyToMany
     @JoinTable(
-            name = "user_favorite_tests",
+            name = "User_Favorite_Tests",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "test_id")
     )
@@ -149,6 +149,30 @@ public class User {
 
     public Role getRole() {
         return role;
+    }
+
+    /**
+     * Checks if the user has administrative privileges.
+     * @return true if the user's role is ADMIN.
+     */
+    public boolean isAdmin() {
+        return this.role == Role.ADMINISTRATOR;
+    }
+
+    /**
+     * Checks if the user has moderator privileges.
+     * @return true if the user has moderator or admin privileges.
+     */
+    public boolean isModerator() {
+        return (this.role == Role.ADMINISTRATOR || this.role == Role.MODERATOR);
+    }
+
+    /**
+     * Checks if the user is registered.
+     * @return true if the user is not an anonymous guest.
+     */
+    public boolean isRegistered() {
+        return this.role != Role.ANONYMOUS;
     }
 
     public void setRole(Role role) {

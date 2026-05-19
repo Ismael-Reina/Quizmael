@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * <strong>Question</strong> entity belonging to a test.
  * <p>Can contain multiple possible answers, one or more of which may be correct.</p>
@@ -28,6 +31,10 @@ public class Question {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "test_id", nullable = false)
     private QuizTest test;
+
+    // The possible answers to this question
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Answer> answers = new ArrayList<>();
 
     // The textual content of the question
     @Column(name = "text", nullable = false)
@@ -54,6 +61,10 @@ public class Question {
 
     public void setTest(QuizTest test) {
         this.test = test;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
     }
 
     public String getText() {

@@ -28,6 +28,20 @@ public class GameQuestionId implements Serializable {
     @Column(name = "question_id", nullable = false)
     private Integer questionId;
 
+
+
+    // Constructor por defecto obligatorio (para Hibernate)                                     // TODO: 16/05
+    public GameQuestionId() {}
+
+    // Constructor con parámetros
+    public GameQuestionId(Integer gameId, Integer questionId) {
+        this.gameId = gameId;
+        this.questionId = questionId;
+    }
+
+
+
+
     // ------------------------------------------------------------
     //                   Getters & Setters
     // ------------------------------------------------------------
@@ -47,6 +61,9 @@ public class GameQuestionId implements Serializable {
         this.questionId = questionId;
     }
 
+    // ------------------------------------------------------------
+    //                  Identity Methods
+    // ------------------------------------------------------------
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
