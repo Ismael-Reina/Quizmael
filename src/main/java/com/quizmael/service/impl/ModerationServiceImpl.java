@@ -26,6 +26,13 @@ public class ModerationServiceImpl implements ModerationService {
     private final UserDao userDao;
     private final ModerationDao moderationDao;
 
+    /**
+     * Constructs the ModerationServiceImpl with dependencies required for test validation and moderation.
+     *
+     * @param quizTestDao the DAO for managing quiz test entities.
+     * @param userDao the DAO for looking up moderators and creators.
+     * @param moderationDao the DAO for persisting moderation records.
+     */
     public ModerationServiceImpl(QuizTestDao quizTestDao, UserDao userDao, ModerationDao moderationDao) {
         this.quizTestDao = quizTestDao;
         this.userDao = userDao;

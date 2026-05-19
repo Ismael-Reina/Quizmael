@@ -1,9 +1,12 @@
 package com.quizmael.service;
 
 import com.quizmael.model.QuizTest;
+import com.quizmael.model.enums.Language;
+import com.quizmael.model.enums.State;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * <strong>QuizTestService</strong> defines the contract for operations related to test creation,
@@ -18,49 +21,15 @@ import java.util.Optional;
 public interface QuizTestService {
 
     // ------------------------------------------------------------
-    //           Management of User-Created Tests
+    //                  Test Retrieval & Filtering
     // ------------------------------------------------------------
 
     /**
-     * Finds all tests created by a specific user.
+     * Retrieves all tests from the system (admin use).
      *
-     * @param userId the ID of the user who created the tests
-     * @return a list of tests created by the given user
+     * @return a list of all tests
      */
-    List<QuizTest> findTestsByCreator(int userId);
-
-    /**
-     * Finds a test by its unique ID.
-     *
-     * @param testId the ID of the test to retrieve
-     * @return an {@link Optional} containing the found test, or empty if not found
-     */
-    Optional<QuizTest> findTestById(int testId);
-
-    /**
-     * Creates a new test.
-     *
-     * @param test the test to create
-     */
-    void createTest(QuizTest test);
-
-    /**
-     * Updates an existing test.
-     *
-     * @param test the test with updated information
-     */
-    void updateTest(QuizTest test);
-
-    /**
-     * Deletes a test by its ID.
-     *
-     * @param testId the ID of the test to delete
-     */
-    void deleteTest(int testId);
-
-    // ------------------------------------------------------------
-    //                Retrieving Public Tests
-    // ------------------------------------------------------------
+    List<QuizTest> findAllTests();
 
     /**
      * Retrieves all public tests (those validated and not in draft state).
@@ -85,4 +54,75 @@ public interface QuizTestService {
      */
     List<QuizTest> findTestsByTitle(String title);
 
+    /**
+     * Finds all tests created by a specific user.
+     *
+     * @param userId the ID of the user who created the tests
+     * @return a list of tests created by the given user
+     */
+    List<QuizTest> findTestsByCreator(int userId);
+
+    /**
+     * Finds a test by its unique ID.
+     *
+     * @param testId the ID of the test to retrieve
+     * @return an {@link Optional} containing the found test, or empty if not found
+     */
+    Optional<QuizTest> findTestById(int testId);
+
+    /**
+     * Finds public tests by various filters.
+     *
+     * @param topicName   the name of the topic, or null if no topic filter is applied
+     * @param creatorName the name of the creator, or null if no creator filter is applied
+     * @param difficulty  the difficulty level, or null if no difficulty filter is applied
+     * @param languages   a set of languages to include
+     * @return a list of public tests matching the filters
+     */
+    List<QuizTest> findPublicTestsByFilters(String topicName, String creatorName, Integer difficulty, Set<Language> languages);
+
+    /**
+     * Retrieves all distinct creators of published tests.
+     *
+     * @return a list of unique creator names
+     */
+    List<String> findAllCreatorsOfPublishedTests();
+
+    // ------------------------------------------------------------
+    //                  Test Lifecycle & Management
+    // ------------------------------------------------------------
+    /**
+     * Creates a new test.
+     *
+     * @param test the test to create
+     */
+    void createTest(QuizTest test);
+
+    /**
+     * Updates an existing test.
+     *
+     * @param test the test with updated information
+     */
+    void updateTest(QuizTest test);
+
+    /**
+     * Updates the state of a test with the specified ID.
+     * If the test exists, its state and last update timestamp are modified.
+     *
+     * @param testId   the ID of the test to update
+     * @param newState the new state to set (e.g., DRAFT, PENDING, PUBLISHED, REJECTED)
+     */
+    boolean updateTestState(Integer testId, State newState);
+
+    /**
+     * Deletes a test by its ID.
+     *
+     * @param testId the ID of the test to delete
+     */
+    boolean deleteTest(int testId);
+
+    // ------------------------------------------------------------
+    //                  User Interactions & Favorites
+    // ------------------------------------------------------------
+    // Here I will place methods like toggleFavorite, etc.
 }

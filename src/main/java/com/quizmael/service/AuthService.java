@@ -5,6 +5,7 @@ import com.quizmael.service.enums.PasswordResetStatus;
 
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -21,19 +22,13 @@ public interface AuthService {
     // ------------------------------------------------------------
 
     /**
-     * Registers a new user in the system with all necessary details.
+     * Registers a new user in the system.
      *
-     * @param name the username
-     * @param email the email address
-     * @param password the plain password
-     * @param passwordHint the password hint
-     * @param secretQuestion the secret question
-     * @param secretAnswer the secret answer
-     * @param birthDate the birth date in ISO format (yyyy-MM-dd)
-     * @return the created User with assigned ID
+     * @param user The user entity containing all registration details.
+     * @return The persisted User with its generated ID.
+     * @throws IllegalArgumentException if validation fails or username exists.
      */
-    User register(String name, String email, String password, String passwordHint,
-                  String secretQuestion, String secretAnswer, LocalDate birthDate);
+    User register(User user);
 
     // ------------------------------------------------------------
     //                 Authentication / Login
@@ -85,11 +80,12 @@ public interface AuthService {
     Optional<String> getSecretQuestion(String name);
 
     /**
+     * TODO: This method is currently disabled as it is not part of the MVP. Mail de momento no es único, por eso el hacerlo con el name.
      * Sends a new random password to the user's email if present.
      *
-     * @param email the user's email
+     * @param name the user's name
      * @return a {@link PasswordResetStatus} indicating the result of the operation
      */
-    PasswordResetStatus resetPasswordWithEmail(String email);
+    // PasswordResetStatus resetPasswordWithEmail(String name);
 
 }

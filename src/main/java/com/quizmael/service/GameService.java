@@ -17,15 +17,19 @@ import java.util.List;
  */
 public interface GameService {
 
+    // ------------------------------------------------------------
+    //                   Game Lifecycle Methods
+    // ------------------------------------------------------------
+
     /**
      * Creates and starts a new game session for the specified user and test.
      *
-     * @param user          the user who is playing the game
-     * @param tests         the tests associated with the game
-     * @param questionCount the number of questions to be included in the game
-     * @return              the initialized Game instance with metadata but without user answers
+     * @param user            the user who is playing the game
+     * @param currentQuizTest the test associated with the game
+     * @param questionCount   the number of questions to be included in the game
+     * @return                the initialized Game instance with metadata but without user answers
      */
-    Game startGame(User user, List<QuizTest> tests, int questionCount);
+    Game startGame(User user, QuizTest currentQuizTest, int questionCount);
 
     /**
      * Submits an answer for a specific question within a game.
@@ -34,5 +38,25 @@ public interface GameService {
      * @param selectedAnswer the selected answer
      */
     void submitAnswer(GameQuestion gameQuestion, Answer selectedAnswer);
+
+    /**
+     * Persists the completed game and its associated data.
+     *
+     * @param game the game object to be saved
+     */
+    void finishGame(Game game);
+
+    // ------------------------------------------------------------
+    //                   Lookup Methods
+    // ------------------------------------------------------------
+
+    /**
+     * Retrieves the list of GameQuestion objects associated with a specific game.
+     *
+     * @param game the game for which to retrieve the questions
+     * @return a list of GameQuestion objects
+     */
+    public List<GameQuestion> getGameQuestions(Game game);
+
 
 }

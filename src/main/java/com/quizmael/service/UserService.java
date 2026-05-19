@@ -1,6 +1,7 @@
 package com.quizmael.service;
 
 import com.quizmael.model.User;
+import com.quizmael.model.enums.Role;
 import com.quizmael.service.enums.ChangePasswordResult;
 
 import java.util.Optional;
@@ -15,7 +16,7 @@ import java.util.List;
 public interface UserService {
 
     // ------------------------------------------------------------
-    //                 User Lookup and Deletion
+    //              User Lookup, Update and Deletion
     // ------------------------------------------------------------
 
     /**
@@ -42,11 +43,18 @@ public interface UserService {
     List<User> findAll();
 
     /**
+     * Updates an existing user's information.
+     * @param user the user with updated data.
+     */
+    void update(User user);
+
+    /**
      * Deletes a user by ID.
      *
      * @param id the ID of the user to delete
+     * @return true if the user was deleted successfully, false otherwise
      */
-    void deleteById(int id);
+    boolean deleteById(int id);
 
     // ------------------------------------------------------------
     //                  Profile Management
@@ -59,6 +67,24 @@ public interface UserService {
      * @param user the user with updated fields
      */
     void updateUser(User user);
+
+    /**
+     * Updates the password for a given user.
+     *
+     * @param userId      the ID of the user
+     * @param newPassword the new password
+     * @return true if the password was updated successfully, false otherwise
+     */
+    public boolean forcePasswordReset(int userId, String newPassword);
+
+    /**
+     * Updates the role of a given user.
+     *
+     * @param userId the ID of the user
+     * @param newRole the new role to assign
+     * @return true if the role was updated successfully, false otherwise
+     */
+    public boolean updateRole(int userId, Role newRole);
 
     /**
      * Changes the password for a given user.

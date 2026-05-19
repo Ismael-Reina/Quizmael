@@ -23,7 +23,7 @@ public interface UserInteractionService {
      * @param userId the ID of the user
      * @param testId the ID of the test to add as favorite
      */
-    void addFavoriteTest(int userId, int testId);
+    boolean addFavoriteTest(int userId, int testId);
 
     /**
      * Removes a test from the user's list of favorites.
@@ -31,7 +31,7 @@ public interface UserInteractionService {
      * @param userId the ID of the user
      * @param testId the ID of the test to remove from favorites
      */
-    void removeFavoriteTest(int userId, int testId);
+    boolean removeFavoriteTest(int userId, int testId);
 
     /**
      * Retrieves the list of favorite tests for a user.
@@ -41,4 +41,12 @@ public interface UserInteractionService {
      */
     List<QuizTest> getFavoriteTests(int userId);
 
+    /**
+     * Checks if a specific test is marked as a favorite by a user.
+     *
+     * @param userId the ID of the user
+     * @param testId the ID of the test to check
+     * @return true if the test is in the user's favorites, false otherwise
+     */
+    boolean isFavoriteTest(int userId, int testId);
 }
