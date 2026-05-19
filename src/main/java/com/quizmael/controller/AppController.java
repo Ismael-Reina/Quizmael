@@ -1,193 +1,139 @@
 package com.quizmael.controller;
 
-import com.quizmael.dao.impl.QuizTestDaoImpl;
+import com.quizmael.dao.impl.*;
 import com.quizmael.gui.helpers.PanelManager;
-import com.quizmael.gui.views.admin.AdminPanel;
-import com.quizmael.gui.views.auth.LoginPanel;
+import com.quizmael.gui.views.admin.AdminPanel2;
 import com.quizmael.gui.views.auth.RegisterPanel;
-import com.quizmael.gui.views.game.PlayPanel;
-import com.quizmael.gui.views.game.QuizSelectionPanel;
 import com.quizmael.gui.views.game.ResultsPanel;
 import com.quizmael.gui.views.mainmenu.MainMenuPanel;
-import com.quizmael.gui.views.profile.AppSettingsPanel;
 import com.quizmael.gui.windows.MainWindow;
-import com.quizmael.service.AuthService;
-import com.quizmael.service.impl.AuthServiceImpl;
-import com.quizmael.session.SessionContext;
+import com.quizmael.gui.views.auth.LoginPanel;
+import com.quizmael.gui.views.game.QuizSelectionPanel;
+import com.quizmael.gui.views.game.PlayPanel;
+import com.quizmael.service.impl.*;
+import com.quizmael.util.I18nUtil;
+import com.quizmael.util.LoggerUtil;
+
+import javax.swing.SwingUtilities;
 
 /**
- * Central controller for managing the application's state and navigation.
- * It initializes the main window, registers all view panels, and handles navigation between them.
- *
+ * <strong>AppController</strong> serves as the Composition Root and main orchestrator of the application.
+ * <p>It is responsible for the instantiation and "wiring" of the entire application graph,
+ * following a strict Dependency Injection pattern. It creates DAOs, Services, Controllers,
+ * and Views in the correct order to ensure a decoupled and maintainable architecture.</p>
  * @author Ismael Reina Muñoz
- * @version 1.0
+ * @version 2.0
  */
 public class AppController {
 
     // ------------------------------------------------------------
-    //                      Attributes
+    //                      Controllers
     // ------------------------------------------------------------
-
-    // Singleton instance of the session context
-    private final SessionContext sessionContext = SessionContext.getInstance();
-
-    // Manages switching between different view panels
-    private final PanelManager panelManager;
-
-    private AuthService authService;
     private AuthController authController;
     private GameController gameController;
-
+    private TopicController topicController;
+    private UserController userController;
+    private QuizTestController quizTestController;
 
     // ------------------------------------------------------------
-    //                      Public Methods
+    //                      GUI Infrastructure
     // ------------------------------------------------------------
+    private MainWindow mainWindow;
+    private PanelManager panelManager;
 
     /**
-     * Constructor that initializes the main application window and registers all view panels.
+     * Initializes the application by orchestrating the dependency graph.
+     * * <p>The initialization follows a hierarchical order:</p>
+     * <ol>
+     * <li>Logging and Internationalization setup.</li>
+     * <li>Data Access Objects (DAOs) instantiation.</li>
+     * <li>Business Logic Services instantiation (injecting DAOs).</li>
+     * <li>Controllers instantiation (injecting Services).</li>
+     * <li>GUI framework setup (MainWindow and PanelManager).</li>
+     * <li>Views instantiation (injecting Controllers) and registration.</li>
+     * </ol>
      */
     public AppController() {
+        try {
+            LoggerUtil.info(AppController.class, "Initializing Quizmael Application...");
+            // 1. DAOs (Persistence Layer)
+            AnswerDaoImpl answerDao = new AnswerDaoImpl();
+            GameDaoImpl gameDao = new GameDaoImpl();
+            GameQuestionDaoImpl gameQuestionDao = new GameQuestionDaoImpl();
+            QuestionDaoImpl questionDao = new QuestionDaoImpl();
+            ModerationDaoImpl moderationDao = new ModerationDaoImpl();
+            QuizTestDaoImpl quizTestDao = new QuizTestDaoImpl();
+            TopicDaoImpl topicDao = new TopicDaoImpl();
+            UserDaoImpl userDao = new UserDaoImpl();
 
-        MainWindow mainWindow = new MainWindow();    // Create the main application window
-        panelManager = mainWindow.getPanelManager(); // Obtain the panel manager from the main window
-        registerPanels();                            // Register all view panels to the panel manager
-        showLoginPanel();                            // Show the initial panel (Login)
-        mainWindow.setVisible(true);                 // Display the main window
+            // 2. Services (Business Logic Layer)
+            AuthServiceImpl authService = new AuthServiceImpl(userDao);
+            GameServiceImpl gameService = new GameServiceImpl(gameDao,gameQuestionDao, questionDao);
+            QuizTestServiceImpl quizTestService = new QuizTestServiceImpl(quizTestDao);
+            ModerationServiceImpl moderationService = new ModerationServiceImpl(quizTestDao, userDao, moderationDao);
+            TopicServiceImpl topicService = new TopicServiceImpl(topicDao);
+            UserInteractionServiceImpl userInteractionService = new UserInteractionServiceImpl(userDao, quizTestDao);
+            UserServiceImpl userService = new UserServiceImpl(userDao);
+
+            // 4. GUI Infrastructure
+            this.mainWindow = new MainWindow();
+            this.panelManager = this.mainWindow.getPanelManager();
+
+            // 3. Controllers (Orchestration Layer)
+            this.authController = new AuthController(authService, this.panelManager);
+            this.gameController = new GameController(gameService, this.panelManager);
+            this.quizTestController = new QuizTestController(quizTestService);
+            this.topicController = new TopicController(topicService);
+            this.userController = new UserController(userService, quizTestService, this.panelManager);
+
+            // 5. Views Registration
+            registerViews();
+
+            LoggerUtil.info(AppController.class, "Application wiring completed successfully.");
+
+            // Start the flow
+            startApp();
+
+        } catch (Exception e) {
+            LoggerUtil.error(AppController.class, "Critical failure during application startup: " + e.getMessage(), e);            // In a real scenario, you might show a localized error dialog here
+        }
+    }
+
+    /**
+     * Instantiates the GUI panels and registers them within the PanelManager.
+     * * <p>Each view is provided with its specific controller, ensuring that views
+     * only communicate with their designated logic handler.</p>
+     */
+    private void registerViews() {
+        LoggerUtil.info(AppController.class, "Registering views in PanelManager...");
+
+        panelManager.addPanel(PanelManager.LOGIN, new LoginPanel(this.authController));
+        panelManager.addPanel(PanelManager.REGISTER, new RegisterPanel(this.authController));
+        panelManager.addPanel(PanelManager.MAIN_MENU, new MainMenuPanel(this.authController, this.gameController, this.userController));
+        panelManager.addPanel(PanelManager.QUIZ_SELECTION, new QuizSelectionPanel(this.quizTestController,
+                this.topicController, this.userController, this.gameController));
+        panelManager.addPanel(PanelManager.PLAY, new PlayPanel(this.gameController));
+        panelManager.addPanel(PanelManager.RESULTS, new ResultsPanel(this.gameController));
+        panelManager.addPanel(PanelManager.ADMIN, new AdminPanel2(this.quizTestController, this.userController)); //
+    }
+
+    /**
+     * Finalizes the application startup by making the main window visible
+     * and navigating to the initial screen (Login).
+     */
+    private void startApp() {
+        SwingUtilities.invokeLater(() -> {
+            mainWindow.setVisible(true);
+            panelManager.showPanel(PanelManager.LOGIN);
+            LoggerUtil.info(AppController.class, "Main window visible. Current Locale: " + I18nUtil.getLocale());
+        });
     }
 
     // ------------------------------------------------------------
-    //                 Navigation Between Panels
+    //          Main Entry Point (Composition Root execution)
     // ------------------------------------------------------------
-
-    /**
-     * Displays the login panel.
-     */
-    public void showLoginPanel() {
-        panelManager.showPanel("login");
-    }
-
-    /**
-     * Displays the register panel.
-     */
-    public void showRegisterPanel() {
-        panelManager.showPanel("register");
-    }
-
-    /**
-     * Displays the main menu panel.
-     */
-    public void showMainMenuPanel() {
-        panelManager.showPanel("mainMenu");
-    }
-
-    /**
-     * Displays the admin panel.
-     */
-    public void showAdminPanel() {
-        panelManager.showPanel("admin");
-    }
-
-    /**
-     * Displays the play panel.
-     */
-    public void showPlayPanel() {
-        panelManager.showPanel("play");
-    }
-
-    /**
-     * Displays the quiz selection panel.
-     */
-    public void showQuizSelectionPanel() {
-        // Reset and reload dynamic components before showing the Quiz Selection Panel
-        // This includes clearing filters, updating combo boxes with current DB values, etc.
-        QuizSelectionPanel panel = (QuizSelectionPanel) panelManager.getPanel("quizSelection");
-        panel.resetFilters();
-
-        panelManager.showPanel("quizSelection");
-    }
-
-    /**
-     * Displays the results panel.
-     */
-    public void showResultsPanel() {
-        panelManager.showPanel("results");
-    }
-
-    /**
-     * Displays the application settings panel.
-     */
-    public void showAppSettingsPanel() {
-        panelManager.showPanel("appSettings");
-    }
-
-    // ------------------------------------------------------------
-    //                        Getters
-    // ------------------------------------------------------------
-
-    /**
-     * Returns the current session context.
-     *
-     * @return the session context
-     */
-    public SessionContext getSessionContext() {
-        return sessionContext;
-    }
-
-    /**
-     * Returns the Main Menu panel.
-     *
-     * @return the Main Menu panel
-     */
-    public MainMenuPanel getMainMenuPanel() {
-        return (MainMenuPanel) panelManager.getPanel("mainMenu");
-    }
-
-    /**
-     * Returns the Play panel.
-     *
-     * @return the Play panel
-     */
-    public PlayPanel getPlayPanel() {
-        return (PlayPanel) panelManager.getPanel("play");
-    }
-
-    /**
-     * Returns the AuthController for user authentication and registration.
-     *
-     * @return the AuthController instance
-     */
-    public AuthController getAuthController() {
-        return authController;
-    }
-
-    /**
-     * Returns the GameController for managing the game logic and flow.
-     *
-     * @return the GameController instance
-     */
-    public GameController getGameController() {
-        return gameController;
-    }
-
-    // ------------------------------------------------------------
-    //                      Private Methods
-    // ------------------------------------------------------------
-
-    /**
-     * Registers all application panels with the panel manager.
-     */
-    private void registerPanels() {
-        authService = new AuthServiceImpl();
-        authController = new AuthController(authService, this);
-        gameController = new GameController(this, new QuizTestDaoImpl());
-
-        panelManager.addPanel("login", new LoginPanel(this));
-        panelManager.addPanel("register", new RegisterPanel(this));
-        panelManager.addPanel("mainMenu", new MainMenuPanel(this));
-        panelManager.addPanel("admin", new AdminPanel(this));
-        panelManager.addPanel("play", new PlayPanel(this));
-        panelManager.addPanel("quizSelection", new QuizSelectionPanel(this));
-        panelManager.addPanel("results", new ResultsPanel(this));
-        panelManager.addPanel("appSettings", new AppSettingsPanel(this));
+    public static void main(String[] args) {
+        // Bootstrapping the application
+        new AppController();
     }
 }
