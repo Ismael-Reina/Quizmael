@@ -1,13 +1,15 @@
 package com.quizmael.gui.windows;
 
 import com.quizmael.gui.helpers.PanelManager;
+import com.quizmael.util.LoggerUtil;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 
 /**
- * Main application window that hosts the main content panel (PanelManager).
+ * Main application window. Hosts the PanelManager and handles global window settings.
  *
  * @author Ismael Reina Muñoz
  * @version 1.0
@@ -17,9 +19,9 @@ public class MainWindow extends javax.swing.JFrame {
     // ------------------------------------------------------------
     //                      Attributes
     // ------------------------------------------------------------
-    public static final Dimension minSize = new Dimension(1300, 1000);
+    public static final Dimension MIN_SIZE = new Dimension(1300, 800);
     private final PanelManager panelManager;
-    ImageIcon icon;
+    private ImageIcon icon;
     
     // ------------------------------------------------------------
     //                      Public Methods
@@ -30,22 +32,12 @@ public class MainWindow extends javax.swing.JFrame {
      */
     public MainWindow() {
         initComponents();
-        
-        // Configures the main window
-        setTitle("Quizmael");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setMinimumSize(minSize);
-        setMaximumSize(Toolkit.getDefaultToolkit().getScreenSize());
-        setLocationRelativeTo(null);   
-        getContentPane().setLayout(new BorderLayout());
-        icon = new ImageIcon(getClass().getResource("/icons/logo_32.png"));
-        setIconImage(icon.getImage());
-        
+        setupWindow();
         
         // Adds PanelManager
         panelManager = new PanelManager();
         add(panelManager, BorderLayout.CENTER);
-        
+        LoggerUtil.info(getClass(), "Main Window initialized successfully.");
     }
 
     /**
@@ -56,11 +48,27 @@ public class MainWindow extends javax.swing.JFrame {
         return panelManager;
     }
     
-    
     // ------------------------------------------------------------
     //                      Private Methods
     // ------------------------------------------------------------
-    
+
+    private void setupWindow() {
+        setTitle("Quizmael");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setMinimumSize(MIN_SIZE);
+        // Using Toolkit to ensure it doesn't exceed screen bounds
+        setMaximumSize(Toolkit.getDefaultToolkit().getScreenSize());
+        setLocationRelativeTo(null);
+
+        try {
+            // Loading the icon from resources
+            icon = new ImageIcon(getClass().getResource("/icons/logo_32.png"));
+            setIconImage(icon.getImage());
+        } catch (Exception e) {
+            LoggerUtil.warn(getClass(), "Application icon not found.");
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
