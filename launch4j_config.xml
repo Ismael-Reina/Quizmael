@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\Users\ismae\Desktop\Quizmael-Distribution\quizmael.jar</jar>
+  <outfile>C:\Users\ismae\Desktop\Quizmael-Distribution\Quizmael.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl></downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>C:\Users\ismae\Desktop\Quizmael-Distribution\logo_32.ico</icon>
+  <singleInstance>
+    <mutexName>Quizmael_Educational_Game_Mutex</mutexName>
+    <windowTitle></windowTitle>
+  </singleInstance>
+  <jre>
+    <path>jre</path>
+    <requiresJdk>false</requiresJdk>
+    <requires64Bit>false</requires64Bit>
+    <minVersion>17</minVersion>
+    <maxVersion></maxVersion>
+    <opt>-Dfile.encoding=UTF-8</opt>
+  </jre>
+</launch4jConfig>
