@@ -2,7 +2,9 @@
 *.class
 
 # Log file
+logs/
 *.log
+*.log.gz
 
 # BlueJ files
 *.ctxt
@@ -36,6 +38,7 @@ target/
 *.iws
 *.iml
 *.ipr
+out/
 
 ### Eclipse ###
 .apt_generated
@@ -65,3 +68,8 @@ build/
 # To-do file
 TODO.md
 notMVP.md
+
+# Database and local runtime data
+data/
+*.mv.db
+*.trace.db
